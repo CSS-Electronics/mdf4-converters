@@ -1,0 +1,31 @@
+# Setup paths.
+set(LINUXDEPLOY_PREFIX_DIR ${EXTERNAL_PROJECTS_DIR}/AppImage)
+set(LINUXDEPLOY_SOURCE_DIR ${LINUXDEPLOY_PREFIX_DIR}/src/appimage)
+set(LINUXDEPLOY_BUILD_DIR ${LINUXDEPLOY_SOURCE_DIR})
+set(LINUXDEPLOY_INSTALL_DIR ${LINUXDEPLOY_PREFIX_DIR}/root)
+
+set(LINUXDEPLOY_BUILD_COMMAND
+    COMMAND chmod +x linuxdeploy-x86_64.AppImage
+    COMMAND ./linuxdeploy-x86_64.AppImage --appimage-extract
+    )
+
+set(LINUXDEPLOY_INSTALL_COMMAND
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${LINUXDEPLOY_INSTALL_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${LINUXDEPLOY_BUILD_DIR}/squashfs-root ${LINUXDEPLOY_INSTALL_DIR}
+    )
+
+# Finally, gather all the commands
+ExternalProject_Add(appimage_builder
+    PREFIX ${LINUXDEPLOY_PREFIX_DIR}
+    URL https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+    URL_MD5 "d075d04e364200e7357684e2ac8b1817"
+    DOWNLOAD_NO_EXTRACT 1
+    DOWNLOAD_NAME linuxdeploy-x86_64.AppImage
+    DOWNLOAD_DIR ${LINUXDEPLOY_SOURCE_DIR}
+    SOURCE_DIR ${LINUXDEPLOY_SOURCE_DIR}
+    INSTALL_DIR ${LINUXDEPLOY_INSTALL_DIR}
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ${LINUXDEPLOY_BUILD_COMMAND}
+    INSTALL_COMMAND ${LINUXDEPLOY_INSTALL_COMMAND}
+    BUILD_IN_SOURCE 1
+    )

@@ -1,0 +1,25 @@
+id ICON "@ICON_PATH@"
+
+1 VERSIONINFO
+FILEVERSION     @VERSION_MAJOR@,@VERSION_MINOR@,@VERSION_PATCH@,0
+PRODUCTVERSION  @VERSION_MAJOR@,@VERSION_MINOR@,@VERSION_PATCH@,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "@COMPANY_NAME@"
+      VALUE "FileDescription", "@DESCRIPTION@"
+      VALUE "FileVersion", "@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@"
+      VALUE "InternalName", "@PROJECT_NAME@"
+      VALUE "LegalCopyright", "@COMPANY_NAME@"
+      VALUE "OriginalFilename", "@PROGRAM_NAME@.exe"
+      VALUE "ProductName", "@PROGRAM_NAME@"
+      VALUE "ProductVersion", "@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

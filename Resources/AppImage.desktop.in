@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=@PROGRAM_NAME@
+Comment=@DESCRIPTION@
+Path=/usr/bin/@PROGRAM_NAME@
+Exec=@PROGRAM_NAME@
+Icon=@PROGRAM_NAME@
+Terminal=false
+Categories=Utility;
