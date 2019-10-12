@@ -1,4 +1,4 @@
-# MDF4 Simple Converters
+# MDF4 Converters
 This project includes library and converter tools for converting raw MDF4 log files.
 These converters are designed for use with the [CANedge](https://www.csselectronics.com/screen/page/can-logger-products) CAN bus data loggers from [CSS Electronics](https://www.csselectronics.com/).
 
@@ -90,25 +90,3 @@ The project uses the following external libraries, apart from the standard libra
 Copyright Beman Dawes, Daniel Frey, David Abrahams, 2003-2004.
 Copyright Rene Rivera 2004-2005.
 Distributed under the [Boost Software License, Version 1.0](https://www.boost.org/LICENSE_1_0.txt).
-
-
-#### tinyxml12 license
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any
-damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any
-purpose, including commercial applications, and to alter it and
-redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must
-not claim that you wrote the original software. If you use this
-software in a product, an acknowledgment in the product documentation
-would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and
-must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source
-distribution.
-
