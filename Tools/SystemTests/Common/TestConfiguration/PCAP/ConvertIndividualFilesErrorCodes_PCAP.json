@@ -1,0 +1,39 @@
+{
+  "tool": "mdf2pcap",
+  "cases": [
+    {
+      "_comment": "No input files",
+      "return_code": 0
+    },
+    {
+      "_comment": "Input file not present",
+      "options": {
+        "-i": "test.MF4"
+      },
+      "return_code": 1
+    },
+    {
+      "_comment": "Password file specified but not present, short form",
+      "options": {
+        "-p": "test.json"
+      },
+      "return_code": 131
+    },
+    {
+      "_comment": "Password file specified but not present, long form",
+      "options": {
+        "--password-file": "test.json"
+      },
+      "return_code": 131
+    },
+    {
+      "_comment": "Single message on CAN bus 1, encrypted, passwords file not present",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "return_code": 2
+    }
+  ]
+}

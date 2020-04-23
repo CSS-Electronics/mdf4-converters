@@ -1,9 +1,50 @@
-cmake_minimum_required(VERSION 3.7)
-project(Dependencies)
+# Empty list containing all external targets.
+set(EXTERNAL_TARGETS)
 
-set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+# Setup external paths.
+set(EXTERNAL_PROJECT_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/Root")
+set(EXTERNAL_PROJECT_INSTALL_DIR_CMAKE ${CMAKE_CURRENT_BINARY_DIR}/Root/cmake)
+set(EXTERNAL_PROJECT_INSTALL_DIR_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/Root/include)
+set(EXTERNAL_PROJECT_INSTALL_DIR_LIB ${CMAKE_CURRENT_BINARY_DIR}/Root/lib)
+set(EXTERNAL_PROJECT_INSTALL_DIR_LIB64 ${CMAKE_CURRENT_BINARY_DIR}/Root/lib64)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+# Setup CMake module path.
+list(APPEND CMAKE_MODULE_PATH "${EXTERNAL_PROJECT_INSTALL_DIR_CMAKE}")
+list(APPEND CMAKE_MODULE_PATH "${EXTERNAL_PROJECT_INSTALL_DIR_LIB}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${EXTERNAL_PROJECT_INSTALL_DIR_LIB64}/cmake")
 
-include(ExternalProjects)
+# Setup pkgconfig.
+set(CMAKE_PREFIX_PATH "${EXTERNAL_PROJECT_INSTALL_DIR_LIB}/pkgconfig")
+set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH TRUE)
+set(PKG_CONFIG_PATH "${EXTERNAL_PROJECT_INSTALL_DIR_LIB}/pkgconfig")
+set(ENV{PKG_CONFIG_PATH} "${EXTERNAL_PROJECT_INSTALL_DIR_LIB}/pkgconfig")
+find_package(PkgConfig REQUIRED)
+
+# Set parallel build information.
+include(ProcessorCount)
+ProcessorCount(N_CORES)
+if(NOT N_CORES EQUAL 0)
+  set(ENV{CMAKE_BUILD_PARALLEL_LEVEL} ${N_CORES})
+endif()
+
+include(Boost.cmake)
+include(botan.cmake)
+include(fmt.cmake)
+include(heatshrink.cmake)
+include(tinyxml2.cmake)
+
+# For linux builds, include AppImage tools (linuxdeploy).
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  include(AppImage.cmake)
+endif()
+
+# Add overall target which depend on all external dependencies.
+list(LENGTH EXTERNAL_TARGETS EXTERNAL_TARGETS_LENGTH)
+if(${EXTERNAL_TARGETS_LENGTH} GREATER 0)
+  message("Found ${EXTERNAL_TARGETS_LENGTH} targets")
+
+  add_custom_target(
+    ExternalDependencies
+    DEPENDS ${EXTERNAL_TARGETS}
+  )
+endif()

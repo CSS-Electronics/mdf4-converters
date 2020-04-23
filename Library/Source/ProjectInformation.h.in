@@ -1,0 +1,16 @@
+#ifndef MDFSIMPLECONVERTERS_PROJECTFORMATION_H
+#define MDFSIMPLECONVERTERS_PROJECTFORMATION_H
+
+#include "Version.h"
+
+namespace mdf {
+
+  constexpr Version const version = {
+    .major = @VERSION_MAJOR@,
+    .minor = @VERSION_MINOR@,
+    .patch = @VERSION_PATCH@
+  };
+
+}
+
+#endif //MDFSIMPLECONVERTERS_PROJECTFORMATION_H

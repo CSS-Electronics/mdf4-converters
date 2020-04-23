@@ -1,0 +1,102 @@
+{
+  "tool": "mdf2pcap",
+  "cases": [
+    {
+      "_comment": "Convert to logger local time, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        }
+      ],
+      "options": {
+        "-t": "l"
+      }
+    },
+    {
+      "_comment": "Convert to logger local time, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        }
+      ],
+      "options": {
+        "--timezone": "l"
+      }
+    },
+    {
+      "_comment": "Convert to UTC time, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        }
+      ],
+      "options": {
+        "-t": "u"
+      }
+    },
+    {
+      "_comment": "Convert to UTC time, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        }
+      ],
+      "options": {
+        "--timezone": "u"
+      }
+    },{
+      "_comment": "Convert to PC local time, short form. Note, this may break/require editing depending on the timezone of the PC",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "comparision_data": "single_can_bus_1_CAN_PC.pcap"
+        }
+      ],
+      "options": {
+        "-t": "p"
+      }
+    },
+    {
+      "_comment": "Convert to PC local time, long form. Note, this may break/require editing depending on the timezone of the PC",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "comparision_data": "single_can_bus_1_CAN_PC.pcap"
+        }
+      ],
+      "options": {
+        "--timezone": "p"
+      }
+    }
+  ]
+}

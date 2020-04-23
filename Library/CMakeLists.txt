@@ -1,105 +1,156 @@
-project(mdf)
+project(MDF_BusLogging_Library)
 
-include_directories(Blocks)
-include_directories(Include)
-include_directories(Interfaces)
-include_directories(Interfaces/Exceptions)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
 
-set(MDF_SOURCES
-    BlockTree.cpp
-    BlockTree.h
-    ExtractMetaData.cpp
-    ExtractMetaData.h
-    Library.cpp
-    Library.h
-    Loader.cpp
-    Loader.h
-    MdfFile.cpp
-    MdfFile.h
-    SemanticVersion.cpp
+set(CMAKE_CXX_STANDARD 17)
 
-    Blocks/CC_Block.cpp
-    Blocks/CC_Block.h
-    Blocks/CG_Block.cpp
-    Blocks/CG_Block.h
-    Blocks/CN_Block.cpp
-    Blocks/CN_Block.h
-    Blocks/DG_Block.cpp
-    Blocks/DG_Block.h
-    Blocks/DT_Block.cpp
-    Blocks/DT_Block.h
-        Blocks/FH_Block.cpp
-    Blocks/FH_Block.h
-    Blocks/HD_Block.cpp
-    Blocks/HD_Block.h
-    Blocks/ID_Block.cpp
-    Blocks/ID_Block.h
-    Blocks/MD_Block.cpp
-    Blocks/MD_Block.h
-    Blocks/SD_Block.cpp
-    Blocks/SD_Block.h
-    Blocks/SI_Block.cpp
-    Blocks/SI_Block.h
-    Blocks/TX_Block.cpp
-    Blocks/TX_Block.h
+# Search for Boost.
+find_package(Boost REQUIRED COMPONENTS filesystem log)
 
-    Config/VersionNumbers.h
+# Improved formatting to string.
+find_package(fmt REQUIRED)
 
-    Include/CAN_DataFrame.h
+# Support for reading XML.
+find_package(tinyxml2 REQUIRED)
+
+# Embed information in the source code.
+configure_file(
+    Source/ProjectInformation.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/Source/ProjectInformation.h
+    @ONLY
+)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Source)
+
+# List of all public header files.
+set(INCLUDE_FILES
+    Include/CANRecord.h
     Include/FileInfo.h
-    Include/LIN_Frame.h
-    Include/MDF_File.h
-    Include/SemanticVersion.h
+    Include/IIterator.h
+    Include/Library.h
+    Include/LINRecord.h
+    Include/MdfFile.h
+    Include/RecordIterator.h
+    Include/Version.h
 
-    Interfaces/MDF_Block.cpp
-    Interfaces/MDF_Block.h
-    Interfaces/MDF_DataSource.cpp
-    Interfaces/MDF_DataSource.h
-    Interfaces/MDF_DataTypes.cpp
-    Interfaces/MDF_DataTypes.h
-    Interfaces/MDF_Header.cpp
-    Interfaces/MDF_Header.h
-    Interfaces/MDF_Type.cpp
-    Interfaces/MDF_Type.h
-    Interfaces/GenericDataReader.cpp
-    Interfaces/GenericDataReader.h
-    Interfaces/GenericDataRecord.cpp
-    Interfaces/GenericDataRecord.h
-    Interfaces/GenericDataRecordIterator.cpp
-    Interfaces/GenericDataRecordIterator.h
-    Interfaces/Exceptions/MDF_BlockSizeError.cpp
-    Interfaces/Exceptions/MDF_BlockSizeError.h
-    Interfaces/Exceptions/MDF_Exception.cpp
-    Interfaces/Exceptions/MDF_Exception.h
-    Interfaces/Exceptions/MDF_MissingBlockError.cpp
-    Interfaces/Exceptions/MDF_MissingBlockError.h
-    Interfaces/Exceptions/MDF_NotImplementedError.cpp
-    Interfaces/Exceptions/MDF_NotImplementedError.h
-
-    Iterators/CAN_DataFrame_Iterator.cpp
-    Iterators/CAN_DataFrame_Iterator.h
-    Iterators/CAN_DataFrame_Mapping.cpp
-    Iterators/CAN_DataFrame_Mapping.h
-    Iterators/LIN_Frame_Iterator.cpp
-    Iterators/LIN_Frame_Iterator.h
-    Iterators/LIN_Frame_Mapping.cpp
-    Iterators/LIN_Frame_Mapping.h
-
-    Utilities/Tree.cpp
-    Utilities/Tree.h
-    Utilities/TreeNode.cpp
-    Utilities/TreeNode.h
+    Include/spimpl.h
     )
 
-add_library(mdf STATIC ${MDF_SOURCES})
-target_link_libraries(mdf interfaces ${tinyxml2_LIBRARIES})
+include_directories(Include)
 
-target_include_directories(mdf INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Blocks>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Iterators>
+# List of all core headers.
+set(SOURCE_HEADERS
+    Source/BlockStorage.h
+    Source/IBlockStorage.h
+    Source/ExtractMetaData.h
+    Source/MdfFileImplementation.h
+    Source/StructAdaptors.h
+    Source/Utility.h
+
+    Source/Blocks/CCBlock.h
+    Source/Blocks/CGBlock.h
+    Source/Blocks/CNBlock.h
+    Source/Blocks/DGBlock.h
+    Source/Blocks/DTBlockMultipleRecordIDs.h
+    Source/Blocks/DTBlockRaw.h
+    Source/Blocks/DTBlockSingleDiscontinuous.h
+    Source/Blocks/DTBlockSingleContinuous.h
+    Source/Blocks/DTBlock.h
+    Source/Blocks/FHBlock.h
+    Source/Blocks/HDBlock.h
+    Source/Blocks/IDBlock.h
+    Source/Blocks/IDataBlock.h
+    Source/Blocks/MDBlock.h
+    Source/Blocks/MdfBlockTypes.h
+    Source/Blocks/MdfBlock.h
+    Source/Blocks/MdfHeader.h
+    Source/Blocks/SDBlock.h
+    Source/Blocks/SDBlockContinuous.h
+    Source/Blocks/SDBlockDiscontinuous.h
+    Source/Blocks/SIBlock.h
+    Source/Blocks/TXBlock.h
+
+    Source/Iterators/Assign.h
+    Source/Iterators/GenericIterator.h
+    Source/Iterators/MappingInformation.h
+    Source/Iterators/RecordFunctor.h
+
+    Source/mio.h
+    )
+
+# List of all core source files.
+set(SOURCE_FILES
+    Source/BlockStorage.cpp
+    Source/CANRecord.cpp
+    Source/ExtractMetaData.cpp
+    Source/FileInfo.cpp
+    Source/Library.cpp
+    Source/LINRecord.cpp
+    Source/MdfFile.cpp
+    Source/MdfFileImplementation.cpp
+    Source/Utility.cpp
+    Source/Version.cpp
+
+    Source/Blocks/CCBlock.cpp
+    Source/Blocks/CGBlock.cpp
+    Source/Blocks/CNBlock.cpp
+    Source/Blocks/DGBlock.cpp
+    Source/Blocks/DTBlock.cpp
+    Source/Blocks/DTBlockMultipleRecordIDs.cpp
+    Source/Blocks/DTBlockRaw.cpp
+    Source/Blocks/DTBlockSingleDiscontinuous.cpp
+    Source/Blocks/DTBlockSingleContinuous.cpp
+    Source/Blocks/FHBlock.cpp
+    Source/Blocks/HDBlock.cpp
+    Source/Blocks/IDBlock.cpp
+    Source/Blocks/MDBlock.cpp
+    Source/Blocks/MdfBlock.cpp
+    Source/Blocks/SDBlock.cpp
+    Source/Blocks/SDBlockContinuous.cpp
+    Source/Blocks/SDBlockDiscontinuous.cpp
+    Source/Blocks/SIBlock.cpp
+    Source/Blocks/TXBlock.cpp
+
+    Source/Iterators/GenericIterator.cpp
+    Source/Iterators/RecordIterator.cpp
+    Source/Iterators/RecordFunctor.cpp
+    )
+
+# Create an amalgamated list for sources and target libraries depending on the options.
+set(SOURCE_FINAL
+    ${SOURCE_FILES}
+    ${SOURCE_HEADER_FILES}
+    ${INCLUDE_FILES}
+    )
+
+set(LIBRARIES_FINAL
+    Boost::headers
+    Boost::filesystem
+    Boost::log
+    fmt::fmt
+    tinyxml2::tinyxml2
+    )
+
+# Create static library.
+add_library(${PROJECT_NAME}_static STATIC ${SOURCE_FINAL})
+add_library(${PROJECT_NAME}::static ALIAS ${PROJECT_NAME}_static)
+target_link_libraries(${PROJECT_NAME}_static ${LIBRARIES_FINAL})
+
+target_include_directories(${PROJECT_NAME}_static INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Interfaces>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Interfaces/Exceptions>
-    $<INSTALL_INTERFACE:include/mdf>
+    )
+
+# Create shared library.
+add_library(${PROJECT_NAME}_shared SHARED ${SOURCE_FINAL})
+add_library(${PROJECT_NAME}::shared ALIAS ${PROJECT_NAME}_shared)
+target_link_libraries(${PROJECT_NAME}_shared
+    -static-libstdc++
+    -static-libgcc
+    -static
+    ${LIBRARIES_FINAL}
+    )
+
+target_include_directories(${PROJECT_NAME}_shared INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
     )

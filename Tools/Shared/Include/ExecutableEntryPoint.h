@@ -3,9 +3,9 @@
 
 #include "ConverterInterface.h"
 
-namespace tools::shared {
+namespace mdf::tools::shared {
 
-    int programEntry(int argc, char** argv, std::unique_ptr<ConverterInterface> exporter);
+  int programEntry(int argc, char **argv, std::unique_ptr<ConverterInterface> exporter);
 
 }
 

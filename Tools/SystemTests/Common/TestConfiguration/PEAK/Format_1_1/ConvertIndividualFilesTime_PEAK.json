@@ -1,0 +1,102 @@
+{
+  "tool": "mdf2peak",
+  "cases": [
+    {
+      "_comment": "Convert to trcger local time, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc"
+        }
+      ],
+      "options": {
+        "-t": "l"
+      }
+    },
+    {
+      "_comment": "Convert to trcger local time, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc"
+        }
+      ],
+      "options": {
+        "--timezone": "l"
+      }
+    },
+    {
+      "_comment": "Convert to UTC time, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc"
+        }
+      ],
+      "options": {
+        "-t": "u"
+      }
+    },
+    {
+      "_comment": "Convert to UTC time, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc"
+        }
+      ],
+      "options": {
+        "--timezone": "u"
+      }
+    },{
+      "_comment": "Convert to PC local time, short form. Note, this may break/require editing depending on the timezone of the PC",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "comparision_data": "single_can_bus_1_CAN_PC.trc"
+        }
+      ],
+      "options": {
+        "-t": "p"
+      }
+    },
+    {
+      "_comment": "Convert to PC local time, long form. Note, this may break/require editing depending on the timezone of the PC",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "comparision_data": "single_can_bus_1_CAN_PC.trc"
+        }
+      ],
+      "options": {
+        "--timezone": "p"
+      }
+    }
+  ]
+}

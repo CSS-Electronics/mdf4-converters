@@ -1,0 +1,20 @@
+#ifndef MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H
+#define MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H
+
+#include <string_view>
+
+#include "Version.h"
+
+namespace mdf {
+
+    constexpr std::string_view PROGRAM_NAME = "@PROGRAM_NAME@";
+
+    constexpr Version const version = {
+        .major = @VERSION_MAJOR@,
+        .minor = @VERSION_MINOR@,
+        .patch = @VERSION_PATCH@
+    };
+
+}
+
+#endif //MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H

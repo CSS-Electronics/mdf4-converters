@@ -1,0 +1,201 @@
+{
+  "tool": "mdf2clx000",
+  "cases": [
+    {
+      "_comment": "Timeformat 0",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_0.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_0.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_0.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 1",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_1.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_1.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_1.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 2",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_2.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_2.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_2.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 3",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_3.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_3.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_3.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 4",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_4.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_4.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_4.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 5",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_5.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_5.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_5.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Timeformat 6",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_1_CAN_1_timeformat_6.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/timeformat/single_can_bus_2_CAN_2_timeformat_6.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_timeformat_6.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 #ifndef TOOLS_SHARED_COMMONOPTIONS_H
 #define TOOLS_SHARED_COMMONOPTIONS_H
 
-namespace tools::shared {
+namespace mdf::tools::shared {
 
-    enum DisplayTimeFormat : char {
+    enum struct DisplayTimeFormat : char {
         UTC = 'u',
         LoggerLocalTime = 'l',
         PCLocalTime = 'p',
@@ -11,7 +11,7 @@ namespace tools::shared {
 
     struct CommonOptions {
         DisplayTimeFormat displayTimeFormat;
-        bool non_interactiveMode;
+        bool nonInteractiveMode;
     };
 
 }

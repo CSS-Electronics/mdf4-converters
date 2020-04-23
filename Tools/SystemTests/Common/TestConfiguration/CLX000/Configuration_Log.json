@@ -1,0 +1,61 @@
+{
+  "tool": "mdf2clx000",
+  "cases": [
+    {
+      "_comment": "All separators enabled",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/log/single_can_bus_1_CAN_1_allSeparators.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/log/single_can_bus_2_CAN_2_allSeparators.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_log_allSeparators.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "No separators enabled",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/log/single_can_bus_1_CAN_1_noSeparators.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/log/single_can_bus_2_CAN_2_noSeparators.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_log_noSeparators.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    }
+  ]
+}

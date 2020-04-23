@@ -1,0 +1,168 @@
+============================= test session starts =============================
+platform win32 -- Python 3.7.2, pytest-5.0.0, py-1.8.0, pluggy-0.12.0
+rootdir: C:\Projects\MdfToolGithub\Tools\SystemTests, inifile: pytest.ini
+collected 3 items
+
+Common\Common_Test.py [2020-02-13 10:37:42.342109] [0x000005c4] [error]   Error during conversion of "C:\Users\Magnus\AppData\Local\Temp\single_message_can_bus_1_256_window". Failed to perform decompression.
+Executing command: ['C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmptf4wjvi2\\bin\\mdf2asc.exe', 'C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmptf4wjvi2\\data\\single_message_can_bus_1_256_window.MFC']
+F[2020-02-13 10:37:42.476077] [0x00002650] [error]   Error during conversion of "C:\Users\Magnus\AppData\Local\Temp\single_message_can_bus_1_512_window". Failed to perform decompression.
+Error during test. The temporary directory has NOT been deleted, and can be found at C:\Users\Magnus\AppData\Local\Temp\tmptf4wjvi2
+Executing command: ['C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmp_pnuq2uv\\bin\\mdf2asc.exe', 'C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmp_pnuq2uv\\data\\single_message_can_bus_1_512_window.MFC']
+F[2020-02-13 10:37:42.590347] [0x000014e4] [error]   Error during conversion of "C:\Users\Magnus\AppData\Local\Temp\single_message_can_bus_1_1024_window". Failed to perform decompression.
+Error during test. The temporary directory has NOT been deleted, and can be found at C:\Users\Magnus\AppData\Local\Temp\tmp_pnuq2uv
+Executing command: ['C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmpzhaw92sd\\bin\\mdf2asc.exe', 'C:\\Users\\Magnus\\AppData\\Local\\Temp\\tmpzhaw92sd\\data\\single_message_can_bus_1_1024_window.MFC']
+FError during test. The temporary directory has NOT been deleted, and can be found at C:\Users\Magnus\AppData\Local\Temp\tmpzhaw92sd
+
+
+================================== FAILURES ===================================
+______________ TestASCFiles.test_common_convert_input_folder[0] _______________
+
+self = <Common_Test.TestASCFiles object at 0x000001F5C209E3C8>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        assert call_result.returncode == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {call_result.returncode}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmptf4wjvi2/data/single_message_can_bus_1_256_window_CAN.asc')]
+E       assert 1 == 0
+E        +  where 1 = len([WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmptf4wjvi2/data/single_message_can_bus_1_256_window_CAN.asc')])
+
+Common\Common_Test.py:50: AssertionError
+______________ TestASCFiles.test_common_convert_input_folder[1] _______________
+
+self = <Common_Test.TestASCFiles object at 0x000001F5C20F70B8>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        assert call_result.returncode == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {call_result.returncode}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmp_pnuq2uv/data/single_message_can_bus_1_512_window_CAN.asc')]
+E       assert 1 == 0
+E        +  where 1 = len([WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmp_pnuq2uv/data/single_message_can_bus_1_512_window_CAN.asc')])
+
+Common\Common_Test.py:50: AssertionError
+______________ TestASCFiles.test_common_convert_input_folder[2] _______________
+
+self = <Common_Test.TestASCFiles object at 0x000001F5C21172E8>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        assert call_result.returncode == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {call_result.returncode}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmpzhaw92sd/data/single_message_can_bus_1_1024_window_CAN.asc')]
+E       assert 1 == 0
+E        +  where 1 = len([WindowsPath('C:/Users/Magnus/AppData/Local/Temp/tmpzhaw92sd/data/single_message_can_bus_1_1024_window_CAN.asc')])
+
+Common\Common_Test.py:50: AssertionError
+========================== 3 failed in 0.54 seconds ===========================

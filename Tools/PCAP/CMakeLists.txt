@@ -1,65 +1,69 @@
 project(mdf2pcap CXX)
 
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
+set(CMAKE_CXX_STANDARD 17)
 
+# Set project information.
 set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to PCAP-NG format")
 
-set(SOURCE_FILES
-    PCAP_CAN_Exporter.cpp
-    PCAP_CAN_Exporter.h
-    PCAP_Exporter.cpp
-    PCAP_Exporter.h
-    main.cpp
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
 
-    PCAP/PCAP_Block.cpp
-    PCAP/PCAP_Block.h
-    PCAP/PCAP_EnhancedPacket.cpp
-    PCAP/PCAP_EnhancedPacket.h
-    PCAP/PCAP_EnhancedPacket_CAN.cpp
-    PCAP/PCAP_EnhancedPacket_CAN.h
-    PCAP/PCAP_InterfaceDescription.cpp
-    PCAP/PCAP_InterfaceDescription.h
-    PCAP/PCAP_Option.cpp
-    PCAP/PCAP_Option.h
-    PCAP/PCAP_OptionEnd.cpp
-    PCAP/PCAP_OptionEnd.h
-    PCAP/PCAP_OptionList.cpp
-    PCAP/PCAP_OptionList.h
-    PCAP/PCAP_OptionString.cpp
-    PCAP/PCAP_OptionString.h
-    PCAP/PCAP_OptionU32.cpp
-    PCAP/PCAP_OptionU32.h
-    PCAP/PCAP_OptionU64.cpp
-    PCAP/PCAP_OptionU64.h
-    PCAP/PCAP_SectionHeader.cpp
-    PCAP/PCAP_SectionHeader.h
-    )
-
-set(ADDITIONAL_RELEASE_FILES
-    README.md
-    )
+# Set required additional packages.
+find_package(fmt REQUIRED)
 
 # Embed information in the source code.
-configure_file(ProjectInformation.h.in ProjectInformation.h @ONLY)
-set(LINK_TARGETS
-        ToolsBase
-        mdf
-        ${RUNTIME_LIBRARIES}
-        ${Boost_LIBRARIES}
-        )
+configure_file(
+    Source/ProjectInformation.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/Source/ProjectInformation.h
+    @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Source)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+# List all source files.
+set(SOURCE_FILES_TOOL
+    Source/PCAP_CAN_Exporter.cpp
+    Source/PCAP_CAN_Exporter.h
+    Source/PCAP_Exporter.cpp
+    Source/PCAP_Exporter.h
+    Source/main.cpp
+    )
+
+set(SOURCE_FILES_PCAP
+    Source/PCAP/PCAP_Block.cpp
+    Source/PCAP/PCAP_Block.h
+    Source/PCAP/PCAP_EnhancedPacket.cpp
+    Source/PCAP/PCAP_EnhancedPacket.h
+    Source/PCAP/PCAP_EnhancedPacket_CAN.cpp
+    Source/PCAP/PCAP_EnhancedPacket_CAN.h
+    Source/PCAP/PCAP_InterfaceDescription.cpp
+    Source/PCAP/PCAP_InterfaceDescription.h
+    Source/PCAP/PCAP_Option.cpp
+    Source/PCAP/PCAP_Option.h
+    Source/PCAP/PCAP_OptionEnd.cpp
+    Source/PCAP/PCAP_OptionEnd.h
+    Source/PCAP/PCAP_OptionList.cpp
+    Source/PCAP/PCAP_OptionList.h
+    Source/PCAP/PCAP_OptionString.cpp
+    Source/PCAP/PCAP_OptionString.h
+    Source/PCAP/PCAP_OptionU32.cpp
+    Source/PCAP/PCAP_OptionU32.h
+    Source/PCAP/PCAP_OptionU64.cpp
+    Source/PCAP/PCAP_OptionU64.h
+    Source/PCAP/PCAP_SectionHeader.cpp
+    Source/PCAP/PCAP_SectionHeader.h
+    )
+
+set(SOURCE_FILES
+    ${SOURCE_FILES_TOOL}
+    ${SOURCE_FILES_PCAP}
+    )
 
 add_executable(${PROGRAM_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROGRAM_NAME} ${LINK_TARGETS})
-
-set_property(TARGET ${PROGRAM_NAME}
-    PROPERTY ADDITIONAL_FILES ${ADDITIONAL_RELEASE_FILES}
+target_link_libraries(${PROGRAM_NAME}
+    ${RUNTIME_LIBRARIES}
+    MDFSimpleConverters_Shared
+    fmt::fmt
     )
 
 pack_executable(${PROGRAM_NAME})
-
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${PROJECT_NAME}.map")

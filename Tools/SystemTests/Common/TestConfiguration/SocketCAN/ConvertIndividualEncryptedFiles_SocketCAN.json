@@ -1,0 +1,271 @@
+{
+  "tool": "mdf2socketcan",
+  "cases": [
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_can_bus_2.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_2_CAN.log",
+          "comparision_data": "single_can_bus_2_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_lin_bus_1_LIN.log",
+          "comparision_data": "single_lin_bus_1_LIN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_2.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_lin_bus_2_LIN.log",
+          "comparision_data": "single_lin_bus_2_LIN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and default key",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and (wrong) default key but correct device key",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default_device_1.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and no default or device key",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "return_code": 2,
+      "additional_files": [
+        {
+          "input_name": "passwords_device_1.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and no default key or but device key as first in list",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_device_2.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and no default key or but device key as middle in list",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_device_3.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Password file next to data with default name and no default key or but device key as last in list",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_device_4.json",
+          "name": "passwords.json"
+        }
+      ]
+    },
+    {
+      "_comment": "Encrypted file with password file stored in non-default location, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "options":
+      {
+        "-p": "abc/pass.json"
+      },
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "pass.json",
+          "relative_path": "abc"
+        }
+      ]
+    },
+    {
+      "_comment": "Encrypted file with password file stored in non-default location, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.log",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.log"
+        }
+      ],
+      "options":
+      {
+        "--password-file": "abc/pass.json"
+      },
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "pass.json",
+          "relative_path": "abc"
+        }
+      ]
+    },
+    {
+      "_comment": "Tests both encryption and compression. Placed in the encryption section to handle the password file setup",
+      "input": [
+        {
+          "name": "single_message_can_bus_1_1024_window.MFM"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_message_can_bus_1_1024_window_CAN.log",
+          "comparision_data": "single_message_can_bus_1_1024_window_CAN_encrypted.log"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 0
+        }
+      ]
+    }
+  ]
+}

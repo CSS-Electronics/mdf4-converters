@@ -1,0 +1,20 @@
+#ifndef TOOLS_CSV_PROJECTFORMATION_H
+#define TOOLS_CSV_PROJECTFORMATION_H
+
+#include <string_view>
+
+#include "Version.h"
+
+namespace mdf::tools::csv {
+
+    constexpr std::string_view PROGRAM_NAME = "@PROGRAM_NAME@";
+
+    constexpr Version const version = {
+        .major = @VERSION_MAJOR@,
+        .minor = @VERSION_MINOR@,
+        .patch = @VERSION_PATCH@
+    };
+
+}
+
+#endif //TOOLS_CSV_PROJECTFORMATION_H

@@ -1,0 +1,139 @@
+{
+  "tool": "mdf2pcap",
+  "cases": [
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        },
+        {
+          "name": "single_lin_bus_1.MF4"
+        },
+        {
+          "name": "single_lin_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MFC"
+        },
+        {
+          "name": "single_can_bus_2.MFC"
+        },
+        {
+          "name": "single_lin_bus_1.MFC"
+        },
+        {
+          "name": "single_lin_bus_2.MFC"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "comparision_data": "single_can_bus_1_CAN_compressed.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap",
+          "comparision_data": "single_can_bus_2_CAN_compressed.pcap"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MFE"
+        },
+        {
+          "name": "single_can_bus_2.MFE"
+        },
+        {
+          "name": "single_lin_bus_1.MFE"
+        },
+        {
+          "name": "single_lin_bus_2.MFE"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "comparision_data": "single_can_bus_1_CAN_encrypted.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap",
+          "comparision_data": "single_can_bus_2_CAN_encrypted.pcap"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "passwords_default.json",
+          "name": "passwords.json",
+          "relative_to_data": 1
+        }
+      ]
+    },
+    {
+      "_comment": "Invalid file simply skips and does not break the entire flow",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "invalid.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "return_code": 8
+    },
+    {
+      "_comment": "Missing file simply skips and does not break the entire flow",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "options": {
+        "../data/single_can_bus_1.MF4": "",
+        "../data/single_can_bus_2.MF4": "",
+        "../data/missing.MF4": "",
+        "../data/single_lin_bus_2.MF4": ""
+      },
+      "return_code": 1
+    }
+  ]
+}

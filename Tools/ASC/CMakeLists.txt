@@ -1,36 +1,42 @@
-project(mdf2asc CXX)
+project(mdf2asc)
 
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
+set(CMAKE_CXX_STANDARD 17)
 
+# Set project information.
 set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to PEAK ASCII format")
 
-set(SOURCE_FILES
-    ASC_CAN_Exporter.cpp
-    ASC_CAN_Exporter.h
-    ASC_Exporter.cpp
-    ASC_Exporter.h
-    ASC_LIN_Exporter.cpp
-    ASC_LIN_Exporter.h
-    main.cpp
-    )
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+
+# Set required additional packages.
+find_package(fmt REQUIRED)
 
 # Embed information in the source code.
-configure_file(ProjectInformation.h.in ProjectInformation.h @ONLY)
-set(LINK_TARGETS
-        ToolsBase
-        mdf
-        ${RUNTIME_LIBRARIES}
-        ${Boost_LIBRARIES}
-        )
+configure_file(
+  Source/ProjectInformation.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/Source/ProjectInformation.h
+  @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Source)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+set(SOURCE_FILES
+  Source/ASC_CAN_Exporter.cpp
+  Source/ASC_CAN_Exporter.h
+  Source/ASC_Exporter.cpp
+  Source/ASC_Exporter.h
+  Source/ASC_LIN_Exporter.cpp
+  Source/ASC_LIN_Exporter.h
+  Source/main.cpp
+  )
 
+include_directories(Include)
 add_executable(${PROGRAM_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROGRAM_NAME} ${LINK_TARGETS})
+target_link_libraries(${PROGRAM_NAME}
+    ${RUNTIME_LIBRARIES}
+    MDFSimpleConverters_Shared
+    fmt::fmt
+    )
 
 pack_executable(${PROGRAM_NAME})
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${PROJECT_NAME}.map")

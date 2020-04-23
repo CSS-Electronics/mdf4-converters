@@ -1,17 +1,16 @@
-#ifndef MDFSORTER_FILEINFO_H
-#define MDFSORTER_FILEINFO_H
+#ifndef MDFSIMPLECONVERTERS_FILEINFO_H
+#define MDFSIMPLECONVERTERS_FILEINFO_H
 
-#include <stdbool.h>
-#include <time.h>
-#include <stdint.h>
+#include <chrono>
+#include <cstdint>
 
-#include "SemanticVersion.h"
+#include "Version.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace mdf {
 
-typedef struct FileInfo_s {
+  struct FileInfo {
+    FileInfo();
+
     uint32_t Session;
     uint32_t Split;
     uint32_t LoggerID;
@@ -21,16 +20,16 @@ typedef struct FileInfo_s {
     uint32_t BitrateLIN1;
     uint32_t BitrateLIN2;
     char Comment[30 + 1];
-    time_t Time;
-    time_t TimezoneOffset;
-    SemanticVersion_t FW_Version;
-    SemanticVersionLimited_t HW_Version;
+
+    std::chrono::nanoseconds Time;
+    uint64_t TimezoneOffset;
+
+    Version FW_Version;
+    Version HW_Version;
     uint64_t CANMessages;
     uint64_t LINMessages;
-} FileInfo_t;
+  };
 
-#ifdef __cplusplus
 }
-#endif
 
-#endif //MDFSORTER_FILEINFO_H
+#endif //MDFSIMPLECONVERTERS_FILEINFO_H

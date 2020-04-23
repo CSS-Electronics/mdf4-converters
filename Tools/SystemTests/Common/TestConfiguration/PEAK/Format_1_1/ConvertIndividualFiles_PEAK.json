@@ -1,0 +1,139 @@
+{
+  "tool": "mdf2peak",
+  "cases": [
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_2_CAN.trc"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_1.MF4"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_2.MF4"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "multiple.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "multiple_CAN.trc"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "multiple_fin.MF4",
+          "comparision_data": "multiple_CAN.log"
+        }
+      ],
+      "output": [
+        {
+          "name": "multiple_fin_CAN.trc",
+          "comparision_data": "multiple_CAN.trc"
+        }
+      ]
+    },
+    {
+      "_comment": "Individual file with output folder, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-O": "abc"
+      }
+    },
+    {
+      "_comment": "Individual file with output folder, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "--output-directory": "abc"
+      }
+    },
+    {
+      "_comment": "Individual file with output folder, short form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-O": "abc"
+      },
+      "options_uses_relative": 1
+    },
+    {
+      "_comment": "Individual file with output folder, long form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.trc",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "--output-directory": "abc"
+      },
+      "options_uses_relative": 1
+    }
+  ]
+}

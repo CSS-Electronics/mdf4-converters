@@ -7,39 +7,72 @@
 #include "boost/filesystem.hpp"
 #include "boost/program_options.hpp"
 
-#include <CAN_DataFrame.h>
+#include "CANRecord.h"
 
 #include "CommonOptions.h"
 #include "FileInfo.h"
-#include "ProgressInterface.h"
+//#include "ProgressInterface.h"
 #include "ParseOptionStatus.h"
 #include "Version.h"
 
-namespace tools::shared {
+namespace mdf::tools::shared {
 
-    class ConverterInterface : public progress::ProgressController {
-    public:
+  /**
+   * The Converter interface allows each conversion tool to customize the commandline parser with additional parameters,
+   * as well as use a default ini file for additional settings.
+   */
+  class ConverterInterface {// : public progress::ProgressController {
+  public:
 
-        /**
-         * Destructor.
-         */
-        virtual ~ConverterInterface();
+    /**
+     * Destructor.
+     */
+    virtual ~ConverterInterface();
 
-        virtual bool convert(boost::filesystem::path inputFilePath, boost::filesystem::path outputFolder) = 0;
-        virtual void configureParser(boost::program_options::options_description& opts);
-        virtual void configureFileParser(boost::program_options::options_description& opts);
-        int setCommonOptions(std::shared_ptr<CommonOptions> commonOptions);
-        virtual ParseOptionStatus parseOptions(boost::program_options::variables_map const& result);
+    virtual bool convert(boost::filesystem::path inputFilePath, boost::filesystem::path outputFolder) = 0;
 
-        std::string const programName;
-        [[nodiscard]] virtual interfaces::Version getVersion() const = 0;
-        [[nodiscard]] bool usesConfigFile() const;
-    protected:
-        explicit ConverterInterface(std::string programName);
-        std::shared_ptr<CommonOptions> commonOptions;
-    private:
-        bool readConfigurationFile = true;
-    };
+    /**
+     * Called during the configuration stage of the commandline parser. Allows for injecting additional options.
+     * @param opts
+     */
+    virtual void configureParser(boost::program_options::options_description &opts);
+
+    /**
+     * Called during the configuration stage of the configuration file parser. Allows for injecting additional options.
+     * @param opts
+     */
+    virtual void configureFileParser(boost::program_options::options_description &opts);
+
+    /**
+     * Called after all options has been parsed, to allow the converter to respond to injected options.
+     * @param result
+     * @return
+     */
+    virtual ParseOptionStatus parseOptions(boost::program_options::variables_map const &result);
+
+    int setCommonOptions(std::shared_ptr<CommonOptions> commonOptions);
+
+
+    [[nodiscard]] virtual Version getVersion() const = 0;
+    [[nodiscard]] bool usesConfigFile() const;
+
+    /**
+     * Get the name of the current convert interface.
+     */
+    std::string_view programName;
+
+    /**
+     * Is true if the interface uses a configuration file for additional settings.
+     */
+    bool const readConfigurationFile;
+
+  protected:
+    explicit ConverterInterface(std::string programName, bool usesConfigurationFile = false);
+
+    std::shared_ptr<CommonOptions> commonOptions;
+  private:
+    std::string const programNameData;
+  };
 
 }
 

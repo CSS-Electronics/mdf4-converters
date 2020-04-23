@@ -1,0 +1,169 @@
+{
+  "tool": "mdf2clx000",
+  "cases": [
+    {
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_2_CAN_2.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_lin_bus_1_LIN_1.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_lin_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_lin_bus_2_LIN_2.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "multiple.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "multiple_CAN_1.txt"
+        },
+        {
+          "name": "multiple_CAN_2.txt"
+        },
+        {
+          "name": "multiple_LIN_1.txt"
+        },
+        {
+          "name": "multiple_LIN_2.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "multiple_fin.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "multiple_fin_CAN_1.txt",
+          "comparision_data": "multiple_CAN_1.txt"
+        },
+        {
+          "name": "multiple_fin_CAN_2.txt",
+          "comparision_data": "multiple_CAN_2.txt"
+        },
+        {
+          "name": "multiple_fin_LIN_1.txt",
+          "comparision_data": "multiple_LIN_1.txt"
+        },
+        {
+          "name": "multiple_fin_LIN_2.txt",
+          "comparision_data": "multiple_LIN_2.txt"
+        }
+      ]
+    },
+    {
+      "_comment": "Individual file with output folder, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-O": "abc"
+      }
+    },
+    {
+      "_comment": "Individual file with output folder, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "--output-directory": "abc"
+      }
+    },
+    {
+      "_comment": "Individual file with output folder, short form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-O": "abc"
+      },
+      "options_uses_relative": 1
+    },
+    {
+      "_comment": "Individual file with output folder, long form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "--output-directory": "abc"
+      },
+      "options_uses_relative": 1
+    }
+  ]
+}

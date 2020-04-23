@@ -6,9 +6,9 @@
 #include "CommonOptions.h"
 #include "FileInfo.h"
 
-namespace tools::shared {
+namespace mdf::tools::shared {
 
-    [[nodiscard]] time_t convertTimeStamp(DisplayTimeFormat const& displayTimeFormat, time_t timeStamp, FileInfo_t const& loggerInfo);
+    [[nodiscard]] time_t convertTimeStamp(DisplayTimeFormat const& displayTimeFormat, time_t timeStamp, FileInfo const& loggerInfo);
 
 }
 

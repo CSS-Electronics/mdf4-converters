@@ -1,46 +1,52 @@
-# Shared components among all exporters.
+# Add support for packaging.
+include(CMake/Package.cmake)
+
+# Set common packaging options.
+set(RESOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Resources)
+set(ICON_PATH ${RESOURCE_PATH}/icon.ico)
+
+if(MINGW)
+set(RUNTIME_LIBRARIES
+    -static-libstdc++
+    -static-libgcc
+    -static
+	)
+else()
+set(RUNTIME_LIBRARIES
+    -lstdc++fs
+	)
+endif()
+
+# Shared base for all the tools.
 add_subdirectory(Shared)
 
-# Common properties for resources related to packing.
-set(COMPANY_NAME "CSS Electronics")
-set(ICON_PATH ${CMAKE_SOURCE_DIR}/Resources/icon.ico)
-
-define_property(TARGET
-    PROPERTY ADDITIONAL_FILES
-    BRIEF_DOCS "Additional files to copy over into a release folder."
-    FULL_DOCS "Additional files to copy over into a release folder."
-    )
-
-# List of all the custom exporters.
+# Each converter tool.
 add_subdirectory(ASC)
 add_subdirectory(CLX000)
 add_subdirectory(CSV)
+add_subdirectory(MDF)
+add_subdirectory(PEAK)
 add_subdirectory(PCAP)
 add_subdirectory(SocketCAN)
-add_subdirectory(Tool)
 
-set(TOOL_TARGETS
+# Create a meta-target for building a release.
+set(EXTERNAL_TARGETS
     mdf2asc
     mdf2clx000
     mdf2csv
     mdf2finalized
     mdf2pcap
+    mdf2peak
     mdf2socketcan
     )
 
-# Create a target building all the tools.
-add_custom_target(Tools)
-add_custom_target(Tools_Pack)
-
-set(ADDITIONAL_RELEASE_FILES
-    README.md
-    LICENSE.md
+add_custom_target(ToolsRelease
+    DEPENDS ${EXTERNAL_TARGETS}
     )
 
-set_property(TARGET Tools_Pack PROPERTY ADDITIONAL_FILES ${ADDITIONAL_RELEASE_FILES})
-copy_additional_files(Tools_Pack)
-
-foreach(TARGET ${TOOL_TARGETS})
-    add_dependencies(Tools ${TARGET})
-    add_dependencies(Tools_Pack ${TARGET}_install)
-endforeach()
+# For linux builds, include AppImage meta-target.
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  foreach(TARGET ${EXTERNAL_TARGETS})
+    add_dependencies(ToolsRelease ${TARGET}_install)
+  endforeach()
+endif()

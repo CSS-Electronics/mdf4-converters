@@ -1,0 +1,2507 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.2, pytest-5.4.1, py-1.8.1, pluggy-0.13.1
+rootdir: /home/work/Projects/MDFTest/Tools/SystemTests, inifile: pytest.ini
+collected 290 items / 243 deselected / 47 selected
+
+Common/Common_Test.py Executing command: ['/tmp/tmp1r3q97ru/bin/mdf2csv', '/tmp/tmp1r3q97ru/data/single_can_bus_1.MF4']
+.Executing command: ['/tmp/tmptjl3rh_6/bin/mdf2csv', '/tmp/tmptjl3rh_6/data/single_can_bus_2.MF4']
+.Executing command: ['/tmp/tmp_pqep8yv/bin/mdf2csv', '/tmp/tmp_pqep8yv/data/single_lin_bus_1.MF4']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp_pqep8yv
+Executing command: ['/tmp/tmpsbvtjdol/bin/mdf2csv', '/tmp/tmpsbvtjdol/data/single_lin_bus_2.MF4']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpsbvtjdol
+Executing command: ['/tmp/tmp2j09krqk/bin/mdf2csv', '/tmp/tmp2j09krqk/data/multiple.MF4']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp2j09krqk
+EEEEEEEEUsage:
+mdf2csv [-short-option value --long-option value] [-i] file_a [file_b ...]:
+
+Short options start with a single "-", while long options start with "--".
+A value enclosed in "[]" signifies it is optional.
+Some options only exists in the long form, while others exist in both forms.
+Not all options require arguments (arg).
+
+  -h [ --help ]                 Print this help message.
+  -v [ --version ]              Print version information.
+  --verbose arg (=1)            Set verbosity of output (0-5).
+  -I [ --input-directory ] arg  Input directory to convert files from.
+  -O [ --output-directory ] arg Output directory to place converted files into.
+  --non-interactive             Run in non-interactive mode, with no progress 
+                                output.
+  -t [ --timezone ] arg (=l)    Display times in UTC (u), logger localtime (l, 
+                                default) or PC local time (p).
+  -i [ --input-files ] arg      List of files to convert, ignored if 
+                                input-directory is specified. All unknown 
+                                arguments will be interpreted as input files.
+
+Executing command: ['/tmp/tmpm5bd_rbs/bin/mdf2csv']
+.[2020-03-24 07:00:24.131007] [0x00007f176e699040] [error]   File does not exist: "/tmp/tmpihdaybe7/data/test.MFE"
+Executing command: ['/tmp/tmpihdaybe7/bin/mdf2csv', '-i', '/tmp/tmpihdaybe7/data/test.MFE']
+FUnrecognized option:
+-p
+
+Usage:
+mdf2csv [-short-option value --long-option value] [-i] file_a [file_b ...]:
+
+Short options start with a single "-", while long options start with "--".
+A value enclosed in "[]" signifies it is optional.
+Some options only exists in the long form, while others exist in both forms.
+Not all options require arguments (arg).
+
+  -h [ --help ]                 Print this help message.
+  -v [ --version ]              Print version information.
+  --verbose arg (=1)            Set verbosity of output (0-5).
+  -I [ --input-directory ] arg  Input directory to convert files from.
+  -O [ --output-directory ] arg Output directory to place converted files into.
+  --non-interactive             Run in non-interactive mode, with no progress 
+                                output.
+  -t [ --timezone ] arg (=l)    Display times in UTC (u), logger localtime (l, 
+                                default) or PC local time (p).
+  -i [ --input-files ] arg      List of files to convert, ignored if 
+                                input-directory is specified. All unknown 
+                                arguments will be interpreted as input files.
+
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpihdaybe7
+Executing command: ['/tmp/tmp49d9efmq/bin/mdf2csv', '-p', '/tmp/tmp49d9efmq/data/test.json']
+FUnrecognized option:
+--password-file
+
+Usage:
+mdf2csv [-short-option value --long-option value] [-i] file_a [file_b ...]:
+
+Short options start with a single "-", while long options start with "--".
+A value enclosed in "[]" signifies it is optional.
+Some options only exists in the long form, while others exist in both forms.
+Not all options require arguments (arg).
+
+  -h [ --help ]                 Print this help message.
+  -v [ --version ]              Print version information.
+  --verbose arg (=1)            Set verbosity of output (0-5).
+  -I [ --input-directory ] arg  Input directory to convert files from.
+  -O [ --output-directory ] arg Output directory to place converted files into.
+  --non-interactive             Run in non-interactive mode, with no progress 
+                                output.
+  -t [ --timezone ] arg (=l)    Display times in UTC (u), logger localtime (l, 
+                                default) or PC local time (p).
+  -i [ --input-files ] arg      List of files to convert, ignored if 
+                                input-directory is specified. All unknown 
+                                arguments will be interpreted as input files.
+
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp49d9efmq
+Executing command: ['/tmp/tmpawl8bb1s/bin/mdf2csv', '--password-file', '/tmp/tmpawl8bb1s/data/test.json']
+F[2020-03-24 07:00:24.171393] [0x00007f353b042040] [fatal]   Error during conversion of ""/tmp/tmpzvvl8x8t/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpawl8bb1s
+Executing command: ['/tmp/tmpzvvl8x8t/bin/mdf2csv', '/tmp/tmpzvvl8x8t/data/single_can_bus_1.MFE']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpzvvl8x8t
+Executing command: ['/tmp/tmpq83c9zqg/bin/mdf2csv', '-t', 'l', '/tmp/tmpq83c9zqg/data/single_can_bus_1.MF4']
+.Executing command: ['/tmp/tmpyjbk30ta/bin/mdf2csv', '--timezone', 'l', '/tmp/tmpyjbk30ta/data/single_can_bus_1.MF4']
+.EEEEEEEE[2020-03-24 07:00:24.321271] [0x00007f52f0d41040] [fatal]   Error during conversion of ""/tmp/tmpbju1dtbt/data/single_message_can_bus_1_256_window.MFC"".
+Executing command: ['/tmp/tmpbju1dtbt/bin/mdf2csv', '/tmp/tmpbju1dtbt/data/single_message_can_bus_1_256_window.MFC']
+F[2020-03-24 07:00:24.333653] [0x00007f60389ab040] [fatal]   Error during conversion of ""/tmp/tmpmy6lg_tq/data/single_message_can_bus_1_512_window.MFC"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpbju1dtbt
+Executing command: ['/tmp/tmpmy6lg_tq/bin/mdf2csv', '/tmp/tmpmy6lg_tq/data/single_message_can_bus_1_512_window.MFC']
+F[2020-03-24 07:00:24.348327] [0x00007ff52bb6d040] [fatal]   Error during conversion of ""/tmp/tmp5wwiks4n/data/single_message_can_bus_1_1024_window.MFC"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpmy6lg_tq
+Executing command: ['/tmp/tmp5wwiks4n/bin/mdf2csv', '/tmp/tmp5wwiks4n/data/single_message_can_bus_1_1024_window.MFC']
+F[2020-03-24 07:00:24.363584] [0x00007f9c2943f040] [fatal]   Error during conversion of ""/tmp/tmpq2xk5z8h/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp5wwiks4n
+Executing command: ['/tmp/tmpq2xk5z8h/bin/mdf2csv', '/tmp/tmpq2xk5z8h/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.378023] [0x00007fdda8c52040] [fatal]   Error during conversion of ""/tmp/tmpv6dhtq01/data/single_can_bus_2.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpq2xk5z8h
+Executing command: ['/tmp/tmpv6dhtq01/bin/mdf2csv', '/tmp/tmpv6dhtq01/data/single_can_bus_2.MFE']
+F[2020-03-24 07:00:24.392838] [0x00007fe982851040] [fatal]   Error during conversion of ""/tmp/tmpc1_vnhqp/data/single_lin_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpv6dhtq01
+Executing command: ['/tmp/tmpc1_vnhqp/bin/mdf2csv', '/tmp/tmpc1_vnhqp/data/single_lin_bus_1.MFE']
+F[2020-03-24 07:00:24.407095] [0x00007f4526e86040] [fatal]   Error during conversion of ""/tmp/tmp585k4loe/data/single_lin_bus_2.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpc1_vnhqp
+Executing command: ['/tmp/tmp585k4loe/bin/mdf2csv', '/tmp/tmp585k4loe/data/single_lin_bus_2.MFE']
+F[2020-03-24 07:00:24.421854] [0x00007f4e5f919040] [fatal]   Error during conversion of ""/tmp/tmphm4fm4yl/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp585k4loe
+Executing command: ['/tmp/tmphm4fm4yl/bin/mdf2csv', '/tmp/tmphm4fm4yl/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.435121] [0x00007fce0623f040] [fatal]   Error during conversion of ""/tmp/tmp5te4y2dh/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmphm4fm4yl
+Executing command: ['/tmp/tmp5te4y2dh/bin/mdf2csv', '/tmp/tmp5te4y2dh/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.450023] [0x00007f45b3993040] [fatal]   Error during conversion of ""/tmp/tmpohnwbf41/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp5te4y2dh
+Executing command: ['/tmp/tmpohnwbf41/bin/mdf2csv', '/tmp/tmpohnwbf41/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.466177] [0x00007f0efe01c040] [fatal]   Error during conversion of ""/tmp/tmpjhkgk2pt/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpohnwbf41
+Executing command: ['/tmp/tmpjhkgk2pt/bin/mdf2csv', '/tmp/tmpjhkgk2pt/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.487903] [0x00007f6919092040] [fatal]   Error during conversion of ""/tmp/tmp9q7xi2df/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpjhkgk2pt
+Executing command: ['/tmp/tmp9q7xi2df/bin/mdf2csv', '/tmp/tmp9q7xi2df/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.508512] [0x00007f26d29c0040] [fatal]   Error during conversion of ""/tmp/tmpb83505a9/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp9q7xi2df
+Executing command: ['/tmp/tmpb83505a9/bin/mdf2csv', '/tmp/tmpb83505a9/data/single_can_bus_1.MFE']
+FUnrecognized option:
+-p
+
+Usage:
+mdf2csv [-short-option value --long-option value] [-i] file_a [file_b ...]:
+
+Short options start with a single "-", while long options start with "--".
+A value enclosed in "[]" signifies it is optional.
+Some options only exists in the long form, while others exist in both forms.
+Not all options require arguments (arg).
+
+  -h [ --help ]                 Print this help message.
+  -v [ --version ]              Print version information.
+  --verbose arg (=1)            Set verbosity of output (0-5).
+  -I [ --input-directory ] arg  Input directory to convert files from.
+  -O [ --output-directory ] arg Output directory to place converted files into.
+  --non-interactive             Run in non-interactive mode, with no progress 
+                                output.
+  -t [ --timezone ] arg (=l)    Display times in UTC (u), logger localtime (l, 
+                                default) or PC local time (p).
+  -i [ --input-files ] arg      List of files to convert, ignored if 
+                                input-directory is specified. All unknown 
+                                arguments will be interpreted as input files.
+
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpb83505a9
+Executing command: ['/tmp/tmpyyrgmmlq/bin/mdf2csv', '-p', '/tmp/tmpyyrgmmlq/data/abc/pass.json', '/tmp/tmpyyrgmmlq/data/single_can_bus_1.MFE']
+FUnrecognized option:
+--password-file
+
+Usage:
+mdf2csv [-short-option value --long-option value] [-i] file_a [file_b ...]:
+
+Short options start with a single "-", while long options start with "--".
+A value enclosed in "[]" signifies it is optional.
+Some options only exists in the long form, while others exist in both forms.
+Not all options require arguments (arg).
+
+  -h [ --help ]                 Print this help message.
+  -v [ --version ]              Print version information.
+  --verbose arg (=1)            Set verbosity of output (0-5).
+  -I [ --input-directory ] arg  Input directory to convert files from.
+  -O [ --output-directory ] arg Output directory to place converted files into.
+  --non-interactive             Run in non-interactive mode, with no progress 
+                                output.
+  -t [ --timezone ] arg (=l)    Display times in UTC (u), logger localtime (l, 
+                                default) or PC local time (p).
+  -i [ --input-files ] arg      List of files to convert, ignored if 
+                                input-directory is specified. All unknown 
+                                arguments will be interpreted as input files.
+
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpyyrgmmlq
+Executing command: ['/tmp/tmp395igdc0/bin/mdf2csv', '--password-file', '/tmp/tmp395igdc0/data/abc/pass.json', '/tmp/tmp395igdc0/data/single_can_bus_1.MFE']
+F[2020-03-24 07:00:24.557926] [0x00007f1b9b241040] [fatal]   Error during conversion of ""/tmp/tmpq64d4sfq/data/single_message_can_bus_1_1024_window.MFM"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp395igdc0
+Executing command: ['/tmp/tmpq64d4sfq/bin/mdf2csv', '/tmp/tmpq64d4sfq/data/single_message_can_bus_1_1024_window.MFM']
+F[2020-03-24 07:00:24.572427] [0x00007fc8adc81040] [fatal]   Error during conversion of ""/tmp/tmpf4x55ec5/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpq64d4sfq
+Executing command: ['/tmp/tmpf4x55ec5/bin/mdf2csv', '-i', '/tmp/tmpf4x55ec5/data']
+F[2020-03-24 07:00:24.592865] [0x00007f8abb2c1040] [fatal]   Error during conversion of ""/tmp/tmpo4qvq7ba/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpf4x55ec5
+Executing command: ['/tmp/tmpo4qvq7ba/bin/mdf2csv', '--input-files', '/tmp/tmpo4qvq7ba/data']
+F[2020-03-24 07:00:24.608279] [0x00007f0c324e9040] [fatal]   Error during conversion of ""/tmp/tmpm04ws7sg/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpo4qvq7ba
+Executing command: ['/tmp/tmpm04ws7sg/bin/mdf2csv', '-i', '../data']
+F[2020-03-24 07:00:24.625251] [0x00007fc73fde5040] [fatal]   Error during conversion of ""/tmp/tmp4_vhx5do/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpm04ws7sg
+Executing command: ['/tmp/tmp4_vhx5do/bin/mdf2csv', '--input-files', '../data']
+F[2020-03-24 07:00:24.648216] [0x00007f63d3e71040] [fatal]   Error during conversion of ""/tmp/tmpubiw_fyi/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp4_vhx5do
+Executing command: ['/tmp/tmpubiw_fyi/bin/mdf2csv', '-i', '/tmp/tmpubiw_fyi/data', '-O', '/tmp/tmpubiw_fyi/data/abc']
+F[2020-03-24 07:00:24.662307] [0x00007f56c92e5040] [fatal]   Error during conversion of ""/tmp/tmpkppvqy11/data"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpubiw_fyi
+Executing command: ['/tmp/tmpkppvqy11/bin/mdf2csv', '-i', '/tmp/tmpkppvqy11/data', '--output-directory', '/tmp/tmpkppvqy11/data/abc']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpkppvqy11
+Executing command: ['/tmp/tmplambk4i6/bin/mdf2csv', '/tmp/tmplambk4i6/data/single_can_bus_1.MF4', '/tmp/tmplambk4i6/data/single_can_bus_2.MF4', '/tmp/tmplambk4i6/data/single_lin_bus_1.MF4', '/tmp/tmplambk4i6/data/single_lin_bus_2.MF4']
+F[2020-03-24 07:00:24.693100] [0x00007faf7789b040] [fatal]   Error during conversion of ""/tmp/tmp93h1dxf9/data/single_can_bus_1.MFC"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmplambk4i6
+Executing command: ['/tmp/tmp93h1dxf9/bin/mdf2csv', '/tmp/tmp93h1dxf9/data/single_can_bus_1.MFC', '/tmp/tmp93h1dxf9/data/single_can_bus_2.MFC', '/tmp/tmp93h1dxf9/data/single_lin_bus_1.MFC', '/tmp/tmp93h1dxf9/data/single_lin_bus_2.MFC']
+F[2020-03-24 07:00:24.715760] [0x00007f734b538040] [fatal]   Error during conversion of ""/tmp/tmpbpd68h97/data/single_can_bus_1.MFE"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmp93h1dxf9
+Executing command: ['/tmp/tmpbpd68h97/bin/mdf2csv', '/tmp/tmpbpd68h97/data/single_can_bus_1.MFE', '/tmp/tmpbpd68h97/data/single_can_bus_2.MFE', '/tmp/tmpbpd68h97/data/single_lin_bus_1.MFE', '/tmp/tmpbpd68h97/data/single_lin_bus_2.MFE']
+F[2020-03-24 07:00:24.730051] [0x00007f5508080040] [fatal]   Error during conversion of ""/tmp/tmprkqqd_s5/data/invalid.MF4"".
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpbpd68h97
+Executing command: ['/tmp/tmprkqqd_s5/bin/mdf2csv', '/tmp/tmprkqqd_s5/data/single_can_bus_1.MF4', '/tmp/tmprkqqd_s5/data/single_can_bus_2.MF4', '/tmp/tmprkqqd_s5/data/invalid.MF4', '/tmp/tmprkqqd_s5/data/single_lin_bus_2.MF4']
+F[2020-03-24 07:00:24.746495] [0x00007f8e87210040] [error]   File does not exist: "/tmp/tmpobinw0wr/data/missing.MF4"
+Error during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmprkqqd_s5
+Executing command: ['/tmp/tmpobinw0wr/bin/mdf2csv', '../data/single_can_bus_1.MF4', '../data/single_can_bus_2.MF4', '../data/missing.MF4', '../data/single_lin_bus_2.MF4']
+FError during test. The temporary directory has NOT been deleted, and can be found at /tmp/tmpobinw0wr
+
+
+==================================== ERRORS ====================================
+______ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[5] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdb6340>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpd08j7sig/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[5] _____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[5]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+______ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[6] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdb72b0>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpu1mdv1vp/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[6] _____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[6]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+______ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[7] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bd41fd0>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpjake17kd/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[7] _____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[7]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+______ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[8] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bc77310>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpzzpimpjd/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[8] _____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[8]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+_____ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[16] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be41ca0>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpoddyiafu/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[16] ____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[16]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+_____ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[17] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181c085940>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmp1cy9w9pv/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[17] ____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[17]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+_____ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[18] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bc77e50>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmpzoj8grnv/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[18] ____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[18]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+_____ ERROR at setup of TestCSVFiles.test_common_convert_input_folder[19] ______
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be57a00>
+copy_binary_files = None
+
+    @pytest.fixture()
+    def copy_test_data_to_data_folder(self, copy_binary_files):
+        self._data_folder = self._temporary_folder / "data"
+>       self._copy_data_to_folder()
+
+Common/BaseTestCase.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Common/BaseTestCase.py:114: in _copy_data_to_folder
+    shutil.copy(src, dst)
+/usr/lib/python3.8/shutil.py:415: in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+src = PosixPath('/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4')
+dst = PosixPath('/tmp/tmp_qkjgs3g/data/single_can_bus_1.mf4')
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/work/Projects/MDFTest/Tools/SystemTests/Common/TestData/single_can_bus_1.mf4'
+
+/usr/lib/python3.8/shutil.py:261: FileNotFoundError
+____ ERROR at teardown of TestCSVFiles.test_common_convert_input_folder[19] ____
+
+request = <SubRequest 'temporary_folder' for <Function test_common_convert_input_folder[19]>>
+pytestconfig = <_pytest.config.Config object at 0x7f181c3f5700>
+
+    @pytest.fixture()
+    def temporary_folder(request, pytestconfig) -> Path:
+        # Create a temporary directory.
+        temporary_directory = tempfile.mkdtemp()
+    
+        # Let the test run its cause.
+        yield Path(temporary_directory)
+    
+        # Cleanup.
+>       if pytestconfig.getoption("keep") and request.node.rep_call.failed:
+E       AttributeError: 'Function' object has no attribute 'rep_call'
+
+conftest.py:72: AttributeError
+=================================== FAILURES ===================================
+_______________ TestCSVFiles.test_common_convert_input_folder[2] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdb6a30>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+        assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [PosixPath('/tmp/tmp_pqep8yv/data/single_lin_bus_1_LIN.csv')]
+E       assert 1 == 0
+E        +  where 1 = len([PosixPath('/tmp/tmp_pqep8yv/data/single_lin_bus_1_LIN.csv')])
+
+Common/Common_Test.py:59: AssertionError
+_______________ TestCSVFiles.test_common_convert_input_folder[3] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdb7d90>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+        assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [PosixPath('/tmp/tmpsbvtjdol/data/single_lin_bus_2_LIN.csv')]
+E       assert 1 == 0
+E        +  where 1 = len([PosixPath('/tmp/tmpsbvtjdol/data/single_lin_bus_2_LIN.csv')])
+
+Common/Common_Test.py:59: AssertionError
+_______________ TestCSVFiles.test_common_convert_input_folder[4] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be43070>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+        assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [PosixPath('/tmp/tmp2j09krqk/data/multiple_LIN.csv')]
+E       assert 1 == 0
+E        +  where 1 = len([PosixPath('/tmp/tmp2j09krqk/data/multiple_LIN.csv')])
+
+Common/Common_Test.py:59: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[10] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf7cbb0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 1 but got 2.
+E       assert 2 == 1
+E        +  where 1 = DataForTestCase(name=None, input=[], output=[], options={'-i': '/tmp/tmpihdaybe7/data/test.MFE'}, options_uses_relative=False, return_code=1, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[], output=[], options={'-i': '/tmp/tmpihdaybe7/data/test.MFE'}, options_uses_relative=False, return_code=1, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf7cbb0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[11] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdaca60>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected -3 but got 1.
+E       assert 1 == -3
+E        +  where -3 = DataForTestCase(name=None, input=[], output=[], options={'-p': '/tmp/tmp49d9efmq/data/test.json'}, options_uses_relative=False, return_code=-3, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[], output=[], options={'-p': '/tmp/tmp49d9efmq/data/test.json'}, options_uses_relative=False, return_code=-3, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdaca60>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[12] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdad0d0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected -3 but got 1.
+E       assert 1 == -3
+E        +  where -3 = DataForTestCase(name=None, input=[], output=[], options={'--password-file': '/tmp/tmpawl8bb1s/data/test.json'}, options_uses_relative=False, return_code=-3, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[], output=[], options={'--password-file': '/tmp/tmpawl8bb1s/data/test.json'}, options_uses_relative=False, return_code=-3, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdad0d0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[13] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be04100>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 2 but got 255.
+E       assert 255 == 2
+E        +  where 2 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=True)], output=[], options={}, options_uses_relative=False, return_code=2, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=True)], output=[], options={}, options_uses_relative=False, return_code=2, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181be04100>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[20] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bfa5ca0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_256_window.MFC', relative_path...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_256_window.MFC', relative_path...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bfa5ca0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[21] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdac700>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_512_window.MFC', relative_path...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_512_window.MFC', relative_path...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdac700>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[22] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be042b0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_1024_window.MFC', relative_pat...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_1024_window.MFC', relative_pat...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181be042b0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[23] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181c024130>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181c024130>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[24] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf8f580>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_2.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_2.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf8f580>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[25] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181beb93d0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_lin_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_lin_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181beb93d0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[26] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bc346d0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_lin_bus_2.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_lin_bus_2.MFE', relative_path='.', auto_include=...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bc346d0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[27] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf15c40>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...input_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...input_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf15c40>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[28] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf7b640>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...e='passwords_default_device_1.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...e='passwords_default_device_1.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf7b640>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[29] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bed8be0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 2 but got 255.
+E       assert 255 == 2
+E        +  where 2 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_1.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_1.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bed8be0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[30] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdac9a0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_2.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_2.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdac9a0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[31] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bd411f0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_3.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_3.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bd411f0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[32] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bee4c70>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_4.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...nput_name='passwords_device_4.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bee4c70>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[33] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdc8cd0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 1.
+E       assert 1 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...on(input_name='passwords_default.json', name='pass.json', relative_path='abc', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...on(input_name='passwords_default.json', name='pass.json', relative_path='abc', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdc8cd0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[34] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf7f820>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 1.
+E       assert 1 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...on(input_name='passwords_default.json', name='pass.json', relative_path='abc', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...on(input_name='passwords_default.json', name='pass.json', relative_path='abc', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf7f820>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[35] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdb7e20>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_1024_window.MFM', relative_pat...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_message_can_bus_1_1024_window.MFM', relative_pat...nput_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=False)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdb7e20>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[36] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf601c0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...tions={'-i': '/tmp/tmpf4x55ec5/data'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...tions={'-i': '/tmp/tmpf4x55ec5/data'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf601c0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[37] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181ba71160>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...nput-files': '/tmp/tmpo4qvq7ba/data'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...nput-files': '/tmp/tmpo4qvq7ba/data'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181ba71160>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[38] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bee3280>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..._path='.')], options={'-i': '../data'}, options_uses_relative=True, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..._path='.')], options={'-i': '../data'}, options_uses_relative=True, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bee3280>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[39] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf17a90>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..., options={'--input-files': '../data'}, options_uses_relative=True, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..., options={'--input-files': '../data'}, options_uses_relative=True, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf17a90>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[40] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bec1fa0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...', '-O': '/tmp/tmpubiw_fyi/data/abc'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...', '-O': '/tmp/tmpubiw_fyi/data/abc'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bec1fa0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[41] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bdf4880>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...ectory': '/tmp/tmpkppvqy11/data/abc'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...ectory': '/tmp/tmpkppvqy11/data/abc'}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bdf4880>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[42] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf7b880>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+        assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+    
+        # Ensure the expected files are present.
+        expected_output_files = []
+        for output_file in self._data.output:
+            target_path = self._data_folder / output_file.relative_path / output_file.name
+            expected_output_files.append(target_path)
+    
+        missing_files = []
+        for expected_output_file in expected_output_files:
+            if not expected_output_file.exists():
+                missing_files.append(expected_output_file)
+    
+>       assert len(missing_files) == 0, f"Missing expected files: {missing_files}"
+E       AssertionError: Missing expected files: [PosixPath('/tmp/tmplambk4i6/data/single_lin_bus_1_LIN.csv'), PosixPath('/tmp/tmplambk4i6/data/single_lin_bus_2_LIN.csv')]
+E       assert 2 == 0
+E        +  where 2 = len([PosixPath('/tmp/tmplambk4i6/data/single_lin_bus_1_LIN.csv'), PosixPath('/tmp/tmplambk4i6/data/single_lin_bus_2_LIN.csv')])
+
+Common/Common_Test.py:59: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[43] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bedb610>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFC', relative_path='.', auto_include=...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFC', relative_path='.', auto_include=...csv', relative_path='.')], options={}, options_uses_relative=False, return_code=0, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bedb610>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[44] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181be5ce20>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 0 but got 255.
+E       assert 255 == 0
+E        +  where 0 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...input_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MFE', relative_path='.', auto_include=...input_name='passwords_default.json', name='passwords.json', relative_path='.', relative_to_data=True)], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181be5ce20>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[45] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bf7ceb0>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 8 but got 255.
+E       assert 255 == 8
+E        +  where 8 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...None, relative_path='.')], options={}, options_uses_relative=False, return_code=8, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=...None, relative_path='.')], options={}, options_uses_relative=False, return_code=8, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bf7ceb0>._data
+
+Common/Common_Test.py:46: AssertionError
+______________ TestCSVFiles.test_common_convert_input_folder[46] _______________
+
+self = <Common_Test.TestCSVFiles object at 0x7f181bed8d60>
+copy_test_data_to_data_folder = None
+
+    def test_common_convert_input_folder(self, copy_test_data_to_data_folder):
+        # Execute the target tool on the input file with the arguments.
+        command = [
+            str(self._executable)
+        ]
+    
+        # Insert options.
+        for key, value in self._data.options.items():
+            command.append(key)
+    
+            # Handle file arguments by discarding the empty value.
+            if value is not "":
+                command.append(value)
+    
+        # Handle files to auto include.
+        for f in self._data.input:
+            if f.auto_include:
+                target_path = self._data_folder / f.relative_path / f.name
+                command.append(str(target_path))
+    
+        print(f"Executing command: {command}")
+    
+        # Perform test.
+        call_result = subprocess.run(command, cwd=self._binary_folder)
+    
+        # Ensure the return code matches the expected code.
+        # NOTE: Windows can return a pure positive number, even though it should be a signed number.
+        return_code = call_result.returncode
+        if return_code & 0x80000000:
+            import ctypes
+            # Convert using twos complement.
+            return_code = ctypes.c_int32(return_code).value
+    
+            pass
+    
+>       assert return_code == self._data.return_code, f"Unexpected returncode. Expected {self._data.return_code} but got {return_code}."
+E       AssertionError: Unexpected returncode. Expected 1 but got 2.
+E       assert 2 == 1
+E        +  where 1 = DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..., '../data/single_lin_bus_2.MF4': ''}, options_uses_relative=False, return_code=1, additional_files=[], tool='mdf2csv').return_code
+E        +    where DataForTestCase(name=None, input=[FileInputSpecification(name='single_can_bus_1.MF4', relative_path='.', auto_include=..., '../data/single_lin_bus_2.MF4': ''}, options_uses_relative=False, return_code=1, additional_files=[], tool='mdf2csv') = <Common_Test.TestCSVFiles object at 0x7f181bed8d60>._data
+
+Common/Common_Test.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[2]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[3]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[4]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[10]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[11]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[12]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[13]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[20]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[21]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[22]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[23]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[24]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[25]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[26]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[27]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[28]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[29]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[30]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[31]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[32]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[33]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[34]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[35]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[36]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[37]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[38]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[39]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[40]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[41]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[42]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[43]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[44]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[45]
+FAILED Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[46]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[5]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[5]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[6]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[6]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[7]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[7]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[8]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[8]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[16]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[16]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[17]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[17]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[18]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[18]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[19]
+ERROR Common/Common_Test.py::TestCSVFiles::test_common_convert_input_folder[19]
+=========== 34 failed, 5 passed, 243 deselected, 16 errors in 1.28s ============

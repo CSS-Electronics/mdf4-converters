@@ -1,0 +1,16 @@
+#ifndef TOOLS_SHARED_VERSIONINFORMATION_H
+#define TOOLS_SHARED_VERSIONINFORMATION_H
+
+#include "Version.h"
+
+namespace mdf::tools::shared {
+
+    constexpr Version const version = {
+        .major = @VERSION_MAJOR@,
+        .minor = @VERSION_MINOR@,
+        .patch = @VERSION_PATCH@
+    };
+
+}
+
+#endif //TOOLS_SHARED_VERSIONINFORMATION_H

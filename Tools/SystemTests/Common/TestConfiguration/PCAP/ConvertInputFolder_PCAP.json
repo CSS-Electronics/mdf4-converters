@@ -1,0 +1,209 @@
+{
+  "tool": "mdf2pcap",
+  "cases": [
+    {
+      "_comment": "Convert multiple files by folder instead of by name, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "options":
+      {
+        "-i": "."
+      }
+    },
+    {
+      "_comment": "Convert multiple files by folder instead of by name, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "options":
+      {
+        "--input-files": "."
+      }
+    },
+    {
+      "_comment": "Convert multiple files by folder instead of by name, short form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "options":
+      {
+        "-i": "."
+      },
+      "options_uses_relative": 1
+    },
+    {
+      "_comment": "Convert multiple files by folder instead of by name, long form and relative path",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap"
+        }
+      ],
+      "options":
+      {
+        "--input-files": "."
+      },
+      "options_uses_relative": 1
+    },
+    {
+      "_comment": "Convert multiple files by folder instead of by name and output to folder, short form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "relative_path": "abc"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-i": ".",
+        "-O": "abc"
+      }
+    },
+    {
+      "_comment": "Convert multiple files by folder instead of by name and output to folder, long form",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_can_bus_2.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_1.MF4",
+          "auto_include": 0
+        },
+        {
+          "name": "single_lin_bus_2.MF4",
+          "auto_include": 0
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN.pcap",
+          "relative_path": "abc"
+        },
+        {
+          "name": "single_can_bus_2_CAN.pcap",
+          "relative_path": "abc"
+        }
+      ],
+      "options": {
+        "-i": ".",
+        "--output-directory": "abc"
+      }
+    }
+  ]
+}

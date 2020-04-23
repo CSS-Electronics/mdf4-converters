@@ -1,378 +1,627 @@
 #include "ExecutableInterface.h"
 
-#include "Library.h"
-
-#include <fstream>
+#include <boost/algorithm/string.hpp>
+#include <boost/dll/runtime_symbol_info.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include "VersionInformation.h"
+#include "GenericFile.h"
+#include "HeatshrinkFile.h"
+#include "AESGCMFile.h"
+#include "PasswordStorage.h"
+
+#include "Library.h"
+#include "ProjectInformation.h"
 
 using namespace std::placeholders;
 namespace bfs = boost::filesystem;
 namespace blo = boost::log;
 namespace bpo = boost::program_options;
 
-namespace tools::shared {
+static std::vector<std::string> acceptableExtensions = {".mf4", ".mfe", ".mfc", ".mfm"};
 
-    ExecutableInterface::ExecutableInterface(std::unique_ptr<ConverterInterface> interface) : interface(std::move(interface)) {
-        commonOptions = std::make_shared<CommonOptions>();
+namespace mdf::tools::shared {
+
+  ExecutableInterface::ExecutableInterface(std::unique_ptr<ConverterInterface> interface) : interface(
+    std::move(interface)) {
+    commonOptions = std::make_shared<CommonOptions>();
+  }
+
+  StatusCode ExecutableInterface::main(int argc, char **argv) {
+    // Register progress callback.
+    //interface->registerProgressCallback([=](auto &&...args) { return updateProgress(args...); });
+    StatusCode mainStatus = StatusCode::NoErrors;
+
+    // Configure which arguments to parse. Start with basic and then custom.
+    configureParser();
+    interface->configureParser(commandlineOptions);
+    interface->configureFileParser(configFileOptions);
+
+    // Parse options. Again, start with basic and continue to derived. The commandline parser is allowed to take
+    // ALL options, to ensure a default value is populated.
+    boost::program_options::options_description allOptions("All allowed options");
+    allOptions.add(commandlineOptions);
+    allOptions.add(configFileOptions);
+
+    auto parser = bpo::command_line_parser(argc, argv);
+    parser.options(allOptions);
+    parser.positional(commandlinePositionalOptions);
+    parser.allow_unregistered();
+
+    bpo::basic_parsed_options<char> parsedOptions(&commandlineOptions);
+
+    ParseOptionStatus status = ParseOptionStatus::NoError;
+
+    // Handle initial parsing of options from the command line.
+    try {
+      parsedOptions = parser.run();
+      bpo::store(parsedOptions, optionResult);
+      bpo::notify(optionResult);
+    } catch (bpo::invalid_command_line_syntax &e) {
+      switch (e.kind()) {
+        case bpo::invalid_command_line_syntax::missing_parameter:
+          BOOST_LOG_TRIVIAL(error) << "Missing argument for option '" << e.get_option_name() << "'";
+          std::cout << "Missing argument for option '" << e.get_option_name() << "'";
+          return StatusCode::MissingArgument;
+        default:
+          BOOST_LOG_TRIVIAL(fatal) << "Could not complete parsing due to exception: " << e.what();
+          return StatusCode::CritialError;
+      }
+    } catch (std::exception &e) {
+      BOOST_LOG_TRIVIAL(fatal) << "Error occurred during initial input argument parsing: " << e.what();
+      return StatusCode::CritialError;
     }
 
-    int ExecutableInterface::main(int argc, char** argv) {
-        // Register progress callback.
-        interface->registerProgressCallback([=](auto && ...args){return updateProgress(args...);});
+    // Continue on with the configuration file.
+    bool noConfigFileFound = false;
+    if (interface->usesConfigFile()) {
+      std::stringstream ss;
 
-        // Configure which arguments to parse. Start with basic and then custom.
-        configureParser();
-        interface->configureParser(commandlineOptions);
-        interface->configureFileParser(configFileOptions);
+      earlyLogMessages.emplace_back(
+        "Converter has requested config file data, attempting to load relative to executable");
+      bfs::path fullPath = boost::dll::program_location();
+      auto configFilePath = fullPath.parent_path() / (std::string(interface->programName) + "_config.ini");
 
-        // Parse options. Again, start with basic and continue to derived. The commandline parser is allowed to take
-        // ALL options, to ensure a default value is populated.
-        boost::program_options::options_description allOptions("All allowed options");
-        allOptions.add(commandlineOptions);
-        allOptions.add(configFileOptions);
+      ss << "Attempting to load additional settings from config file at: " << configFilePath;
+      earlyLogMessages.emplace_back(ss.str());
+      ss.str("");
 
-        auto parser = bpo::command_line_parser(argc, argv);
-        parser.options(allOptions);
-        parser.positional(commandlinePositionalOptions);
-        parser.allow_unregistered();
-
-        bpo::basic_parsed_options<char> parsedOptions(&commandlineOptions);
-
-        ParseOptionStatus status = ParseOptionStatus::NoError;
-
-        // Handle initial parsing of options from the command line.
+      if (bfs::exists(configFilePath)) {
         try {
-            parsedOptions = parser.run();
-            bpo::store(parsedOptions, optionResult);
-            bpo::notify(optionResult);
-        } catch (bpo::invalid_command_line_syntax &e) {
-            switch(e.kind()) {
-                case bpo::invalid_command_line_syntax::missing_parameter:
-                    BOOST_LOG_TRIVIAL(error) << "Missing argument for option '" << e.get_option_name() << "'";
-                    std::cout << "Missing argument for option '" << e.get_option_name() << "'";
-                    break;
-                default:
-                    throw;
-            }
-            return -1;
-        } catch (bpo::error &e) {
-            BOOST_LOG_TRIVIAL(debug) << "Error occurred during initial input argument parsing of type " << typeid(e).name();
-            throw;
+          auto configFile = std::ifstream(configFilePath.c_str());
+          auto configParserOptions = bpo::parse_config_file(configFile, configFileOptions, true);
+          bpo::store(configParserOptions, optionResult);
+          bpo::notify(optionResult);
+
+          ss << "Loaded configuration file at: " << configFilePath;
+          earlyLogMessages.emplace_back(ss.str());
+          ss.str("");
         } catch (std::exception &e) {
-            BOOST_LOG_TRIVIAL(fatal) << "Error occurred during initial input argument parsing: " << e.what();
-            return -1;
+          ss << "Error during parsing of configuration file: " << e.what();
+          earlyLogMessages.emplace_back(ss.str());
+          ss.str("");
+          return StatusCode::ConfigurationFileParseError;
         }
-
-        // Continue on with the configuration file.
-        bool noConfigFileFound = false;
-        if(interface->usesConfigFile()) {
-            std::string iniFileName = interface->programName + "_config.ini";
-
-            auto configFilePath = bfs::weakly_canonical(iniFileName);
-
-            if(bfs::exists(configFilePath)) {
-                try {
-                    auto configFile = std::ifstream(configFilePath.c_str());
-                    auto configParserOptions = bpo::parse_config_file(configFile, configFileOptions, true);
-                    bpo::store(configParserOptions, optionResult);
-                    bpo::notify(optionResult);
-                } catch (std::exception &e) {
-                    BOOST_LOG_TRIVIAL(fatal) << "Error during parsing of configuration file: " << e.what();
-                    return -1;
-                }
-            } else {
-                // Delay logging until after the verbosity settings has been read.
-                noConfigFileFound = true;
-            }
-        }
-
-        // If no arguments are supplied, or an error occurred during parsing, display the help message.
-        if(argc <= 1) {
-            status |= ParseOptionStatus::DisplayHelp;
-        }
-
-        // Perform core parsing.
-        try {
-            status |= parseOptions(optionResult);
-        } catch (std::exception &e) {
-            BOOST_LOG_TRIVIAL(fatal) << "Error occurred during general input argument parsing: " << e.what();
-            return -1;
-        }
-
-        // Perform specialization parsing.
-        interface->setCommonOptions(commonOptions);
-        try {
-            status |= interface->parseOptions(optionResult);
-        } catch (std::exception &e) {
-            BOOST_LOG_TRIVIAL(fatal) << "Error occurred during specialized input argument parsing: " << e.what();
-            return -1;
-        }
-
-        // Collect any unrecognized options.
-        std::vector<std::string> unrecognizedOptions = bpo::collect_unrecognized(parsedOptions.options, bpo::exclude_positional);
-
-        if(!unrecognizedOptions.empty()) {
-            status |= ParseOptionStatus::UnrecognizedOption;
-        }
-
-        if(noConfigFileFound) {
-            BOOST_LOG_TRIVIAL(info) << "No configuration file found, skipping.";
-        }
-
-        // Handle parsing result.
-        if((status & ParseOptionStatus::UnrecognizedOption) == ParseOptionStatus::UnrecognizedOption) {
-            displayUnrecognizedOptions(unrecognizedOptions);
-            return 1;
-        } else if((status & ParseOptionStatus::DisplayHelp) == ParseOptionStatus::DisplayHelp) {
-            displayHelp();
-            return 0;
-        } else if((status & ParseOptionStatus::DisplayVersion) == ParseOptionStatus::DisplayVersion) {
-            displayVersion();
-            return 0;
-        } else if((status & ParseOptionStatus::NoInputFiles) == ParseOptionStatus::NoInputFiles) {
-            return 0;
-        }
-
-        // Create a mapping between all input files and their corresponding output files.
-        // If the output directory is set, override the destination path, else place them in the same folder as the
-        // input file.
-        int returnCode = 0;
-
-        for(auto & inputFilePath: inputFiles) {
-            // Ensure the full path is used.
-            if(!inputFilePath.is_absolute()) {
-                inputFilePath = boost::filesystem::weakly_canonical(inputFilePath);
-            }
-
-            // Ensure that the current input file exists.
-            if(!boost::filesystem::exists(inputFilePath)) {
-                BOOST_LOG_TRIVIAL(error) << "File does not exist: " << inputFilePath;
-                returnCode = 2;
-                continue;
-            }
-
-            // Determine where to place the result.
-            boost::filesystem::path outputFolder;
-            if(optionResult.count("output-directory")) {
-                // An output directory is specified, place everything here.
-                outputFolder = boost::filesystem::path(optionResult["output-directory"].as<std::string>());
-
-                if(!outputFolder.is_absolute()) {
-                    boost::filesystem::weakly_canonical(outputFolder);
-                }
-
-                if(!boost::filesystem::exists(outputFolder)) {
-                    BOOST_LOG_TRIVIAL(info) << "Output folder does not exists. Creating \"" << outputFolder << "\"";
-                    try {
-                        boost::filesystem::create_directories(outputFolder);
-                    } catch (boost::filesystem::filesystem_error &e) {
-                        BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder \"" << outputFolder << "\". Logged error is:\n" << e.what();
-                        return -1;
-                    }
-                }
-            } else {
-                // Use the same folder as the input file.
-                outputFolder = inputFilePath.parent_path();
-            }
-
-            // Call the exporter for the conversion.
-            if(!interface->convert(inputFilePath, outputFolder)) {
-                BOOST_LOG_TRIVIAL(fatal) << "Error during conversion of \"" << inputFilePath << "\".";
-                return -1;
-            }
-        }
-
-        return returnCode;
+      } else {
+        ss << "Error during parsing of configuration file. Could not locate file at: " << configFilePath;
+        earlyLogMessages.emplace_back(ss.str());
+        ss.str("");
+        noConfigFileFound = true;
+      }
     }
 
-    void ExecutableInterface::configureParser() {
-        // Add default options.
-        commandlineOptions.add_options()
-            ("help,h", bpo::bool_switch()->default_value(false), "Print this help message.")
-            ("version,v", bpo::bool_switch()->default_value(false),"Print version information.")
-            ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
-            ("input-directory,I", bpo::value<std::string>(), "Input directory to convert files from.")
-            ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
-            ("non-interactive", bpo::bool_switch()->default_value(false), "Run in non-interactive mode, with no progress output.")
-            ("timezone,t", bpo::value<std::string>()->default_value("l"), "Display times in UTC (u), logger localtime (l, default) or PC local time (p).")
-            ("input-files,i", bpo::value<std::vector<std::string>>(), "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.")
-            ;
-
-        // Capture all other options (Positional options) as input files.
-        commandlinePositionalOptions.add("input-files", -1);
+    // If no arguments are supplied, or an error occurred during parsing, display the help message.
+    if (argc <= 1) {
+      status |= ParseOptionStatus::DisplayHelp;
     }
 
-    void ExecutableInterface::displayHelp() const {
-        std::cout << "Usage:" << "\n";
-        std::cout << interface->programName << " [-short-option value --long-option value] [-i] file_a [file_b ...]:\n";
-        std::cout << "\n";
-        std::cout << "Short options start with a single \"-\", while long options start with \"--\".\n";
-        std::cout << "A value enclosed in \"[]\" signifies it is optional.\n";
-        std::cout << "Some options only exists in the long form, while others exist in both forms.\n";
-        std::cout << "Not all options require arguments (arg).\n";
-        std::cout << "\n";
-        std::cout << commandlineOptions << std::endl;
+    // Perform core parsing.
+    try {
+      status |= parseOptions(optionResult);
+    } catch (std::exception &e) {
+      BOOST_LOG_TRIVIAL(fatal) << "Error occurred during general input argument parsing: " << e.what();
+      return StatusCode::InputArgumentParsingError;
     }
 
-    void ExecutableInterface::displayUnrecognizedOptions(std::vector<std::string> const& unrecognizedOptions) const {
-        if(unrecognizedOptions.size() == 1) {
-            std::cout << "Unrecognized option:" << "\n";
+    // Parsing for anything but errors can now be done.
+    for (auto const &traceMessage: earlyLogMessages) {
+      BOOST_LOG_TRIVIAL(trace) << traceMessage;
+    }
+
+    // Perform specialization parsing.
+    interface->setCommonOptions(commonOptions);
+    try {
+      status |= interface->parseOptions(optionResult);
+    } catch (std::exception &e) {
+      BOOST_LOG_TRIVIAL(fatal) << "Error occurred during specialized input argument parsing: " << e.what();
+      return StatusCode::InputArgumentParsingError;
+    }
+
+    // Collect any unrecognized options.
+    std::vector<std::string> unrecognizedOptions = bpo::collect_unrecognized(parsedOptions.options,
+      bpo::exclude_positional);
+
+    if (!unrecognizedOptions.empty()) {
+      status |= ParseOptionStatus::UnrecognizedOption;
+    }
+
+    if (noConfigFileFound) {
+      BOOST_LOG_TRIVIAL(info) << "No configuration file found, skipping.";
+    }
+
+    // Handle parsing result.
+    if ((status & ParseOptionStatus::UnrecognizedOption) == ParseOptionStatus::UnrecognizedOption) {
+      displayUnrecognizedOptions(unrecognizedOptions);
+      return StatusCode::UnrecognizedOption;
+    } else if ((status & ParseOptionStatus::DisplayHelp) == ParseOptionStatus::DisplayHelp) {
+      displayHelp();
+      return StatusCode::NoErrors;
+    } else if ((status & ParseOptionStatus::DisplayVersion) == ParseOptionStatus::DisplayVersion) {
+      displayVersion();
+      return StatusCode::NoErrors;
+    } else if ((status & ParseOptionStatus::CouldNotFindPasswordFile) == ParseOptionStatus::CouldNotFindPasswordFile) {
+      BOOST_LOG_TRIVIAL(error) << "Could not locate password file";
+      return StatusCode::InvalidInputArgument;
+    } else if ((status & ParseOptionStatus::CouldNotParsePasswordFile) ==
+               ParseOptionStatus::CouldNotParsePasswordFile) {
+      BOOST_LOG_TRIVIAL(error) << "Could not parse password file";
+      return StatusCode::InvalidInputArgument;
+    } else if ((status & ParseOptionStatus::NoInputFiles) == ParseOptionStatus::NoInputFiles) {
+      return StatusCode::NoErrors;
+    }
+
+    std::vector<boost::filesystem::path> curatedInputFiles;
+
+    // Create a list of files to work on. For each folder in the input, walk it recursively (without following links).
+    for (auto &path: inputFiles) {
+      bfs::path inputPath(path);
+
+      // Ensure the full path is used.
+      if (!inputPath.is_absolute()) {
+        inputPath = boost::filesystem::weakly_canonical(inputPath);
+      }
+
+      // Ensure that the current path exists.
+      if (!boost::filesystem::exists(inputPath)) {
+        BOOST_LOG_TRIVIAL(error) << "Path does not exist: " << inputPath;
+        mainStatus |= StatusCode::MissingFile;
+        continue;
+      }
+
+      // If it is a folder, iterate recursively.
+      if (bfs::is_directory(inputPath)) {
+        BOOST_LOG_TRIVIAL(info) << "Received folder as input argument, performing recursive walk: " << inputPath;
+        for (auto &entry: bfs::recursive_directory_iterator(inputPath, bfs::symlink_option::no_recurse)) {
+          std::string extension = entry.path().extension().string();
+          boost::algorithm::to_lower(extension);
+
+          if (std::find(std::cbegin(acceptableExtensions), std::cend(acceptableExtensions), extension) !=
+              std::end(acceptableExtensions)) {
+            BOOST_LOG_TRIVIAL(info) << "Found file with matching extensions; " << entry;
+            curatedInputFiles.push_back(entry);
+          }
+        }
+      } else {
+        curatedInputFiles.push_back(inputPath);
+      }
+    }
+
+    // Create a mapping between all input files and their corresponding output files.
+    // If the output directory is set, override the destination path, else place them in the same folder as the
+    // input file.
+
+    for (auto &path: curatedInputFiles) {
+      bfs::path inputFilePath(path);
+      bool inputFileIsTemporary = false;
+
+      // Determine where to place the result.
+      boost::filesystem::path outputFolder;
+      if (optionResult.count("output-directory")) {
+        // An output directory is specified, place everything here.
+        outputFolder = boost::filesystem::path(optionResult["output-directory"].as<std::string>());
+
+        if (!outputFolder.is_absolute()) {
+          boost::filesystem::weakly_canonical(outputFolder);
+        }
+
+        if (!boost::filesystem::exists(outputFolder)) {
+          BOOST_LOG_TRIVIAL(info) << "Output folder does not exists. Creating " << outputFolder << "";
+          try {
+            boost::filesystem::create_directories(outputFolder);
+          } catch (boost::filesystem::filesystem_error &e) {
+            BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder << ". Logged error is:\n"
+                                     << e.what();
+            return StatusCode::CritialError;
+          }
+        }
+      } else {
+        // Use the same folder as the input file.
+        outputFolder = inputFilePath.parent_path();
+      }
+
+      // If the file is encrypted, decrypt it first.
+      if (mdf::generic::getGenericFileType(inputFilePath) == mdf::generic::GenericFileType::EncryptedFile) {
+        BOOST_LOG_TRIVIAL(info) << "Detected encrypted file.";
+        std::shared_ptr<PasswordStorage> currentPasswordStorage;
+
+        // Is a password storage generated?
+        if (!passwordStorage) {
+          auto localPasswordFilePath = inputFilePath.parent_path() / "passwords.json";
+
+          if (boost::filesystem::exists(localPasswordFilePath)) {
+            try {
+              currentPasswordStorage = std::make_shared<PasswordStorage>(localPasswordFilePath.string());
+            } catch (std::exception &e) {
+              BOOST_LOG_TRIVIAL(error)
+                << "Could not load local password file, even though the file exists. Input file: " << inputFilePath
+                << ".";
+              continue;
+            }
+          } else {
+            BOOST_LOG_TRIVIAL(error)
+              << "Could not decrypt file, as no password file is specified, no default password file is found and no local password file is found. Input file: "
+              << inputFilePath << ".";
+            mainStatus |= StatusCode::DecryptionError;
+            continue;
+          }
         } else {
-            std::cout << "Unrecognized options:" << "\n";
+          currentPasswordStorage = passwordStorage;
         }
 
-        for(auto const& option: unrecognizedOptions) {
-            std::cout << option << "\n";
+        // Create a temporary folder with a file with the correct name.
+        bfs::path temporaryDirectoryPath = bfs::temp_directory_path() / bfs::unique_path();
+        BOOST_LOG_TRIVIAL(info) << "Creating temporary folder: " << temporaryDirectoryPath << ".";
+        bfs::create_directories(temporaryDirectoryPath);
+        bfs::path temporaryPath = temporaryDirectoryPath / inputFilePath.filename();
+
+        // Determine which logger this file originates from.
+        uint32_t device = mdf::getDeviceIdFromFile(inputFilePath.string());
+
+        // Attempt to get the corresponding password.
+        bool decryptionStatus = false;
+        auto passwordAvailable = currentPasswordStorage->hasPassword(device);
+        if (passwordAvailable != PasswordType::Missing) {
+          std::string const &password = currentPasswordStorage->getPassword(device);
+
+          // Decompress to temporary file, and pass this on for further processing.
+          decryptionStatus = mdf::decryptFile(inputFilePath.string(), temporaryPath.string(), password);
         }
 
-        std::cout << "\n";
-        displayHelp();
-    }
-
-    void ExecutableInterface::displayVersion() const {
-        // Display version information on the base library, the shared base and the specialization.
-        std::cout << "Version of " << interface->programName << ": " << interface->getVersion() << std::endl;
-        std::cout << "Version of converter base: " << tools::shared::version << std::endl;
-        std::cout << "Version of MDF library: " << mdf::version << std::endl;
-    }
-
-    ParseOptionStatus ExecutableInterface::parseOptions(boost::program_options::variables_map const& result) {
-        // Handle request for help messages.
-        if(result["help"].as<bool>()) {
-            return ParseOptionStatus::DisplayHelp;
+        // Check if the current file is a temporary one. If so, then delete it.
+        if (inputFileIsTemporary) {
+          BOOST_LOG_TRIVIAL(info) << "Deleting temporary file: " << inputFilePath << ".";
+          bfs::remove(inputFilePath);
         }
 
-        // Handle request for version information.
-        if(result["version"].as<bool>()) {
-            return ParseOptionStatus::DisplayVersion;
-        }
+        // Pass the temporary file on as the input file.
+        inputFilePath = temporaryPath;
+        inputFileIsTemporary = true;
 
-        // Setup verbosity.
-        switch(result["verbose"].as<int>()) {
-            case 0:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::fatal);
-                break;
-            case 1:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::error);
-                break;
-            case 2:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::warning);
-                break;
-            case 3:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::info);
-                break;
-            case 4:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::debug);
-                break;
-            case 5:
-                blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::trace);
-                break;
+        if (!decryptionStatus) {
+          std::stringstream ss;
+          ss << "Error during conversion of " << inputFilePath << ". Failed to perform decryption - ";
+
+          switch (passwordAvailable) {
+            case PasswordType::Specific:
+              ss << "device specific password is incorrect.";
+              break;
+            case PasswordType::Default:
+              ss << "default password is incorrect.";
+              break;
+            case PasswordType::Missing:
+              // Fallthrough.
             default:
-                // TODO: Send the value back as well.
-                return ParseOptionStatus::UnrecognizedOption;
+              ss << "no default password and/or no matching serial number found in password file.";
+              break;
+          }
+
+          ss << "Attempted to use " << currentPasswordStorage->getPasswordFilePath() << " as password list.";
+
+          BOOST_LOG_TRIVIAL(error) << ss.str();
+          mainStatus |= StatusCode::DecryptionError;
+
+          bfs::remove(inputFilePath);
+          bfs::remove(inputFilePath.parent_path());
+
+          continue;
+        }
+      }
+
+      // If the file is compressed, decompress it first.
+      if (mdf::generic::getGenericFileType(inputFilePath) == mdf::generic::GenericFileType::CompressedFile) {
+        BOOST_LOG_TRIVIAL(info) << "Detected compressed file.";
+
+        // Create a temporary folder.
+        bfs::path temporaryDirectoryPath = bfs::temp_directory_path() / bfs::unique_path();
+        BOOST_LOG_TRIVIAL(info) << "Creating temporary folder: " << temporaryDirectoryPath << ".";
+        bfs::create_directories(temporaryDirectoryPath);
+        bfs::path temporaryPath = temporaryDirectoryPath / inputFilePath.filename();
+
+        // Decompress to temporary file, and pass this on for further processing.
+        bool decompressionStatus = mdf::decompressFile(inputFilePath.string(), temporaryPath.string());
+
+        // Check if the current file is a temporary one. If so, then delete it.
+        if (inputFileIsTemporary) {
+          BOOST_LOG_TRIVIAL(info) << "Deleting temporary file and parent folder: " << inputFilePath << ".";
+          bfs::remove(inputFilePath);
+          bfs::remove(inputFilePath.parent_path());
         }
 
-        commonOptions->non_interactiveMode = result["non-interactive"].as<bool>();
+        // Pass the temporary file on as the input file.
+        inputFilePath = temporaryPath;
+        inputFileIsTemporary = true;
 
-        std::string timeZoneDisplay = "l";
-        if(result.count("timezone")) {
-            timeZoneDisplay = result["timezone"].as<std::string>();
+        if (!decompressionStatus) {
+          BOOST_LOG_TRIVIAL(error) << "Error during conversion of " << inputFilePath
+                                   << ". Failed to perform decompression.";
+          mainStatus |= StatusCode::DecompressionError;
+          continue;
         }
+      }
 
-        char first = 0;
-        if(timeZoneDisplay.length() != 0) {
-            first = timeZoneDisplay[0];
-        }
+      // Call the exporter for the conversion.
+      bool conversionStatus = false;
+      try {
+        conversionStatus = interface->convert(inputFilePath, outputFolder);
+      /*} catch (mdf::MDF_Exception &e) {
+        BOOST_LOG_TRIVIAL(error) << e.what();
+        mainStatus |= StatusCode::DecodingError;
+      */} catch (std::exception &e) {
+        BOOST_LOG_TRIVIAL(error) << e.what();
+        conversionStatus = false;
+      }
 
-        switch(first) {
-            case 'u':
-                commonOptions->displayTimeFormat = UTC;
-                break;
-            case 'p':
-                commonOptions->displayTimeFormat = PCLocalTime;
-                break;
-            case 'l':
-                // Fallthrough for the default value.
-            default:
-                commonOptions->displayTimeFormat = LoggerLocalTime;
-                break;
-        }
+      // Check if the current file is a temporary one. If so, then delete it.
+      if (inputFileIsTemporary) {
+        BOOST_LOG_TRIVIAL(info) << "Deleting temporary file and parent folder: " << inputFilePath << ".";
+        bfs::remove(inputFilePath);
+        bfs::remove(inputFilePath.parent_path());
+      }
 
-        // Is an input directory specified? In that case, ignore any files passed to the program and instead populate
-        // the files list from the directory.
-        if(result.count("input-directory")) {
-            // Ensure the location exists.
-            boost::filesystem::path inputDirectory(result["input-directory"].as<std::string>());
-
-            if(!inputDirectory.is_absolute()) {
-                inputDirectory = boost::filesystem::weakly_canonical(inputDirectory);
-            }
-
-            // Ensure that the current input file exists.
-            if(!boost::filesystem::exists(inputDirectory)) {
-                // TODO: Log error.
-                std::cout << inputDirectory << std::endl;
-            } else if(!boost::filesystem::is_directory(inputDirectory)) {
-                // TODO: Log error.
-                std::cout << inputDirectory << std::endl;
-            } else {
-                for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(inputDirectory), {})) {
-                    if(boost::filesystem::is_regular_file(entry)) {
-                        if(boost::filesystem::extension(entry) == ".mf4") {
-                            inputFiles.push_back(entry);
-                        }
-                    }
-                }
-            }
-        } else if(result.count("input-files")) {
-            std::vector<std::string> files = result["input-files"].as<std::vector<std::string>>();
-            for(std::string const& entry: files) {
-                inputFiles.emplace_back(entry);
-            }
-        } else {
-            // No input files.
-            return ParseOptionStatus::NoInputFiles;
-        }
-
-        return ParseOptionStatus::NoError;
+      if (!conversionStatus) {
+        BOOST_LOG_TRIVIAL(error) << "Error during conversion of " << inputFilePath << ".";
+        mainStatus |= StatusCode::DecodingError;
+        continue;
+      }
     }
 
-    void ExecutableInterface::updateProgress(int current, int total) {
-        // Do nothing if running in non-interactive mode.
-        if(commonOptions->non_interactiveMode) {
-            return;
-        }
+    return mainStatus;
+  }
 
-        // Determine the fraction to fill.
-        const int width = 80;
-        double fraction = static_cast<double>(current) / static_cast<double>(total);
-        int fill = static_cast<int>(fraction * width);
+  void ExecutableInterface::configureParser() {
+    // Add default options.
+    commandlineOptions.add_options()
+      ("help,h", bpo::bool_switch()->default_value(false), "Print this help message.")
+      ("version,v", bpo::bool_switch()->default_value(false), "Print version information.")
+      ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
+      ("input-directory,I", bpo::value<std::string>(), "Input directory to convert files from.")
+      ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
+      ("non-interactive", bpo::bool_switch()->default_value(false),
+        "Run in non-interactive mode, with no progress output.")
+      ("timezone,t", bpo::value<std::string>()->default_value("l"),
+        "Display times in UTC (u), logger localtime (l, default) or PC local time (p).")
+      ("password-file,p", bpo::value<std::string>(),
+        "Path to password json file. If left empty, and an encrypted file is encountered, the folder of the input file will be searched.")
+      ("input-files,i", bpo::value<std::vector<std::string>>(),
+        "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.");
 
-        std::cout << "\r";
+    // Capture all other options (Positional options) as input files.
+    commandlinePositionalOptions.add("input-files", -1);
+  }
 
-        for(int i = 0; i < fill - 1; i++) {
-            std::cout << "=";
-        }
+  void ExecutableInterface::displayHelp() const {
+    std::cout << "Usage:" << "\n";
+    std::cout << interface->programName << " [-short-option value --long-option value] [-i] file_a [file_b ...]:\n";
+    std::cout << "\n";
+    std::cout << "Short options start with a single \"-\", while long options start with \"--\".\n";
+    std::cout << "A value enclosed in \"[]\" signifies it is optional.\n";
+    std::cout << "Some options only exists in the long form, while others exist in both forms.\n";
+    std::cout << "Not all options require arguments (arg).\n";
+    std::cout << "\n";
+    std::cout << commandlineOptions << std::endl;
+  }
 
-        if(current != total) {
-            std::cout << ">";
-        }
-
-        for(int i = fill; i < width; ++i) {
-            std::cout << " ";
-        }
-
-        std::cout << " " << current << " / " << total;
-
-        if(current == total) {
-            std::cout << "\n";
-        }
-
-        std::cout.flush();
+  void ExecutableInterface::displayUnrecognizedOptions(std::vector<std::string> const &unrecognizedOptions) const {
+    if (unrecognizedOptions.size() == 1) {
+      std::cout << "Unrecognized option:" << "\n";
+    } else {
+      std::cout << "Unrecognized options:" << "\n";
     }
+
+    for (auto const &option: unrecognizedOptions) {
+      std::cout << option << "\n";
+    }
+
+    std::cout << "\n";
+    displayHelp();
+  }
+
+  void ExecutableInterface::displayVersion() const {
+    // Display version information on the base library, the shared base and the specialization.
+    std::cout << "Version of " << interface->programName << ": " << interface->getVersion() << std::endl;
+    std::cout << "Version of converter base: " << mdf::tools::shared::version << std::endl;
+    std::cout << "Version of MDF library: " << mdf::version << std::endl;
+  }
+
+  ParseOptionStatus ExecutableInterface::parseOptions(boost::program_options::variables_map const &result) {
+    // Setup verbosity.
+    switch (result["verbose"].as<int>()) {
+      case 0:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::fatal);
+        break;
+      case 1:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::error);
+        break;
+      case 2:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::warning);
+        break;
+      case 3:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::info);
+        break;
+      case 4:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::debug);
+        break;
+      case 5:
+        blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::trace);
+        break;
+      default:
+        // TODO: Send the value back as well.
+        // NOTE: Maybe this can be handled with a boost options specific exception?
+        return ParseOptionStatus::UnrecognizedOption;
+    }
+
+    // Handle request for help messages.
+    if (result["help"].as<bool>()) {
+      return ParseOptionStatus::DisplayHelp;
+    }
+
+    // Handle request for version information.
+    if (result["version"].as<bool>()) {
+      return ParseOptionStatus::DisplayVersion;
+    }
+
+    commonOptions->nonInteractiveMode = result["non-interactive"].as<bool>();
+
+    std::string timeZoneDisplay = "l";
+    if (result.count("timezone")) {
+      timeZoneDisplay = result["timezone"].as<std::string>();
+    }
+
+    char first = 0;
+    if (timeZoneDisplay.length() != 0) {
+      first = timeZoneDisplay[0];
+    }
+
+    switch (first) {
+      case 'u':
+        commonOptions->displayTimeFormat = DisplayTimeFormat::UTC;
+        break;
+      case 'p':
+        commonOptions->displayTimeFormat = DisplayTimeFormat::PCLocalTime;
+        break;
+      case 'l':
+        // Fallthrough for the default value.
+      default:
+        commonOptions->displayTimeFormat = DisplayTimeFormat::LoggerLocalTime;
+        break;
+    }
+
+    // Attempt to load passwords.
+    if (result.count("password-file")) {
+      std::string passwordFile = result["password-file"].as<std::string>();
+
+      boost::filesystem::path passwordFilePath = boost::filesystem::weakly_canonical(passwordFile);
+
+      BOOST_LOG_TRIVIAL(trace) << "Attempting to load password file from argument at " << passwordFilePath;
+
+      if (boost::filesystem::exists(passwordFilePath)) {
+        try {
+          passwordStorage = std::make_shared<PasswordStorage>(passwordFilePath.string());
+        } catch (boost::property_tree::json_parser_error &e) {
+          BOOST_LOG_TRIVIAL(fatal) << "Error during parsing of " << passwordFilePath << ": " << e.message()
+                                   << " at line " << e.line();
+          return ParseOptionStatus::CouldNotParsePasswordFile;
+        } catch (std::exception &e) {
+          return ParseOptionStatus::CouldNotFindPasswordFile;
+        }
+      } else {
+        return ParseOptionStatus::CouldNotFindPasswordFile;
+      }
+    } else {
+      // Attempted to load default password file here.
+      bfs::path current_path = boost::dll::program_location();
+      boost::filesystem::path passwordFilePath = current_path.parent_path() / "passwords.json";
+
+      BOOST_LOG_TRIVIAL(trace) << "Attempting to load default password file next to executable at " << passwordFilePath;
+
+      if (boost::filesystem::exists(passwordFilePath)) {
+        try {
+          passwordStorage = std::make_shared<PasswordStorage>(passwordFilePath.string());
+        } catch (boost::property_tree::json_parser_error &e) {
+          BOOST_LOG_TRIVIAL(fatal) << "Error during parsing of " << passwordFilePath << ": " << e.message()
+                                   << " at line " << e.line();
+          return ParseOptionStatus::CouldNotParsePasswordFile;
+        } catch (std::exception &e) {
+          // Ignore password file errors in the default path. User may not need passwords.
+        }
+      }
+    }
+
+    // Is an input directory specified? In that case, ignore any files passed to the program and instead populate
+    // the files list from the directory.
+    if (result.count("input-directory")) {
+      // Ensure the location exists.
+      boost::filesystem::path inputDirectory(result["input-directory"].as<std::string>());
+
+      if (!inputDirectory.is_absolute()) {
+        inputDirectory = boost::filesystem::weakly_canonical(inputDirectory);
+      }
+
+      // Ensure that the current input file exists.
+      if (!boost::filesystem::exists(inputDirectory)) {
+        std::cout << inputDirectory << std::endl;
+      } else if (!boost::filesystem::is_directory(inputDirectory)) {
+        std::cout << inputDirectory << std::endl;
+      } else {
+        for (auto &entry : boost::make_iterator_range(boost::filesystem::directory_iterator(inputDirectory), {})) {
+          if (boost::filesystem::is_regular_file(entry)) {
+            // Case insensitive compare.
+            if (boost::iequals(bfs::extension(entry), ".mf4")) {
+              inputFiles.push_back(entry);
+            }
+          }
+        }
+      }
+    } else if (result.count("input-files")) {
+      std::vector<std::string> files = result["input-files"].as<std::vector<std::string>>();
+      for (std::string const &entry: files) {
+        inputFiles.emplace_back(entry);
+      }
+    } else {
+      // No input files.
+      return ParseOptionStatus::NoInputFiles;
+    }
+
+    return ParseOptionStatus::NoError;
+  }
+
+  void ExecutableInterface::updateProgress(int current, int total) {
+    // Do nothing if running in non-interactive mode.
+    if (commonOptions->nonInteractiveMode) {
+      return;
+    }
+
+    // Determine the fraction to fill.
+    const int width = 80;
+    double fraction = static_cast<double>(current) / static_cast<double>(total);
+    int fill = static_cast<int>(fraction * width);
+
+    // Return to beginning of line.
+    std::cout << "\r";
+
+    for (int i = 0; i < fill - 1; i++) {
+      std::cout << "=";
+    }
+
+    if (current != total) {
+      std::cout << ">";
+    } else {
+      std::cout << "=";
+    }
+
+    for (int i = fill; i < width; ++i) {
+      std::cout << " ";
+    }
+
+    std::cout << " " << current << " / " << total;
+
+    if (current == total) {
+      std::cout << " \n";
+    }
+
+    std::cout.flush();
+  }
 }

@@ -1,36 +1,41 @@
-project(mdf2csv CXX)
+project(mdf2csv)
 
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
+set(CMAKE_CXX_STANDARD 17)
+
+# Set project information.
+set(PROGRAM_NAME ${PROJECT_NAME})
+set(DESCRIPTION "MDF4 bus logging to CSV format")
+
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 
-set(PROGRAM_NAME ${PROJECT_NAME})
-set(DESCRIPTION "MDF4 bus logging to csv format")
-
-set(SOURCE_FILES
-    CSV_CAN_Exporter.cpp
-    CSV_CAN_Exporter.h
-    CSV_Exporter.cpp
-    CSV_Exporter.h
-    CSV_LIN_Exporter.cpp
-    CSV_LIN_Exporter.h
-    main.cpp
-    )
+# Set required additional packages.
+find_package(fmt REQUIRED)
 
 # Embed information in the source code.
-configure_file(ProjectInformation.h.in ProjectInformation.h @ONLY)
-set(LINK_TARGETS
-        ToolsBase
-        mdf
-        ${RUNTIME_LIBRARIES}
-        ${Boost_LIBRARIES}
-        )
+configure_file(
+    Source/ProjectInformation.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/Source/ProjectInformation.h
+    @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Source)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+set(SOURCE_FILES
+    Source/CSV_CAN_Exporter.cpp
+    Source/CSV_CAN_Exporter.h
+    Source/CSV_Exporter.cpp
+    Source/CSV_Exporter.h
+    Source/CSV_LIN_Exporter.cpp
+    Source/CSV_LIN_Exporter.h
+    Source/main.cpp
+    )
 
+include_directories(Include)
 add_executable(${PROGRAM_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROGRAM_NAME} ${LINK_TARGETS})
+target_link_libraries(${PROGRAM_NAME}
+    ${RUNTIME_LIBRARIES}
+    MDFSimpleConverters_Shared
+    fmt::fmt
+    )
 
 pack_executable(${PROGRAM_NAME})
-
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${PROJECT_NAME}.map")

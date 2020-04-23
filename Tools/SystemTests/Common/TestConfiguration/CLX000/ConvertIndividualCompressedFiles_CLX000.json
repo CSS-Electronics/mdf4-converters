@@ -1,0 +1,44 @@
+{
+  "tool": "mdf2clx000",
+  "cases": [
+    {
+      "input": [
+        {
+          "name": "single_message_can_bus_1_256_window.MFC"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_message_can_bus_1_256_window_CAN_1.txt",
+          "comparision_data": "single_message_can_bus_1_256_window_CAN_1.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_message_can_bus_1_512_window.MFC"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_message_can_bus_1_512_window_CAN_1.txt",
+          "comparision_data": "single_message_can_bus_1_512_window_CAN_1.txt"
+        }
+      ]
+    },
+    {
+      "input": [
+        {
+          "name": "single_message_can_bus_1_1024_window.MFC"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_message_can_bus_1_1024_window_CAN_1.txt",
+          "comparision_data": "single_message_can_bus_1_1024_window_CAN_1.txt"
+        }
+      ]
+    }
+  ]
+}

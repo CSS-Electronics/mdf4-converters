@@ -1,0 +1,61 @@
+{
+  "tool": "mdf2clx000",
+  "cases": [
+    {
+      "_comment": "All fields enabled",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/dataFields/single_can_bus_1_CAN_1_config_dataFields_12345.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/dataFields/single_can_bus_2_CAN_2_config_dataFields_12345.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_dataFields_all.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    },
+    {
+      "_comment": "All fields disabled",
+      "input": [
+        {
+          "name": "single_can_bus_1.MF4"
+        },
+        {
+          "name": "single_can_bus_2.MF4"
+        }
+      ],
+      "output": [
+        {
+          "name": "single_can_bus_1_CAN_1.txt",
+          "comparision_data": "Config/dataFields/single_can_bus_1_CAN_1_config_dataFields.txt"
+        },
+        {
+          "name": "single_can_bus_2_CAN_2.txt",
+          "comparision_data": "Config/dataFields/single_can_bus_2_CAN_2_config_dataFields.txt"
+        }
+      ],
+      "additional_files": [
+        {
+          "input_name": "config_dataFields_none.ini",
+          "name": "mdf2clx000_config.ini",
+          "relative_to_data": 0
+        }
+      ]
+    }
+  ]
+}
