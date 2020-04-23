@@ -36,7 +36,7 @@ All the tools support drag-and-drop, where the default values are used to conver
 each tool's respective format. Additional options are present for all tools, which can be seen by running the tool in the
 command line and passing either no arguments or `--help`.
 
-For additional details on e.g. error codes and command line usage, see the CANedge Intro docs and the `README.md` in the `Tools/` folder.
+For details on using the converters, see the CANedge Intros and the `README.md` in the `Tools/` folder.
 
 ---
 
@@ -47,8 +47,7 @@ main configuration will fetch and build the dependencies under the `External` fo
 If publishing any of the build artifacts, remember to change the "Company Name" in `Tools/CMakeLists.txt`, since the
 information is embedded in the executable targets. 
 
-For building under Windows using MinGW-64, Clang has to be configured as the compiler.
-See https://sourceforge.net/p/mingw-w64/bugs/727/
+For building under Windows using MinGW-64, Clang has to be configured as the compiler ([details](https://sourceforge.net/p/mingw-w64/bugs/727/))
 
 ---
 
@@ -90,9 +89,7 @@ For convenience, targets for building all the tools are present:
 
 In Windows, the latter option gathers all the executables in the `Release` folder under
 the current build directory. Under Linux, this creates [AppImage](https://appimage.org/) packages (Still present in
-each tool's folder). The build system must have a C++17 compiler, for instance Ubuntu 18.04 LTS.
-
-Build dependencies include python and pkg-config.
+each tool's folder). The build system must have a C++17 compiler, for instance Ubuntu 18.04 LTS. Build dependencies include python and pkg-config.
 
 ---
 
