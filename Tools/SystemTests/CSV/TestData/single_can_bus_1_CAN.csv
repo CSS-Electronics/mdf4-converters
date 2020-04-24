@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c55659bcd5507b2116acf6f482cee0295d1abc98736bad0c35d0ecff9740d68b
-size 117
+TimestampEpoch;BusChannel;ID;IDE;DLC;DataLength;Dir;EDL;BRS;DataBytes
+1581582536.664350;1;123;0;4;4;0;0;0;12345678

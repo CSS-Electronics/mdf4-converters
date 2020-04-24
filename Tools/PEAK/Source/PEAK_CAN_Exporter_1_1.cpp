@@ -65,7 +65,7 @@ namespace mdf::tools::peak {
     // CAN ID.
     // DLC field.
     // Data.
-    double timeStamp = convertTimestampToRelative(record.TimeStamp);
+    milliseconds timeStamp = convertTimestampToRelative(record.TimeStamp);
 
     // Select print statement based on ID type.
     if(record.IDE) {
@@ -73,7 +73,7 @@ namespace mdf::tools::peak {
         output,
         FMT_STRING("{:6d}) {:11.1f} {:s}    {:08X} {:d} {:02X}\n"),
         recordCounter++,
-        timeStamp,
+        timeStamp.count(),
         (record.Dir == 0) ? "Rx" : "Tx",
         record.ID,
         record.DLC,
@@ -83,7 +83,7 @@ namespace mdf::tools::peak {
         output,
         FMT_STRING("{:6d}) {:11.1f} {:s}        {:04X} {:d} {:02X}\n"),
         recordCounter++,
-        timeStamp,
+        timeStamp.count(),
         (record.Dir == 0) ? "Rx" : "Tx",
         record.ID,
         record.DLC,

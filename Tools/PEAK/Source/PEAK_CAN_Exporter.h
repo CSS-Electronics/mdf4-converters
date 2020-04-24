@@ -13,6 +13,9 @@
 
 namespace mdf::tools::peak {
 
+  // Define new floating precision time base for time in ms.
+  using milliseconds = std::chrono::duration<double, std::milli>;
+
   class PEAK_CAN_Exporter : public tools::shared::GenericRecordExporter<CANRecord> {
   public:
     explicit PEAK_CAN_Exporter(std::ostream &output, FileInfo const &fileInfo);
@@ -20,7 +23,7 @@ namespace mdf::tools::peak {
     virtual void correctHeader() = 0;
 
   protected:
-    double convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const;
+    milliseconds convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const;
 
     FileInfo const &fileInfo;
 

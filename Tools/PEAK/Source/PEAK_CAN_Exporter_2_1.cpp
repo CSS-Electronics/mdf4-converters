@@ -65,7 +65,7 @@ namespace mdf::tools::peak {
     // Direction of data.
     // DLC field.
     // Data.
-    double timeStamp = convertTimestampToRelative(record.TimeStamp);
+    milliseconds timeStamp = convertTimestampToRelative(record.TimeStamp);
 
     std::string messageType;
     if (record.EDL) {
@@ -83,7 +83,7 @@ namespace mdf::tools::peak {
         output,
         FMT_STRING("{:7d} {:13.3f} {:s} {:d} {:08X} {:s} {:02d} {:02X}\n"),
         recordCounter++,
-        timeStamp,
+        timeStamp.count(),
         messageType,
         record.BusChannel,
         record.ID,
@@ -96,7 +96,7 @@ namespace mdf::tools::peak {
         output,
         FMT_STRING("{:7d} {:13.3f} {:s} {:d}     {:04X} {:s} {:02d} {:02X}\n"),
         recordCounter++,
-        timeStamp,
+        timeStamp.count(),
         messageType,
         record.BusChannel,
         record.ID,

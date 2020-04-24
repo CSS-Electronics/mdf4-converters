@@ -7,13 +7,13 @@ namespace mdf::tools::peak {
     recordCounter = 0;
   }
 
-  double PEAK_CAN_Exporter::convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const {
+  milliseconds PEAK_CAN_Exporter::convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const {
     // Take the difference between the first timestamp and this.
     std::chrono::nanoseconds difference = timeStamp - headerTimeStamp;
 
-    double differenceInUs = difference.count() * 1E-3;
+    milliseconds result(difference);
 
-    return differenceInUs;
+    return result;
   }
 
 }

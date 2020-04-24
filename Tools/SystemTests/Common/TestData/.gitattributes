@@ -1,0 +1,4 @@
+*.MF4 filter=lfs diff=lfs merge=lfs -text
+*.MFC filter=lfs diff=lfs merge=lfs -text
+*.MFE filter=lfs diff=lfs merge=lfs -text
+*.MFM filter=lfs diff=lfs merge=lfs -text

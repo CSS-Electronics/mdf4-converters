@@ -67,7 +67,7 @@ namespace mdf::tools::asc {
         // Write the header.
         exporter.writeHeader();
 
-        mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages);
+        mdf::tools::shared::ProgressIndicator indicator(0, info.LINMessages);
         indicator.setPrefix("LIN");
         std::size_t i = 0;
 
