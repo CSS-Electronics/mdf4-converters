@@ -13,7 +13,7 @@
 
 namespace mdf::tools::shared {
 
-  ProgressIndicator::ProgressIndicator(std::size_t start, std::size_t stop) : start(start), stop(stop) {
+  ProgressIndicator::ProgressIndicator(std::size_t start, std::size_t stop, bool suppressed) : start(start), stop(stop), suppressed(suppressed) {
     // Determine the size of the terminal
   }
 
@@ -29,6 +29,10 @@ namespace mdf::tools::shared {
   }
 
   void ProgressIndicator::update_percent(std::size_t current) {
+    if(suppressed) {
+      return;
+    }
+
     double ratio = static_cast<double>(current - start) * 1.0 / static_cast<double>(stop - start);
     leftStream.str("");
     rightStream.str("");
@@ -79,7 +83,9 @@ namespace mdf::tools::shared {
 
   void ProgressIndicator::end() {
     update_percent((stop - start));
-    std::cout << std::endl;
+    if(!suppressed) {
+      std::cout << std::endl;
+    }
   }
 
   std::size_t ProgressIndicator::getTerminalSize() const {

@@ -41,7 +41,7 @@ namespace mdf::tools::asc {
         // Write the header.
         exporter.writeHeader();
 
-        mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages);
+        mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages, commonOptions->nonInteractiveMode);
         indicator.setPrefix("CAN");
         std::size_t i = 0;
 
@@ -67,7 +67,7 @@ namespace mdf::tools::asc {
         // Write the header.
         exporter.writeHeader();
 
-        mdf::tools::shared::ProgressIndicator indicator(0, info.LINMessages);
+        mdf::tools::shared::ProgressIndicator indicator(0, info.LINMessages, commonOptions->nonInteractiveMode);
         indicator.setPrefix("LIN");
         std::size_t i = 0;
 

@@ -72,7 +72,7 @@ namespace mdf::tools::clx {
         // Loop over all data and write to the correct log file.
         auto iter = mdfFile->getCANIterator();
 
-        mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages);
+        mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages, commonOptions->nonInteractiveMode);
         indicator.setPrefix("CAN");
         std::size_t i = 0;
 
@@ -143,7 +143,7 @@ namespace mdf::tools::clx {
         // Loop over all data and write to the correct log file.
         auto iter = mdfFile->getLINIterator();
 
-        mdf::tools::shared::ProgressIndicator indicator(0, info.LINMessages);
+        mdf::tools::shared::ProgressIndicator indicator(0, info.LINMessages, commonOptions->nonInteractiveMode);
         indicator.setPrefix("LIN");
         std::size_t i = 0;
 

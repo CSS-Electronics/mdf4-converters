@@ -54,7 +54,7 @@ namespace mdf::tools::peak {
           // Extract iterator and write all records.
           auto iter = mdfFile->getCANIterator();
 
-          mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages);
+          mdf::tools::shared::ProgressIndicator indicator(0, info.CANMessages, commonOptions->nonInteractiveMode);
           indicator.setPrefix("CAN");
           std::size_t i = 0;
 

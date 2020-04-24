@@ -8,7 +8,7 @@
 namespace mdf::tools::shared {
 
   struct ProgressIndicator {
-    ProgressIndicator(std::size_t start, std::size_t stop);
+    ProgressIndicator(std::size_t start, std::size_t stop, bool suppressed = false);
 
     void begin();
     void update(std::size_t current);
@@ -29,6 +29,7 @@ namespace mdf::tools::shared {
 
     std::string prefix;
     std::string suffix;
+    bool suppressed;
 
     void update_percent(std::size_t percent);
   };
