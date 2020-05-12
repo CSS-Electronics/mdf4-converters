@@ -58,9 +58,13 @@ if(NOT Boost_FOUND)
         --with-thread
         --prefix=<INSTALL_DIR>
         toolset=${BOOST_TOOLCHAIN}
+        variant=release
+        address-model=64
         threading=multi
+        link=static
+        runtime-link=static
         install
-        -j4
+        -j1
         )
 
     # Configure arguments to b2 when building.
@@ -68,19 +72,11 @@ if(NOT Boost_FOUND)
         set(BOOST_BUILD_COMMAND
             b2.exe
             ${BUILD_COMMAND_ARGS}
-            variant=release
-            address-model=64
-            runtime-link=static
-            link=static
             )
     else()
         set(BOOST_BUILD_COMMAND
             ./b2
             ${BUILD_COMMAND_ARGS}
-            variant=release
-            address-model=64
-            link=shared
-            install
             )
     endif()
 

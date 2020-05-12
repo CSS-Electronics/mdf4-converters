@@ -11,7 +11,7 @@ namespace mdf::tools::shared {
     switch (displayTimeFormat) {
       case DisplayTimeFormat::LoggerLocalTime:
         // Correct for the logger timezone.
-        result += loggerInfo.TimezoneOffset;
+        result += loggerInfo.TimezoneOffsetMinutes * 60;
         break;
       case DisplayTimeFormat::UTC:
         // Timestamps are logged in UTC by default, no need to do any conversion.

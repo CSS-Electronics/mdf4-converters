@@ -32,6 +32,9 @@ class CommonBase(BaseTestCase):
         if not self._data_folder.exists():
             self._data_folder.mkdir(parents=True)
 
+        if self._data.name is not None:
+            print(f"Starting test with comment: {self._data.name}")
+
         print(f"Executing command: {command}")
 
         # Perform test.
@@ -66,7 +69,7 @@ class CommonBase(BaseTestCase):
 
             # Determine comparison to perform based on file extension.
             extension = data_file.suffix.lower()
-            if extension in [".log", ".trc", ".asc", ".txt"]:
+            if extension in [".log", ".trc", ".asc", ".txt", ".csv"]:
                 comparison_result = compare_ignore_line_ending(comparison_file, data_file)
             else:
                 comparison_result = filecmp.cmp(comparison_file, data_file)

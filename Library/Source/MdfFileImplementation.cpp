@@ -191,6 +191,9 @@ namespace mdf {
         uint64_t startTimeNs = hdBlock->getStartTimeNs();
         fileInfo.Time = std::chrono::nanoseconds(startTimeNs);
 
+        // Extract time zone offset.
+        fileInfo.TimezoneOffsetMinutes = hdBlock->getTzOffsetMin();
+
         // Get xml data from MDBlock.
         std::shared_ptr<MDBlock> mdBlock = hdBlock->getComment();
         bool loadStatus = false;
@@ -243,6 +246,23 @@ namespace mdf {
           std::shared_ptr<CGBlock> LINCGBlock = LINDGBlock->getFirstCGBlock();
 
           fileInfo.LINMessages = LINCGBlock->getCycleCount();
+
+          // Get xml data from the acquisition source.
+          bool loadStatus = false;
+          std::shared_ptr<SIBlock> siBlock = LINCGBlock->getSIBlock();
+          if(siBlock) {
+            std::shared_ptr<MDBlock> mdBlock = siBlock->getComment();
+
+            if(mdBlock) {
+              // Extract common metadata.
+              std::string metaData(mdBlock->getMetaData());
+              loadStatus = getLINInfo(fileInfo, metaData);
+            }
+          }
+
+          if(!loadStatus) {
+            break;
+          }
         }
       }
 

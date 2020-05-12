@@ -25,7 +25,7 @@ namespace mdf::tools::shared {
      * @param argv Values of arguments passed on the commandline.
      * @return Status.
      */
-    StatusCode main(int argc, char **argv);
+    StatusCode main(int argc, char** argv);
 
   private:
     /**
@@ -55,11 +55,6 @@ namespace mdf::tools::shared {
      * @return
      */
     ParseOptionStatus parseOptions(boost::program_options::variables_map const &result);
-
-    /**
-     *
-     */
-    void updateProgress(int, int);
 
     /**
      * List of shared and interface options to accept on the commandline.

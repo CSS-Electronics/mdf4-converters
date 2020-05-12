@@ -6,12 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMake")
 
 # Configure global options.
-
-# When using MinGW, use static linkage.
-if (MINGW)
-    SET(Boost_USE_STATIC_LIBS ON)
-    SET(Boost_USE_STATIC_RUNTIME ON)
-endif ()
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_RUNTIME ON)
 
 add_subdirectory(External)
 

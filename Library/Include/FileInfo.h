@@ -22,7 +22,7 @@ namespace mdf {
     char Comment[30 + 1];
 
     std::chrono::nanoseconds Time;
-    uint64_t TimezoneOffset;
+    int16_t TimezoneOffsetMinutes;
 
     Version FW_Version;
     Version HW_Version;

@@ -5,17 +5,10 @@ include(CMake/Package.cmake)
 set(RESOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Resources)
 set(ICON_PATH ${RESOURCE_PATH}/icon.ico)
 
-if(MINGW)
 set(RUNTIME_LIBRARIES
     -static-libstdc++
     -static-libgcc
-    -static
-	)
-else()
-set(RUNTIME_LIBRARIES
-    -lstdc++fs
-	)
-endif()
+)
 
 # Shared base for all the tools.
 add_subdirectory(Shared)
@@ -43,10 +36,3 @@ set(EXTERNAL_TARGETS
 add_custom_target(ToolsRelease
     DEPENDS ${EXTERNAL_TARGETS}
     )
-
-# For linux builds, include AppImage meta-target.
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  foreach(TARGET ${EXTERNAL_TARGETS})
-    add_dependencies(ToolsRelease ${TARGET}_install)
-  endforeach()
-endif()

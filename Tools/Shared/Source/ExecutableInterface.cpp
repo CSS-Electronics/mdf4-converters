@@ -5,8 +5,10 @@
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/predef.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <fmt/format.h>
 
 #include "GenericFile.h"
 #include "HeatshrinkFile.h"
@@ -30,9 +32,8 @@ namespace mdf::tools::shared {
     commonOptions = std::make_shared<CommonOptions>();
   }
 
-  StatusCode ExecutableInterface::main(int argc, char **argv) {
+  StatusCode ExecutableInterface::main(int argc, char** argv) {
     // Register progress callback.
-    //interface->registerProgressCallback([=](auto &&...args) { return updateProgress(args...); });
     StatusCode mainStatus = StatusCode::NoErrors;
 
     // Configure which arguments to parse. Start with basic and then custom.
@@ -119,11 +120,15 @@ namespace mdf::tools::shared {
     }
 
     // Perform core parsing.
+    earlyLogMessages.emplace_back("Parsing general input options");
     try {
       status |= parseOptions(optionResult);
-    } catch (std::exception &e) {
+    } catch (bpo::validation_error &e) {
       BOOST_LOG_TRIVIAL(fatal) << "Error occurred during general input argument parsing: " << e.what();
       return StatusCode::InputArgumentParsingError;
+    } catch (std::exception &e) {
+      BOOST_LOG_TRIVIAL(fatal) << "Error occurred during general input argument parsing: " << e.what();
+      return StatusCode::CritialError;
     }
 
     // Parsing for anything but errors can now be done.
@@ -133,16 +138,20 @@ namespace mdf::tools::shared {
 
     // Perform specialization parsing.
     interface->setCommonOptions(commonOptions);
+    BOOST_LOG_TRIVIAL(trace) << "Parsing specialized input options";
     try {
       status |= interface->parseOptions(optionResult);
-    } catch (std::exception &e) {
+    } catch (bpo::validation_error &e) {
       BOOST_LOG_TRIVIAL(fatal) << "Error occurred during specialized input argument parsing: " << e.what();
       return StatusCode::InputArgumentParsingError;
+    } catch (std::exception &e) {
+      BOOST_LOG_TRIVIAL(fatal) << "Error occurred during specialized input argument parsing: " << e.what();
+      return StatusCode::CritialError;
     }
 
     // Collect any unrecognized options.
     std::vector<std::string> unrecognizedOptions = bpo::collect_unrecognized(parsedOptions.options,
-      bpo::exclude_positional);
+                                                                             bpo::exclude_positional);
 
     if (!unrecognizedOptions.empty()) {
       status |= ParseOptionStatus::UnrecognizedOption;
@@ -162,7 +171,8 @@ namespace mdf::tools::shared {
     } else if ((status & ParseOptionStatus::DisplayVersion) == ParseOptionStatus::DisplayVersion) {
       displayVersion();
       return StatusCode::NoErrors;
-    } else if ((status & ParseOptionStatus::CouldNotFindPasswordFile) == ParseOptionStatus::CouldNotFindPasswordFile) {
+    } else if ((status & ParseOptionStatus::CouldNotFindPasswordFile) ==
+               ParseOptionStatus::CouldNotFindPasswordFile) {
       BOOST_LOG_TRIVIAL(error) << "Could not locate password file";
       return StatusCode::InvalidInputArgument;
     } else if ((status & ParseOptionStatus::CouldNotParsePasswordFile) ==
@@ -193,7 +203,8 @@ namespace mdf::tools::shared {
 
       // If it is a folder, iterate recursively.
       if (bfs::is_directory(inputPath)) {
-        BOOST_LOG_TRIVIAL(info) << "Received folder as input argument, performing recursive walk: " << inputPath;
+        BOOST_LOG_TRIVIAL(info) << "Received folder as input argument, performing recursive walk: "
+                                << inputPath;
         for (auto &entry: bfs::recursive_directory_iterator(inputPath, bfs::symlink_option::no_recurse)) {
           std::string extension = entry.path().extension().string();
           boost::algorithm::to_lower(extension);
@@ -232,7 +243,8 @@ namespace mdf::tools::shared {
           try {
             boost::filesystem::create_directories(outputFolder);
           } catch (boost::filesystem::filesystem_error &e) {
-            BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder << ". Logged error is:\n"
+            BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder
+                                     << ". Logged error is:\n"
                                      << e.what();
             return StatusCode::CritialError;
           }
@@ -256,7 +268,8 @@ namespace mdf::tools::shared {
               currentPasswordStorage = std::make_shared<PasswordStorage>(localPasswordFilePath.string());
             } catch (std::exception &e) {
               BOOST_LOG_TRIVIAL(error)
-                << "Could not load local password file, even though the file exists. Input file: " << inputFilePath
+                << "Could not load local password file, even though the file exists. Input file: "
+                << inputFilePath
                 << ".";
               continue;
             }
@@ -366,10 +379,7 @@ namespace mdf::tools::shared {
       bool conversionStatus = false;
       try {
         conversionStatus = interface->convert(inputFilePath, outputFolder);
-      /*} catch (mdf::MDF_Exception &e) {
-        BOOST_LOG_TRIVIAL(error) << e.what();
-        mainStatus |= StatusCode::DecodingError;
-      */} catch (std::exception &e) {
+      } catch (std::exception &e) {
         BOOST_LOG_TRIVIAL(error) << e.what();
         conversionStatus = false;
       }
@@ -400,13 +410,13 @@ namespace mdf::tools::shared {
       ("input-directory,I", bpo::value<std::string>(), "Input directory to convert files from.")
       ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
       ("non-interactive", bpo::bool_switch()->default_value(false),
-        "Run in non-interactive mode, with no progress output.")
+       "Run in non-interactive mode, with no progress output.")
       ("timezone,t", bpo::value<std::string>()->default_value("l"),
-        "Display times in UTC (u), logger localtime (l, default) or PC local time (p).")
+       "Display times in UTC (u), logger localtime (l, default) or PC local time (p).")
       ("password-file,p", bpo::value<std::string>(),
-        "Path to password json file. If left empty, and an encrypted file is encountered, the folder of the input file will be searched.")
+       "Path to password json file. If left empty, and an encrypted file is encountered, the folder of the input file will be searched.")
       ("input-files,i", bpo::value<std::vector<std::string>>(),
-        "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.");
+       "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.");
 
     // Capture all other options (Positional options) as input files.
     commandlinePositionalOptions.add("input-files", -1);
@@ -447,8 +457,15 @@ namespace mdf::tools::shared {
   }
 
   ParseOptionStatus ExecutableInterface::parseOptions(boost::program_options::variables_map const &result) {
+    // Predicate for usage with trimming of '=' and ' '.
+    auto predicate = [](char const& input) -> bool {
+      return (input == ' ' || input == '=');
+    };
+
     // Setup verbosity.
-    switch (result["verbose"].as<int>()) {
+    int verboseToken = result["verbose"].as<int>();
+
+    switch (verboseToken) {
       case 0:
         blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::fatal);
         break;
@@ -468,9 +485,14 @@ namespace mdf::tools::shared {
         blo::core::get()->set_filter(blo::trivial::severity >= blo::trivial::trace);
         break;
       default:
-        // TODO: Send the value back as well.
-        // NOTE: Maybe this can be handled with a boost options specific exception?
-        return ParseOptionStatus::UnrecognizedOption;
+        // Unknown value.
+        std::string const originalToken = fmt::format(FMT_STRING("{:d}"), verboseToken);
+
+        throw bpo::validation_error(
+          bpo::validation_error::kind_t::invalid_option_value,
+          "verbose",
+          originalToken
+          );
     }
 
     // Handle request for help messages.
@@ -485,33 +507,29 @@ namespace mdf::tools::shared {
 
     commonOptions->nonInteractiveMode = result["non-interactive"].as<bool>();
 
-    std::string timeZoneDisplay = "l";
-    if (result.count("timezone")) {
-      timeZoneDisplay = result["timezone"].as<std::string>();
-    }
+    // Handle timezone. Utilize the default value is set.
+    std::string timeZoneDisplay = result["timezone"].as<std::string>();
+    boost::algorithm::trim_left_if(timeZoneDisplay, predicate);
 
-    char first = 0;
-    if (timeZoneDisplay.length() != 0) {
-      first = timeZoneDisplay[0];
-    }
-
-    switch (first) {
-      case 'u':
-        commonOptions->displayTimeFormat = DisplayTimeFormat::UTC;
-        break;
-      case 'p':
-        commonOptions->displayTimeFormat = DisplayTimeFormat::PCLocalTime;
-        break;
-      case 'l':
-        // Fallthrough for the default value.
-      default:
-        commonOptions->displayTimeFormat = DisplayTimeFormat::LoggerLocalTime;
-        break;
+    if (boost::algorithm::iequals("u", timeZoneDisplay)) {
+      commonOptions->displayTimeFormat = DisplayTimeFormat::UTC;
+    } else if (boost::algorithm::iequals("p", timeZoneDisplay)) {
+      commonOptions->displayTimeFormat = DisplayTimeFormat::PCLocalTime;
+    } else if (boost::algorithm::iequals("l", timeZoneDisplay)) {
+      commonOptions->displayTimeFormat = DisplayTimeFormat::LoggerLocalTime;
+    } else {
+      // Unknown value.
+      throw bpo::validation_error(
+        bpo::validation_error::kind_t::invalid_option_value,
+        "timezone",
+        result["timezone"].as<std::string>()
+      );
     }
 
     // Attempt to load passwords.
     if (result.count("password-file")) {
       std::string passwordFile = result["password-file"].as<std::string>();
+      boost::algorithm::trim_left_if(passwordFile, predicate);
 
       boost::filesystem::path passwordFilePath = boost::filesystem::weakly_canonical(passwordFile);
 
@@ -535,7 +553,8 @@ namespace mdf::tools::shared {
       bfs::path current_path = boost::dll::program_location();
       boost::filesystem::path passwordFilePath = current_path.parent_path() / "passwords.json";
 
-      BOOST_LOG_TRIVIAL(trace) << "Attempting to load default password file next to executable at " << passwordFilePath;
+      BOOST_LOG_TRIVIAL(trace) << "Attempting to load default password file next to executable at "
+                               << passwordFilePath;
 
       if (boost::filesystem::exists(passwordFilePath)) {
         try {
@@ -553,20 +572,23 @@ namespace mdf::tools::shared {
     // Is an input directory specified? In that case, ignore any files passed to the program and instead populate
     // the files list from the directory.
     if (result.count("input-directory")) {
-      // Ensure the location exists.
-      boost::filesystem::path inputDirectory(result["input-directory"].as<std::string>());
+      std::string inputDirectoryToken = result["input-directory"].as<std::string>();
+      boost::algorithm::trim_left_if(inputDirectoryToken, predicate);
+
+      boost::filesystem::path inputDirectory(inputDirectoryToken);
 
       if (!inputDirectory.is_absolute()) {
         inputDirectory = boost::filesystem::weakly_canonical(inputDirectory);
       }
 
-      // Ensure that the current input file exists.
+      // Ensure the location exists.
       if (!boost::filesystem::exists(inputDirectory)) {
         std::cout << inputDirectory << std::endl;
       } else if (!boost::filesystem::is_directory(inputDirectory)) {
         std::cout << inputDirectory << std::endl;
       } else {
-        for (auto &entry : boost::make_iterator_range(boost::filesystem::directory_iterator(inputDirectory), {})) {
+        for (auto &entry : boost::make_iterator_range(boost::filesystem::directory_iterator(inputDirectory),
+                                                      {})) {
           if (boost::filesystem::is_regular_file(entry)) {
             // Case insensitive compare.
             if (boost::iequals(bfs::extension(entry), ".mf4")) {
@@ -586,42 +608,5 @@ namespace mdf::tools::shared {
     }
 
     return ParseOptionStatus::NoError;
-  }
-
-  void ExecutableInterface::updateProgress(int current, int total) {
-    // Do nothing if running in non-interactive mode.
-    if (commonOptions->nonInteractiveMode) {
-      return;
-    }
-
-    // Determine the fraction to fill.
-    const int width = 80;
-    double fraction = static_cast<double>(current) / static_cast<double>(total);
-    int fill = static_cast<int>(fraction * width);
-
-    // Return to beginning of line.
-    std::cout << "\r";
-
-    for (int i = 0; i < fill - 1; i++) {
-      std::cout << "=";
-    }
-
-    if (current != total) {
-      std::cout << ">";
-    } else {
-      std::cout << "=";
-    }
-
-    for (int i = fill; i < width; ++i) {
-      std::cout << " ";
-    }
-
-    std::cout << " " << current << " / " << total;
-
-    if (current == total) {
-      std::cout << " \n";
-    }
-
-    std::cout.flush();
   }
 }

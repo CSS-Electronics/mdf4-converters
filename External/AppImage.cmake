@@ -31,7 +31,7 @@ if(NOT AppImage_FOUND)
 
         PREFIX              ${EXTERNAL_PROJECT_NAME}
         URL                 https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        URL_HASH            MD5=81fa0518386e0ee828a86000be93332d
+        URL_HASH            MD5=f245a3802a63e38cd53c54f2b2817e3e
         DOWNLOAD_NO_EXTRACT 1
         DOWNLOAD_NAME       linuxdeploy-x86_64.AppImage
 

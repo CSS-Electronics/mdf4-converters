@@ -28,7 +28,7 @@ if(NOT botan_FOUND)
     find_package(Python COMPONENTS Interpreter REQUIRED)
 
     set(EXTERNAL_PROJECT_CONFIGURE_COMMAND
-      COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py --prefix=<INSTALL_DIR> ${BOTAN_CONFIGURE_COMMAND_OS} --cc=${BOTAN_CONFIGURE_COMMAND_CC} --minimized-build --without-stack-protector --enable-modules=system_rng,aead,aes,aes_ni,aes_vperm,gcm,hmac,sha2_32,sha2_32_bmi2,sha2_32_x86,sha2_64,sha2_64_bmi2,sha1,sha3,shacal2,shacal2_simd,shacal2_x86,simd,simd_avx2,pbkdf,pbkdf1,pbkdf2
+      COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py --prefix=<INSTALL_DIR> ${BOTAN_CONFIGURE_COMMAND_OS} --cc=${BOTAN_CONFIGURE_COMMAND_CC} --minimized-build --without-stack-protector --disable-shared-library --enable-modules=system_rng,aead,aes,aes_ni,aes_vperm,gcm,hmac,sha2_32,sha2_32_bmi2,sha2_32_x86,sha2_64,sha2_64_bmi2,sha1,sha3,shacal2,shacal2_simd,shacal2_x86,simd,simd_avx2,pbkdf,pbkdf1,pbkdf2
       )
 
     # Command used for building.

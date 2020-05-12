@@ -14,7 +14,7 @@ namespace mdf {
     CANMessages(0),
     LINMessages(0),
     Time(0),
-    TimezoneOffset(0)
+    TimezoneOffsetMinutes(0)
   {
     //
   }
