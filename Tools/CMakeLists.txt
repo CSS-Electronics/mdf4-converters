@@ -10,6 +10,10 @@ set(RUNTIME_LIBRARIES
     -static-libgcc
 )
 
+if(MINGW)
+    list(APPEND RUNTIME_LIBRARIES -static)
+endif()
+
 # Shared base for all the tools.
 add_subdirectory(Shared)
 
