@@ -69,11 +69,11 @@ namespace mdf::tools::shared {
           return StatusCode::MissingArgument;
         default:
           BOOST_LOG_TRIVIAL(fatal) << "Could not complete parsing due to exception: " << e.what();
-          return StatusCode::CritialError;
+          return StatusCode::CriticalError;
       }
     } catch (std::exception &e) {
       BOOST_LOG_TRIVIAL(fatal) << "Error occurred during initial input argument parsing: " << e.what();
-      return StatusCode::CritialError;
+      return StatusCode::CriticalError;
     }
 
     // Continue on with the configuration file.
@@ -128,7 +128,7 @@ namespace mdf::tools::shared {
       return StatusCode::InputArgumentParsingError;
     } catch (std::exception &e) {
       BOOST_LOG_TRIVIAL(fatal) << "Error occurred during general input argument parsing: " << e.what();
-      return StatusCode::CritialError;
+      return StatusCode::CriticalError;
     }
 
     // Parsing for anything but errors can now be done.
@@ -146,7 +146,7 @@ namespace mdf::tools::shared {
       return StatusCode::InputArgumentParsingError;
     } catch (std::exception &e) {
       BOOST_LOG_TRIVIAL(fatal) << "Error occurred during specialized input argument parsing: " << e.what();
-      return StatusCode::CritialError;
+      return StatusCode::CriticalError;
     }
 
     // Collect any unrecognized options.
@@ -158,7 +158,14 @@ namespace mdf::tools::shared {
     }
 
     if (noConfigFileFound) {
-      BOOST_LOG_TRIVIAL(info) << "No configuration file found, skipping.";
+      bool failOnMissingConfigFile = (optionResult.count("error-on-missing-config-file") != 0);
+
+      if(failOnMissingConfigFile) {
+        BOOST_LOG_TRIVIAL(fatal) << "No configuration file found, but required by the user, exiting.";
+        return StatusCode::ConfigurationFileParseError;
+      } else {
+        BOOST_LOG_TRIVIAL(info) << "No configuration file found, skipping.";
+      }
     }
 
     // Handle parsing result.
@@ -246,7 +253,7 @@ namespace mdf::tools::shared {
             BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder
                                      << ". Logged error is:\n"
                                      << e.what();
-            return StatusCode::CritialError;
+            return StatusCode::CriticalError;
           }
         }
       } else {
@@ -417,6 +424,11 @@ namespace mdf::tools::shared {
        "Path to password json file. If left empty, and an encrypted file is encountered, the folder of the input file will be searched.")
       ("input-files,i", bpo::value<std::vector<std::string>>(),
        "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.");
+
+    if(interface->usesConfigFile()) {
+      commandlineOptions.add_options()
+        ("error-on-missing-config-file,e", "Emit error on no configuration file instead of using default values");
+    }
 
     // Capture all other options (Positional options) as input files.
     commandlinePositionalOptions.add("input-files", -1);

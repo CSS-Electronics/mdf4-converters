@@ -8,7 +8,7 @@ set(DESCRIPTION "MDF4 finalizer and sorter")
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 3)
+set(VERSION_PATCH 4)
 
 # Embed information in the source code.
 configure_file(

@@ -19,7 +19,7 @@ namespace mdf::tools::shared {
     DecodingError = 0x1u << 3u,
 
     // Error codes, setting the MSB.
-    CritialError = (0x80u + 0x01u),
+    CriticalError = (0x80u + 0x01u),
     MissingArgument = (0x80u + 0x02),
     InvalidInputArgument = (0x80u + 0x03u),
     InputArgumentParsingError = (0x80u + 0x04u),

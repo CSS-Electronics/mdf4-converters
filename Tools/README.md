@@ -10,25 +10,13 @@ A set of common options are included, which all sub-tools inherit.
 Local time (`p`), logger local time (`l`) or UTC (`u`). May not be applicable for all output formats, e.g. CSV, PCAP and the finalizer.
 * `--verbosity`. Alters how much information is shown. For normal operation, the default value of `1` is sufficient. Values range from `0` (Fatal errors only) to `5` (Debug information)
 
-## Return codes.
-If no errors occurred during the run, the program will return `0`. In case of recoverable errors, the following codes will be returned:
-* `0`: No errors
-* `1`: One or more input files could not be found
-* `2`: Failure to decrypt one or more input files, see error output for more information
-* `4`: Failure to decompress one or more input files, see error output for more information
-* `8`: Error reading and decoding the MDF file
+If the converter allows for options from a config file, an additional flag is available:
+* `-e` or `--error-on-missing-config-file`. If no config file is found, the program will error out instead of utilizing default values.
 
-These codes are used as bit flags and can be combined. E.g. an error code of `3 (0x0011)` would indicate both a missing file `(1 = 0x100)` and a decryption failure `(2 = 0x010)`.
+## Exit codes.
+See `Exit codes.md`
 
-In the case of an unrecoverable error, the program will return a negative value:
-* `-1`: Fatal error (Terminating the program immediately), see output for more info
-* `-2`: An argument was called without a value
-* `-3`: The value passed to an argument is in invalid
-* `-4`: Could not parse one or more of the arguments passed
-* `-5`: Error parsing the external configuration file
-* `-6`: Unrecognized option passed
-
-If the converter is started using drag-and-drop and an error occurs, the output window will stay visible untill the user closes it by pressing the `Enter` key.
+If the converter is started using drag-and-drop and an error occurs, the output window will stay visible until the user closes it by pressing the `Enter` key.
 
 ## Password file format.
 The password file is formatted in JSON. The file may contain a default key, labelled `default`, and device specific keys, with the ID of the corresponding logger as the key. An example with both a default and a device specific key could be:

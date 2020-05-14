@@ -76,6 +76,9 @@ class BaseTestCase(object):
         for key, value in self._data.options.items():
             # Handle some keys related to paths.
             if key in _directory_keys:
+                if value is None or value == "":
+                    continue
+
                 p = Path(value)
                 if not p.is_absolute():
                     p = self._data_folder / p

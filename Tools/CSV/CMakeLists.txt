@@ -8,7 +8,7 @@ set(DESCRIPTION "MDF4 bus logging to CSV format")
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 3)
+set(VERSION_PATCH 4)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)
