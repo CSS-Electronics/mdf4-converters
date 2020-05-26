@@ -8,7 +8,7 @@ set(DESCRIPTION "MDF4 bus logging to PCAP-NG format")
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 4)
+set(VERSION_PATCH 5)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)
