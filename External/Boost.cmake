@@ -20,7 +20,17 @@ set(Boost_ROOT ${EXTERNAL_PROJECT_INSTALL_DIR} CACHE PATH "Boost root path")
 set(Boost_COMPILER ${BOOST_TOOLCHAIN} CACHE INTERNAL "Boost compiler")
 set(ENV{Boost_ROOT} ${Boost_ROOT})
 set(ENV{Boost_COMPILER} ${Boost_COMPILER})
-find_package(Boost 1.72.0)
+
+set(Boost_COMPONENTS_TO_FIND
+        date_time
+        filesystem
+        iostreams
+        log
+        program_options
+        thread
+        )
+
+find_package(Boost 1.72.0 COMPONENTS ${Boost_COMPONENTS_TO_FIND})
 
 if(NOT Boost_FOUND)
     message("External dependencies: Boost not found, creating external target.")
@@ -108,5 +118,5 @@ if(NOT Boost_FOUND)
     list(APPEND EXTERNAL_TARGETS ${EXTERNAL_PROJECT_NAME}_builder)
     set(EXTERNAL_TARGETS ${EXTERNAL_TARGETS} PARENT_SCOPE)
 else()
-    message("External dependencies: Boost found")
+    message("External dependencies: Boost found at ${Boost_INCLUDE_DIR}")
 endif()

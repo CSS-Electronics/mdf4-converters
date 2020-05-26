@@ -1,6 +1,7 @@
 #include "DTBlockSingleDiscontinuous.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 namespace mdf {
 

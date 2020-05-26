@@ -33,11 +33,6 @@ include(fmt.cmake)
 include(heatshrink.cmake)
 include(tinyxml2.cmake)
 
-# For linux builds, include AppImage tools (linuxdeploy).
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  include(AppImage.cmake)
-endif()
-
 # Add overall target which depend on all external dependencies.
 list(LENGTH EXTERNAL_TARGETS EXTERNAL_TARGETS_LENGTH)
 if(${EXTERNAL_TARGETS_LENGTH} GREATER 0)

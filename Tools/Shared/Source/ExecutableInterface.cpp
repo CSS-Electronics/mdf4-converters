@@ -297,6 +297,13 @@ namespace mdf::tools::shared {
         bfs::create_directories(temporaryDirectoryPath);
         bfs::path temporaryPath = temporaryDirectoryPath / inputFilePath.filename();
 
+        // Attempt to use the correct naming scheme.
+        if( boost::algorithm::equals(temporaryPath.extension().string(), ".MFM") ) {
+            temporaryPath.replace_extension(".MFC");
+        } else if( boost::algorithm::equals(temporaryPath.extension().string(), ".MFE") ) {
+            temporaryPath.replace_extension(".MF4");
+        }
+
         // Determine which logger this file originates from.
         uint32_t device = mdf::getDeviceIdFromFile(inputFilePath.string());
 
@@ -306,7 +313,7 @@ namespace mdf::tools::shared {
         if (passwordAvailable != PasswordType::Missing) {
           std::string const &password = currentPasswordStorage->getPassword(device);
 
-          // Decompress to temporary file, and pass this on for further processing.
+          // Decrypt to temporary file, and pass this on for further processing.
           decryptionStatus = mdf::decryptFile(inputFilePath.string(), temporaryPath.string(), password);
         }
 
@@ -359,6 +366,10 @@ namespace mdf::tools::shared {
         BOOST_LOG_TRIVIAL(info) << "Creating temporary folder: " << temporaryDirectoryPath << ".";
         bfs::create_directories(temporaryDirectoryPath);
         bfs::path temporaryPath = temporaryDirectoryPath / inputFilePath.filename();
+
+        if( boost::algorithm::equals(temporaryPath.extension().string(), ".MFC") ) {
+            temporaryPath.replace_extension(".MF4");
+        }
 
         // Decompress to temporary file, and pass this on for further processing.
         bool decompressionStatus = mdf::decompressFile(inputFilePath.string(), temporaryPath.string());

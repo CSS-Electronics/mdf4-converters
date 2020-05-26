@@ -1,5 +1,7 @@
 #include "DTBlockRaw.h"
 
+#include <stdexcept>
+
 namespace mdf {
 
     bool DTBlockRaw::saveBlockData(uint8_t* dataPtr) {
