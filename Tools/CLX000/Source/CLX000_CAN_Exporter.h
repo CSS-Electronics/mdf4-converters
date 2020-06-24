@@ -29,17 +29,9 @@ namespace mdf::tools::clx {
         void writeRecord(CANRecord const& record) override;
         void correctHeader();
     private:
-        std::string convertTimestampWithYear(std::time_t const& timeStamp);
+        void convertTimestampWithYear(std::time_t const& timeStamp, std::ostream &output);
 
-        std::stringstream timeStream;
-        std::string convertTimestampToFormat(std::time_t const& timeStamp);
-        void convertTimestampToFormat0(std::time_t const& timeStamp);
-        void convertTimestampToFormat1(std::time_t const& timeStamp);
-        void convertTimestampToFormat2(std::time_t const& timeStamp);
-        void convertTimestampToFormat3(std::time_t const& timeStamp);
-        void convertTimestampToFormat4(std::time_t const& timeStamp);
-        void convertTimestampToFormat5(std::time_t const& timeStamp);
-        void convertTimestampToFormat6(std::time_t const& timeStamp);
+        void convertTimestampToFormat(std::chrono::nanoseconds const& timeStamp, std::ostream& output);
 
         uint8_t const busChannel;
         std::string_view const delimiter;

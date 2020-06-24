@@ -5,10 +5,14 @@ include(CMake/Package.cmake)
 set(RESOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Resources)
 set(ICON_PATH ${RESOURCE_PATH}/icon.ico)
 
-set(RUNTIME_LIBRARIES
-    -static-libstdc++
-    -static-libgcc
-)
+if (MSVC_VERSION GREATER_EQUAL "1900")
+
+else()
+    set(RUNTIME_LIBRARIES
+        -static-libstdc++
+        -static-libgcc
+        )
+endif()
 
 if(MINGW)
     list(APPEND RUNTIME_LIBRARIES -static)

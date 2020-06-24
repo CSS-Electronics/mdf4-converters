@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#ifdef __MINGW64__
+#if defined(__MINGW64__) || defined(_MSC_VER)
 #include <windows.h>
 #else
 #include <sys/ioctl.h>
@@ -92,7 +92,7 @@ namespace mdf::tools::shared {
     // See https://stackoverflow.com/a/23370070
     std::size_t width = 80;
 
-    #ifdef __MINGW64__
+    #if defined(__MINGW64__) || defined(_MSC_VER)
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
     if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {

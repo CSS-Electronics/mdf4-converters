@@ -37,7 +37,7 @@ namespace mdf {
     /**
      * Mapping between the fields in the RecordType and the DG block.
      */
-    std::map<unsigned, unsigned> mapping;
+    std::map<unsigned, unsigned, std::less<unsigned>, std::allocator<std::pair<const unsigned, unsigned>>> mapping;
 
     MappingInformation mappingInformation;
     RecordType record;

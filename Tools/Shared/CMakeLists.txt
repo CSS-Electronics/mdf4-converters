@@ -1,6 +1,5 @@
 project(MDFSimpleConverters_Shared)
 
-set(CMAKE_CXX_STANDARD 17)
 find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS filesystem program_options log REQUIRED)
 find_package(Heatshrink 0.4.1 REQUIRED)

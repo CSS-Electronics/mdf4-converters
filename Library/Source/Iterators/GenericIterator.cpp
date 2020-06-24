@@ -5,8 +5,12 @@
 #include <boost/mpl/range_c.hpp>
 #include <boost/range/adaptor/indexed.hpp>
 #include <boost/bind.hpp>
+#include <boost/predef.h>
 #include <boost/endian.hpp>
 #include <boost/mpl/contains.hpp>
+
+#include <algorithm>
+#include <iterator>
 
 #include "CANRecord.h"
 #include "GenericIterator.h"
@@ -19,6 +23,8 @@
 #include "../Blocks/TXBlock.h"
 #include "../Blocks/SDBlock.h"
 #include "../Blocks/DTBlockSingleDiscontinuous.h"
+
+#include <bitset>
 
 namespace mdf {
 

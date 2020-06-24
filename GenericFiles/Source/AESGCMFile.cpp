@@ -1,6 +1,7 @@
 #include "AESGCMFile.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <fstream>
 #include <iterator>

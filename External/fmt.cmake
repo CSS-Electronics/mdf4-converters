@@ -5,7 +5,7 @@ set(EXTERNAL_PROJECT_NAME "fmt")
 
 set(fmt_ROOT ${EXTERNAL_PROJECT_INSTALL_DIR} CACHE PATH "fmt root path")
 set(ENV{fmt_ROOT} ${fmt_ROOT})
-find_package(fmt 6.2.0)
+find_package(fmt 6.2.1)
 
 if(NOT fmt_FOUND)
   message("External dependencies: fmt not found, creating external target.")
@@ -14,8 +14,8 @@ if(NOT fmt_FOUND)
     ${EXTERNAL_PROJECT_NAME}_builder
 
     PREFIX            ${EXTERNAL_PROJECT_NAME}
-    URL               https://github.com/fmtlib/fmt/releases/download/6.2.0/fmt-6.2.0.zip
-    URL_HASH          MD5=d4dadf3be208df2571baf8483e0154c5
+    URL               https://github.com/fmtlib/fmt/releases/download/6.2.1/fmt-6.2.1.zip
+    URL_HASH          MD5=e66b07ca9fc0f88283a9bb294d3b7d06
 
     # Setup CMake arguments to use the same flags and install to the local path instead of the global path.
     CMAKE_ARGS

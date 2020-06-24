@@ -1,14 +1,12 @@
 project(mdf2clx000)
 
-set(CMAKE_CXX_STANDARD 17)
-
 # Set project information.
 set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to CLX000 format")
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 5)
+set(VERSION_PATCH 6)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)

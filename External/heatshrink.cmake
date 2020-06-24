@@ -15,7 +15,6 @@ if(NOT Heatshrink_FOUND)
       ${CMAKE_BUILD_TOOL} libraries
       )
 
-
   # Command used for installation.
   set(EXTERNAL_PROJECT_INSTALL_COMMAND
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libheatshrink_dynamic.a <INSTALL_DIR>/lib/libheatshrink.a

@@ -1,6 +1,7 @@
 #include "GenericFile.h"
 
 #include <algorithm>
+#include <array>
 #include <iterator>
 
 #include <boost/endian/arithmetic.hpp>
