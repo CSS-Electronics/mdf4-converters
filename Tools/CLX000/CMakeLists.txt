@@ -1,5 +1,7 @@
 project(mdf2clx000)
 
+#set(CMAKE_CXX_STANDARD 17)
+
 # Set project information.
 set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to CLX000 format")

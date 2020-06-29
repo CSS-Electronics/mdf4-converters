@@ -8,7 +8,7 @@ namespace mdf {
   struct DTBlockSingleContinuous : DTBlock {
     DTBlockSingleContinuous(DTBlock const& parent, std::size_t recordSize);
 
-    uint8_t const *operator[](std::size_t index) override;
+    uint64_t operator[](std::size_t index) override;
 
   protected:
     bool saveBlockData(uint8_t * dataPtr) override;

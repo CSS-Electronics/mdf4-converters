@@ -5,11 +5,7 @@
 
 namespace mdf {
 
-  constexpr Version const version = {
-    .major = @VERSION_MAJOR@,
-    .minor = @VERSION_MINOR@,
-    .patch = @VERSION_PATCH@
-  };
+    constexpr Version const version(@VERSION_MAJOR@, @VERSION_MINOR@, @VERSION_PATCH@);
 
 }
 

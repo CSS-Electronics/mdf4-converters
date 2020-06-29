@@ -1,6 +1,9 @@
 #include "MDBlock.h"
 
+#include <algorithm>
+#include <iterator>
 #include <sstream>
+#include <streambuf>
 
 namespace mdf {
 
@@ -8,12 +11,17 @@ namespace mdf {
     return std::string_view(metaData);
   }
 
-  bool MDBlock::load(uint8_t const *dataPtr) {
+  bool MDBlock::load(std::shared_ptr<std::streambuf> stream) {
     bool result = false;
 
     // Load the data as string.
     std::stringstream ss;
-    ss.write(reinterpret_cast<char const *>(dataPtr), header.blockSize - sizeof(header));
+    std::copy_n(
+            std::istreambuf_iterator<char>(stream.get()),
+            header.blockSize - sizeof(header),
+            std::ostream_iterator<char>(ss)
+            );
+
     metaData = ss.str();
 
     result = true;

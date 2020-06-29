@@ -6,6 +6,7 @@
 #include "Library.h"
 #include "ProgressIndicator.h"
 #include "ProjectInformation.h"
+#include "ParsedFileInfo.h"
 
 using namespace mdf;
 
@@ -25,8 +26,10 @@ namespace mdf::tools::socketcan {
       // Create the base file name.
       std::string const outputFileBase = inputFilePath.stem().string() + "_";
 
-      // Determine if any data is present.
-      FileInfo info = mdfFile->getFileInfo();
+      // Load full metadata.
+      FileInfo fileInfo = mdfFile->getFileInfo();
+      MetadataMap metadata = mdfFile->getMetadata();
+      mdf::tools::shared::ParsedFileInfo info(fileInfo, metadata);
 
       if (info.CANMessages > 0) {
         // Create an output for the CAN messages.

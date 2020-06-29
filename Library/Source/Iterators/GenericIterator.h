@@ -6,49 +6,61 @@
 #include "RecordFunctor.h"
 
 #include "../Blocks/DGBlock.h"
+#include "../CachingStreamBuffer.h"
 
 #include <boost/dynamic_bitset.hpp>
+#include <streambuf>
 
 namespace mdf {
 
-  typedef boost::function<uint8_t const*(std::size_t)> NextRawDataLocationFunc2;
-  typedef std::function<uint8_t const*(std::size_t)> NextRawDataLocationFunc;
+    typedef std::function<uint64_t(std::size_t)> NextRawDataLocationFunc;
 
-  template <typename RecordType>
-  struct GenericIterator : public IIterator<RecordType const> {
-    explicit GenericIterator(std::shared_ptr<DGBlock> dgBlock, std::chrono::nanoseconds offset = std::chrono::nanoseconds(0), std::size_t start = 0);
-    GenericIterator(GenericIterator<RecordType> const& other);
+    template<typename RecordType>
+    struct GenericIterator : public IIterator<RecordType const> {
+        explicit GenericIterator(
+                std::shared_ptr<DGBlock> dgBlock,
+                std::shared_ptr<std::streambuf> stream,
+                std::chrono::nanoseconds offset = std::chrono::nanoseconds(0),
+                std::size_t start = 0
+                        );
 
-    void increment() override;
-    RecordType const& dereference() override;
+        GenericIterator(GenericIterator<RecordType> const &other);
 
-    std::unique_ptr<IIterator<RecordType const>> clone() const override;
-    std::unique_ptr<IIterator<RecordType const>> begin() const override;
-    std::unique_ptr<IIterator<RecordType const>> end() const override;
+        void increment() override;
 
-    bool equals(IIterator<RecordType const> const& other) const override;
-  protected:
-    std::size_t start;
-    std::size_t stop;
-    std::size_t current;
+        RecordType const &dereference() override;
 
-    NextRawDataLocationFunc func;
+        std::unique_ptr<IIterator<RecordType const>> clone() const override;
 
-    /**
-     * Mapping between the fields in the RecordType and the DG block.
-     */
-    std::map<unsigned, unsigned, std::less<unsigned>, std::allocator<std::pair<const unsigned, unsigned>>> mapping;
+        std::unique_ptr<IIterator<RecordType const>> begin() const override;
 
-    MappingInformation mappingInformation;
-    RecordType record;
+        std::unique_ptr<IIterator<RecordType const>> end() const override;
 
-    std::vector<RecordFunctor> functorStorage;
-    std::vector<MappingInformationEntry> mappingEntries;
+        bool equals(IIterator<RecordType const> const &other) const override;
 
-    boost::dynamic_bitset<uint8_t> bitData;
+    protected:
+        std::size_t start;
+        std::size_t stop;
+        std::size_t current;
+        std::shared_ptr<std::streambuf> stream;
+        std::shared_ptr<CachingStreamBuffer> stream2;
+        NextRawDataLocationFunc func;
 
-    void mapDataToRecord();
-  };
+        /**
+         * Mapping between the fields in the RecordType and the DG block.
+         */
+        std::map<unsigned, unsigned, std::less<unsigned>, std::allocator<std::pair<const unsigned, unsigned>>> mapping;
+
+        MappingInformation mappingInformation;
+        RecordType record;
+
+        std::vector<RecordFunctor> functorStorage;
+        std::vector<MappingInformationEntry> mappingEntries;
+
+        boost::dynamic_bitset<uint8_t> bitData;
+
+        void mapDataToRecord();
+    };
 
 }
 

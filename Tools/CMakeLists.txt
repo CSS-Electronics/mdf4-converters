@@ -6,12 +6,12 @@ set(RESOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Resources)
 set(ICON_PATH ${RESOURCE_PATH}/icon.ico)
 
 if (MSVC_VERSION GREATER_EQUAL "1900")
-
+    set(RUNTIME_LIBRARIES "")
 else()
     set(RUNTIME_LIBRARIES
-        -static-libstdc++
-        -static-libgcc
-        )
+            -static-libstdc++
+            -static-libgcc
+            )
 endif()
 
 if(MINGW)

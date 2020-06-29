@@ -8,13 +8,13 @@
 
 #include "LINRecord.h"
 #include "CommonOptions.h"
-#include "FileInfo.h"
+#include "ParsedFileInfo.h"
 
 namespace mdf::tools::asc {
 
   class ASC_LIN_Exporter : public tools::shared::GenericRecordExporter<LINRecord> {
   public:
-    explicit ASC_LIN_Exporter(std::ostream &output, FileInfo const &fileInfo,
+    explicit ASC_LIN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
       tools::shared::DisplayTimeFormat displayLocalTime);
 
     void writeHeader() override;
@@ -28,7 +28,7 @@ namespace mdf::tools::asc {
     tools::shared::DisplayTimeFormat displayLocalTime;
 
     std::stringstream timeStampString;
-    FileInfo const &fileInfo;
+    mdf::tools::shared::ParsedFileInfo const &fileInfo;
 
     std::string convertTimestamp(double const &timeStamp);
 

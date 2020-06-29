@@ -9,7 +9,7 @@ namespace mdf {
 
     struct CCBlock : MdfBlock {
     protected:
-        bool load(uint8_t const* dataPtr) override;
+        bool load(std::shared_ptr<std::streambuf> stream) override;
         bool saveBlockData(uint8_t * dataPtr) override;
     private:
         uint8_t type;

@@ -7,7 +7,7 @@
 
 namespace mdf::tools::asc {
 
-  ASC_CAN_Exporter::ASC_CAN_Exporter(std::ostream &output, FileInfo const &fileInfo,
+  ASC_CAN_Exporter::ASC_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
     tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(output), fileInfo(fileInfo),
                                                          displayLocalTime(displayLocalTime) {
 

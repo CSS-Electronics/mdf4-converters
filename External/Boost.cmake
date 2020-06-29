@@ -5,11 +5,12 @@ set(EXTERNAL_PROJECT_NAME "Boost")
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(BOOST_TOOLCHAIN gcc)
-    set(Boost_COMPILER ${BOOST_TOOLCHAIN} CACHE INTERNAL "Boost compiler")
+    set(Boost_COMPILER "-${BOOST_TOOLCHAIN}" CACHE INTERNAL "Boost compiler")
+    set(Boost_ARCHITECTURE "-x64" CACHE INTERNAL "Boost arch")
     message("Building boost using GCC")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(BOOST_TOOLCHAIN clang)
-    set(Boost_COMPILER ${BOOST_TOOLCHAIN} CACHE INTERNAL "Boost compiler")
+    set(Boost_COMPILER "-${BOOST_TOOLCHAIN}" CACHE INTERNAL "Boost compiler")
     message("Building boost using Clang")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(BOOST_TOOLCHAIN msvc)
@@ -19,29 +20,33 @@ else()
     message("ERROR")
 endif()
 
+if(DEFINED ENV{CI})
+    set(Boost_ROOT $ENV{BOOST_ROOT_1_72_0} CACHE PATH "Boost root path")
+    set(BOOST_INCLUDEDIR "$ENV{BOOST_ROOT_1_72_0}/boost/include")
+    set(BOOST_LIBRARYDIR "$ENV{BOOST_ROOT_1_72_0}/lib")
+elseif(DEFINED ENV{BOOST_ROOT})
+    set(Boost_ROOT ${EXTERNAL_PROJECT_INSTALL_DIR} CACHE PATH "Boost root path")
+endif()
+
 if(NOT DEFINED ENV{BOOST_ROOT})
-    set(BOOST_ROOT ${EXTERNAL_PROJECT_INSTALL_DIR} CACHE PATH "Boost root path")
+    set(Boost_ROOT ${EXTERNAL_PROJECT_INSTALL_DIR} CACHE PATH "Boost root path")
     set(ENV{BOOST_ROOT} ${BOOST_ROOT})
-else()
-    message("Getting Boost root from environment variable")
-    set(BOOST_ROOT $ENV{BOOST_ROOT})
-    set(Boost_NO_SYSTEM_PATHS ON)
 endif()
 
 message("Using ${BOOST_ROOT} as search path")
+message("Using ${Boost_COMPILER} as boost compiler")
 
 set(ENV{Boost_COMPILER} ${Boost_COMPILER})
 
 set(Boost_COMPONENTS_TO_FIND
         date_time
         filesystem
-        iostreams
         log
         program_options
         thread
         )
 
-find_package(Boost 1.73.0 COMPONENTS ${Boost_COMPONENTS_TO_FIND})
+find_package(Boost 1.72.0 COMPONENTS ${Boost_COMPONENTS_TO_FIND})
 
 if(NOT Boost_FOUND)
     message("External dependencies: Boost not found, creating external target.")
@@ -69,11 +74,20 @@ if(NOT Boost_FOUND)
         set(BOOST_BOOTSTRAP_TOOLCHAIN ${BOOST_TOOLCHAIN})
     endif()
 
+    if(WIN32)
+        set(BOOST_CXXFLAGS "")
+        set(BOOST_CFLAGS "")
+    else()
+        set(BOOST_CXXFLAGS "-fPIC")
+        set(BOOST_CFLAGS "-fPIC")
+    endif()
+
     set(BUILD_COMMAND_ARGS
+        cxxflags=${BOOST_CXXFLAGS}
+        cflags=${BOOST_CFLAGS}
         --with-date_time
         --with-filesystem
         --with-headers
-        --with-iostreams
         --with-log
         --with-program_options
         --with-thread
@@ -112,8 +126,8 @@ if(NOT Boost_FOUND)
         ${EXTERNAL_PROJECT_NAME}_builder
 
         PREFIX            ${EXTERNAL_PROJECT_NAME}
-        URL               https://dl.bintray.com/boostorg/release/1.73.0/source/boost_1_73_0.tar.gz
-        URL_HASH          MD5=4036cd27ef7548b8d29c30ea10956196
+        URL               https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
+        URL_HASH          MD5=e2b0b1eac302880461bcbef097171758
 
         CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
         BUILD_COMMAND     ${BOOST_BUILD_COMMAND}

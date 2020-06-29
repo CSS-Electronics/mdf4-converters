@@ -8,8 +8,8 @@ namespace mdf {
         throw std::runtime_error("This method should never be called");
     }
 
-  uint8_t const *DTBlockRaw::operator[](std::size_t index) {
-    return nullptr;
+  uint64_t DTBlockRaw::operator[](std::size_t index) {
+    return 0;
   }
 
 }

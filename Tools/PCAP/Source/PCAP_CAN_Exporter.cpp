@@ -6,7 +6,7 @@
 
 namespace mdf::tools::pcap {
 
-    PCAP_CAN_Exporter::PCAP_CAN_Exporter(std::ostream& output, mdf::FileInfo const& fileInfo) : GenericRecordExporter(output), fileInfo(fileInfo) {
+    PCAP_CAN_Exporter::PCAP_CAN_Exporter(std::ostream& output, mdf::tools::shared::ParsedFileInfo const& fileInfo) : GenericRecordExporter(output), fileInfo(fileInfo) {
 
     }
 

@@ -6,7 +6,7 @@
 namespace mdf {
 
   struct DTBlockRaw : DTBlock {
-    uint8_t const *operator[](std::size_t index) override;
+    uint64_t operator[](std::size_t index) override;
   protected:
     bool saveBlockData(uint8_t *dataPtr) override;
   };

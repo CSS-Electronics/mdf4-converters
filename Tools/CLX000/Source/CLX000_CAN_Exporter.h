@@ -10,7 +10,7 @@
 #include "GenericRecordExporter.h"
 
 #include "CANRecord.h"
-#include "FileInfo.h"
+#include "ParsedFileInfo.h"
 
 namespace ts = mdf::tools::shared;
 
@@ -20,7 +20,7 @@ namespace mdf::tools::clx {
     public:
         explicit CLX000_CAN_Exporter(
                 std::ostream& output,
-                FileInfo const& fileInfo,
+                mdf::tools::shared::ParsedFileInfo const& fileInfo,
                 uint8_t busChannel,
                 CLX000_Configuration const& configuration,
                 shared::DisplayTimeFormat displayLocalTime
@@ -35,7 +35,7 @@ namespace mdf::tools::clx {
 
         uint8_t const busChannel;
         std::string_view const delimiter;
-        FileInfo const& fileInfo;
+        mdf::tools::shared::ParsedFileInfo const& fileInfo;
 
         std::fpos<mbstate_t> datePosition;
         time_t headerTimeStamp;

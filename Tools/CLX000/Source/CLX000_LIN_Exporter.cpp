@@ -11,7 +11,7 @@ namespace mdf::tools::clx {
 
   CLX000_LIN_Exporter::CLX000_LIN_Exporter(
     std::ostream &output,
-    FileInfo const &fileInfo,
+    mdf::tools::shared::ParsedFileInfo const &fileInfo,
     uint8_t busChannel,
     CLX000_Configuration const &configuration,
     tools::shared::DisplayTimeFormat displayLocalTime

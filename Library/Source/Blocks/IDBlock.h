@@ -2,6 +2,7 @@
 #define MDFSIMPLECONVERTERS_IDBLOCK_H
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <type_traits>
 
@@ -28,7 +29,7 @@ namespace mdf {
     }
 
     struct IDBlock {
-        bool load(uint8_t const* dataPtr);
+        bool load(std::shared_ptr<std::streambuf> stream);
         bool save(uint8_t* dataPtr);
 
         FinalizationFlags getFinalizationFlags() const;

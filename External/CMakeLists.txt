@@ -31,7 +31,7 @@ include(Boost.cmake)
 include(botan.cmake)
 include(fmt.cmake)
 include(heatshrink.cmake)
-include(tinyxml2.cmake)
+include(PyCXX.cmake)
 
 # Add overall target which depend on all external dependencies.
 list(LENGTH EXTERNAL_TARGETS EXTERNAL_TARGETS_LENGTH)

@@ -12,6 +12,8 @@
 #include "SIBlock.h"
 #include "TXBlock.h"
 
+#include <streambuf>
+#include <iostream>
 #include <boost/endian/buffers.hpp>
 #include <boost/endian/conversion.hpp>
 
@@ -21,7 +23,7 @@ namespace mdf {
         this->header = header_;
     }
 
-    std::shared_ptr<MdfBlock> createBlock(MdfHeader header, std::vector<std::shared_ptr<MdfBlock>> links, uint8_t const* dataPtr) {
+    std::shared_ptr<MdfBlock> createBlock(MdfHeader header, std::vector<std::shared_ptr<MdfBlock>> links, std::shared_ptr<std::streambuf> stream) {
         std::shared_ptr<MdfBlock> result;
 
         // Determine which type to construct.
@@ -65,7 +67,8 @@ namespace mdf {
 
         if(result) {
             // Set the original file location.
-            result->setFileLocation(reinterpret_cast<uint64_t>(dataPtr));
+            std::streampos fileLocation = stream->pubseekoff(0, std::ios_base::cur);
+            result->setFileLocation(fileLocation);
 
             // Set the header.
             result->header = header;
@@ -74,7 +77,7 @@ namespace mdf {
             result->links = links;
 
             // Let the block perform the final loading.
-            result->load(dataPtr);
+            result->load(stream);
         }
 
         return result;
@@ -92,8 +95,8 @@ namespace mdf {
         return fileLocation;
     }
 
-    void MdfBlock::setFileLocation(uint64_t fileLocation) {
-        this->fileLocation = fileLocation;
+    void MdfBlock::setFileLocation(uint64_t fileLocation_) {
+        fileLocation = fileLocation_;
     }
 
     bool MdfBlock::save(uint8_t *dataPtr) {

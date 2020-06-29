@@ -5,16 +5,17 @@
 
 namespace mdf {
 
-  struct SDBlockContinuous : public SDBlock {
-    uint8_t const *operator[](std::size_t index) override;
-  protected:
-    bool load(uint8_t const *dataPtr) override;
-    bool saveBlockData(uint8_t *outputDataPtr) override;
+    struct SDBlockContinuous : public SDBlock {
+        uint64_t operator[](std::size_t index) override;
 
-    uint8_t const* dataPtr;
-  };
+    protected:
+        bool load(std::shared_ptr<std::streambuf> stream) override;
+
+        bool saveBlockData(uint8_t *outputDataPtr) override;
+
+        std::shared_ptr<std::streambuf> stream;
+    };
 
 }
-
 
 #endif //MDFSIMPLECONVERTERS_SDBLOCKCONTINUOUS_H

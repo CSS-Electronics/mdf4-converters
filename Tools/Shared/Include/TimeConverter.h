@@ -4,11 +4,11 @@
 #include <cstdint>
 
 #include "CommonOptions.h"
-#include "FileInfo.h"
+#include "ParsedFileInfo.h"
 
 namespace mdf::tools::shared {
 
-    [[nodiscard]] time_t convertTimeStamp(DisplayTimeFormat const& displayTimeFormat, time_t timeStamp, FileInfo const& loggerInfo);
+    [[nodiscard]] time_t convertTimeStamp(DisplayTimeFormat const& displayTimeFormat, time_t timeStamp, ParsedFileInfo const& loggerInfo);
 
 }
 

@@ -5,13 +5,13 @@
 
 #include "CANRecord.h"
 #include "CommonOptions.h"
-#include "FileInfo.h"
+#include "ParsedFileInfo.h"
 
 namespace mdf::tools::socketcan {
 
   class SocketCAN_CAN_Exporter : public tools::shared::GenericRecordExporter<CANRecord> {
   public:
-    explicit SocketCAN_CAN_Exporter(std::ostream &output, FileInfo const &fileInfo,
+    explicit SocketCAN_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
                                     tools::shared::DisplayTimeFormat displayLocalTime);
 
     void writeHeader() override;
@@ -20,7 +20,7 @@ namespace mdf::tools::socketcan {
 
   private:
     tools::shared::DisplayTimeFormat displayLocalTime;
-    FileInfo const &fileInfo;
+    mdf::tools::shared::ParsedFileInfo const &fileInfo;
   };
 
 }

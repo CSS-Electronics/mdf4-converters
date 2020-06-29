@@ -1,29 +1,38 @@
 #include "FHBlock.h"
 
-#include <boost/endian/buffers.hpp>
+#include <streambuf>
+
+#include <boost/endian.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
     #pragma pack(push, 1)
     struct FHBlockData {
-        boost::endian::little_uint64_buf_t time_ns;
-        boost::endian::little_uint16_buf_t tz_offset_min;
-        boost::endian::little_uint16_buf_t dst_offset_min;
-        boost::endian::little_uint8_buf_t time_flags;
-        boost::endian::little_uint8_buf_t reserved[3];
+        be::little_uint64_buf_t time_ns;
+        be::little_uint16_buf_t tz_offset_min;
+        be::little_uint16_buf_t dst_offset_min;
+        be::little_uint8_buf_t time_flags;
+        be::little_uint8_buf_t reserved[3];
     };
     #pragma pack(pop)
 
-    bool FHBlock::load(uint8_t const* dataPtr) {
+    bool FHBlock::load(std::shared_ptr<std::streambuf> stream) {
         bool result = false;
 
         // Load data into a struct for easier access.
-        auto ptr = reinterpret_cast<FHBlockData const*>(dataPtr);
+        FHBlockData rawData;
+        std::streamsize bytesRead = stream->sgetn(reinterpret_cast<char*>(&rawData), sizeof(rawData));
 
-        timeNs = ptr->time_ns.value();
-        tzOffsetMin = ptr->tz_offset_min.value();
-        dstOffsetMin = ptr->dst_offset_min.value();
-        timeFlags = ptr->time_flags.value();
+        if(bytesRead != sizeof(rawData)) {
+            return false;
+        }
+
+        timeNs = rawData.time_ns.value();
+        tzOffsetMin = rawData.tz_offset_min.value();
+        dstOffsetMin = rawData.dst_offset_min.value();
+        timeFlags = rawData.time_flags.value();
 
         result = true;
 

@@ -1,5 +1,7 @@
 project(MDFSimpleConverters_Shared)
 
+#set(CMAKE_CXX_STANDARD 17)
+
 find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS filesystem program_options log REQUIRED)
 find_package(Heatshrink 0.4.1 REQUIRED)
@@ -20,6 +22,7 @@ set(INCLUDE_FILES
     Include/ConverterInterface.h
     Include/ExecutableEntryPoint.h
     Include/GenericRecordExporter.h
+    Include/ParsedFileInfo.h
     Include/ParseOptionStatus.h
     Include/PasswordStorage.h
     Include/ProgressIndicator.h
@@ -30,6 +33,7 @@ set(SOURCE_FILES
     Source/ConverterInterface.cpp
     Source/ExecutableEntryPoint.cpp
     Source/ExecutableInterface.cpp
+    Source/ParsedFileInfo.cpp
     Source/ParseOptionStatus.cpp
     Source/PasswordStorage.cpp
     Source/ProgressIndicator.cpp

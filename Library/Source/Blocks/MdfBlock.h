@@ -10,6 +10,9 @@ namespace mdf {
 
     struct MdfBlock {
         MdfBlock() = default;
+        MdfBlock(MdfBlock const& other) = default;
+        virtual ~MdfBlock() = default;
+
         [[nodiscard]] MdfHeader const& getHeader() const;
         void setHeader(MdfHeader header);
 
@@ -22,12 +25,12 @@ namespace mdf {
         MdfHeader header;
         std::vector<std::shared_ptr<MdfBlock>> links;
 
-        virtual bool load(uint8_t const* dataPtr) = 0;
+        virtual bool load(std::shared_ptr<std::streambuf> stream) = 0;
         virtual bool saveBlockData(uint8_t* dataPtr) = 0;
     private:
         uint64_t fileLocation;
 
-        friend std::shared_ptr<MdfBlock> createBlock(MdfHeader header, std::vector<std::shared_ptr<MdfBlock>> links, uint8_t const* dataPtr);
+        friend std::shared_ptr<MdfBlock> createBlock(MdfHeader header, std::vector<std::shared_ptr<MdfBlock>> links, std::shared_ptr<std::streambuf> stream);
         friend bool saveBlock(std::shared_ptr<MdfBlock> block, uint8_t const* dataPtr);
     };
 

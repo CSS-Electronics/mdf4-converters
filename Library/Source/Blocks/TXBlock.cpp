@@ -1,15 +1,22 @@
 #include "TXBlock.h"
 
+#include <algorithm>
+#include <iterator>
 #include <sstream>
+#include <streambuf>
 
 namespace mdf {
 
-    bool TXBlock::load(uint8_t const* dataPtr) {
+    bool TXBlock::load(std::shared_ptr<std::streambuf> stream) {
         bool result = false;
 
         // Load the data as string.
         std::stringstream ss;
-        ss.write(reinterpret_cast<char const*>(dataPtr), header.blockSize - sizeof(header));
+        std::copy_n(
+                std::istreambuf_iterator<char>(stream.get()),
+                header.blockSize - sizeof(header),
+                std::ostream_iterator<char>(ss)
+        );
         text = ss.str();
 
         result = true;

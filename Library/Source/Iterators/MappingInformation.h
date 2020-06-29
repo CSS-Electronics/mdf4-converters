@@ -29,7 +29,7 @@ namespace mdf {
     CNDataType dataType;
 
     // Optional function to extract additional data (SD blocks).
-    boost::function<uint8_t const *(uint64_t)> dataFunc;
+    boost::function<uint64_t(uint64_t)> dataFunc;
 
     // Name of the field.
     std::string fieldName;

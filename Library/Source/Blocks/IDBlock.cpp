@@ -1,6 +1,11 @@
 #include "IDBlock.h"
 
 #include <algorithm>
+#include <streambuf>
+
+#include <boost/endian/buffers.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
@@ -12,33 +17,52 @@ namespace mdf {
         uint8_t versionStr[8];
         uint8_t toolStr[8];
         uint8_t reserved1[4];
-        uint16_t versionNum;
+        be::little_uint16_buf_t versionNum;
         uint8_t reserved2[30];
-        FinalizationFlags finalizationFlags;
-        uint16_t customFinalizationFlags;
+        be::little_uint16_buf_t finalizationFlags;
+        be::little_uint16_buf_t customFinalizationFlags;
     };
 
-    bool IDBlock::load(uint8_t const* dataPtr) {
-        auto ptr = reinterpret_cast<IDBlockData const*>(dataPtr);
+    bool IDBlock::load(std::shared_ptr<std::streambuf> stream) {
+        bool result = false;
 
-        // Determine if this is a MDF4 file at all.
-        if(
-            !std::equal(std::cbegin(ptr->identifierStr), std::cend(ptr->identifierStr), std::cbegin(finalizedIdentifierStr)) &&
-            !std::equal(std::cbegin(ptr->identifierStr), std::cend(ptr->identifierStr), std::cbegin(unfinalizedIdentifierStr))
-            ) {
-            return false;
-        }
+        do {
+            std::streampos streamLocation = stream->pubseekpos(0);
+            if(streamLocation != 0) {
+                throw std::runtime_error("Could not seek to ID block header");
+            }
 
-        // Read out data.
-        creationTool = std::string(reinterpret_cast<char const*>(ptr->toolStr), sizeof(ptr->toolStr));
-        versionNum = ptr->versionNum;
-        versionStr = std::string(reinterpret_cast<char const*>(ptr->versionStr), sizeof(ptr->versionStr));
+            char buffer[sizeof(IDBlockData)] = { 0 };
+            std::streamsize bytesRead = stream->sgetn(buffer, sizeof(buffer));
 
-        // Read any finalization flags.
-        finalizationFlags = ptr->finalizationFlags;
-        customFinalizationFlags = ptr->customFinalizationFlags;
+            if(bytesRead != sizeof(buffer)) {
+                throw std::runtime_error("Could not read enough bytes to fill ID block");
+            }
 
-        return true;
+            // Treat the buffer as a block of data with the correct endianess.
+            IDBlockData const* const data = reinterpret_cast<IDBlockData const*>(buffer);
+
+            // Determine if this is a MDF4 file at all.
+            if(
+                !std::equal(std::cbegin(data->identifierStr), std::cend(data->identifierStr), std::cbegin(finalizedIdentifierStr)) &&
+                !std::equal(std::cbegin(data->identifierStr), std::cend(data->identifierStr), std::cbegin(unfinalizedIdentifierStr))
+                ) {
+                break;
+            }
+
+            // Read out data.
+            creationTool = std::string(reinterpret_cast<char const*>(data->toolStr), sizeof(data->toolStr));
+            versionNum = data->versionNum.value();
+            versionStr = std::string(reinterpret_cast<char const*>(data->versionStr), sizeof(data->versionStr));
+
+            // Read any finalization flags.
+            finalizationFlags = FinalizationFlags(data->finalizationFlags.value());
+            customFinalizationFlags = data->customFinalizationFlags.value();
+
+            result = true;
+        } while(false);
+
+        return result;
     }
 
     FinalizationFlags IDBlock::getFinalizationFlags() const {

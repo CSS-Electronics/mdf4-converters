@@ -4,14 +4,13 @@ set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 3)
 
+set(CMAKE_CXX_STANDARD 17)
+
 # Search for Boost.
 find_package(Boost REQUIRED COMPONENTS filesystem log)
 
 # Improved formatting to string.
 find_package(fmt REQUIRED)
-
-# Support for reading XML.
-find_package(tinyxml2 REQUIRED)
 
 # Embed information in the source code.
 configure_file(
@@ -29,6 +28,7 @@ set(INCLUDE_FILES
     Include/Library.h
     Include/LINRecord.h
     Include/MdfFile.h
+    Include/Metadata.h
     Include/RecordIterator.h
     Include/Version.h
 
@@ -41,9 +41,12 @@ include_directories(Include)
 set(SOURCE_HEADERS
     Source/BlockStorage.h
     Source/IBlockStorage.h
+    Source/CachingStreamBuffer.h
     Source/ExtractMetaData.h
+    Source/Logger.h
     Source/MdfFileImplementation.h
     Source/StructAdaptors.h
+    Source/UnfinalizedFileInfo.h
     Source/Utility.h
 
     Source/Blocks/CCBlock.h
@@ -80,13 +83,16 @@ set(SOURCE_HEADERS
 # List of all core source files.
 set(SOURCE_FILES
     Source/BlockStorage.cpp
+    Source/CachingStreamBuffer.cpp
     Source/CANRecord.cpp
     Source/ExtractMetaData.cpp
     Source/FileInfo.cpp
     Source/Library.cpp
     Source/LINRecord.cpp
+    Source/Logger.cpp
     Source/MdfFile.cpp
     Source/MdfFileImplementation.cpp
+    Source/UnfinalizedFileInfo.cpp
     Source/Utility.cpp
     Source/Version.cpp
 
@@ -127,13 +133,18 @@ set(LIBRARIES_FINAL
     Boost::filesystem
     Boost::log
     fmt::fmt
-    tinyxml2::tinyxml2
     )
+
+include(CMakePackageConfigHelpers)
 
 # Create static library.
 add_library(${PROJECT_NAME}_static STATIC ${SOURCE_FINAL})
 add_library(${PROJECT_NAME}::static ALIAS ${PROJECT_NAME}_static)
-target_link_libraries(${PROJECT_NAME}_static ${LIBRARIES_FINAL})
+
+set_property(TARGET ${PROJECT_NAME}_static
+        PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(${PROJECT_NAME}_static
+    PUBLIC ${LIBRARIES_FINAL})
 
 target_include_directories(${PROJECT_NAME}_static INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
@@ -151,4 +162,14 @@ target_link_libraries(${PROJECT_NAME}_shared
 
 target_include_directories(${PROJECT_NAME}_shared INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
+    )
+
+# Create minimal tester.
+add_executable(${PROJECT_NAME}_tester Tester/main.cpp Tester/DummyStreamBuffer.cpp)
+target_link_libraries(${PROJECT_NAME}_tester
+    -static-libstdc++
+    -static-libgcc
+    -static
+    ${PROJECT_NAME}_static
+    ${LIBRARIES_FINAL}
     )

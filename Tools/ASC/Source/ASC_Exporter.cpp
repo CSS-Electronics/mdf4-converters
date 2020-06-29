@@ -24,11 +24,10 @@ namespace mdf::tools::asc {
       // Create the base file name.
       std::string const outputFileBase = inputFilePath.stem().string() + "_";
 
-      // Determine if any data is present.
-      FileInfo info = mdfFile->getFileInfo();
-
-      // Determine the number of data records.
-      auto const totalRecords = static_cast<unsigned int>(info.CANMessages + info.LINMessages);
+      // Load full metadata.
+      FileInfo fileInfo = mdfFile->getFileInfo();
+      MetadataMap metadata = mdfFile->getMetadata();
+      mdf::tools::shared::ParsedFileInfo info(fileInfo, metadata);
 
       if (info.CANMessages > 0) {
         // Create an output for the CAN messages.

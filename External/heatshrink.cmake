@@ -11,18 +11,36 @@ if(NOT Heatshrink_FOUND)
   message("Heatshrink not found, creating external target.")
 
   # Command used for building.
-  set(EXTERNAL_PROJECT_BUILD_COMMAND
-      ${CMAKE_BUILD_TOOL} libraries
-      )
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(EXTERNAL_PROJECT_BUILD_COMMAND
+        COMMAND ${CMAKE_C_COMPILER} /c /DHEATSHRINK_DYNAMIC_ALLOC=0 <SOURCE_DIR>/heatshrink_decoder.c
+        COMMAND ${CMAKE_C_COMPILER} /c /DHEATSHRINK_DYNAMIC_ALLOC=0 <SOURCE_DIR>/heatshrink_encoder.c
+        COMMAND ${CMAKE_C_COMPILER} /LD <SOURCE_DIR>/heatshrink_decoder.obj <SOURCE_DIR>/heatshrink_encoder.obj /Fe<SOURCE_DIR>/heatshrink.lib
+        )
+  else ()
+    set(EXTERNAL_PROJECT_BUILD_COMMAND
+        ${CMAKE_BUILD_TOOL} libraries
+        )
+  endif ()
 
   # Command used for installation.
-  set(EXTERNAL_PROJECT_INSTALL_COMMAND
-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libheatshrink_dynamic.a <INSTALL_DIR>/lib/libheatshrink.a
-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_common.h <INSTALL_DIR>/include/heatshrink_common.h
-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_config.h <INSTALL_DIR>/include/heatshrink_config.h
-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_decoder.h <INSTALL_DIR>/include/heatshrink_decoder.h
-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_encoder.h <INSTALL_DIR>/include/heatshrink_encoder.h
-    )
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(EXTERNAL_PROJECT_INSTALL_COMMAND
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink.lib <INSTALL_DIR>/lib/heatshrink.lib
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_common.h <INSTALL_DIR>/include/heatshrink_common.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_config.h <INSTALL_DIR>/include/heatshrink_config.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_decoder.h <INSTALL_DIR>/include/heatshrink_decoder.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_encoder.h <INSTALL_DIR>/include/heatshrink_encoder.h
+        )
+  else ()
+    set(EXTERNAL_PROJECT_INSTALL_COMMAND
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libheatshrink_dynamic.a <INSTALL_DIR>/lib/libheatshrink.a
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_common.h <INSTALL_DIR>/include/heatshrink_common.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_config.h <INSTALL_DIR>/include/heatshrink_config.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_decoder.h <INSTALL_DIR>/include/heatshrink_decoder.h
+        COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/heatshrink_encoder.h <INSTALL_DIR>/include/heatshrink_encoder.h
+        )
+  endif ()
 
   ExternalProject_Add (
     ${EXTERNAL_PROJECT_NAME}_builder

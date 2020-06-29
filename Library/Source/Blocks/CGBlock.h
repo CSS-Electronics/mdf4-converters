@@ -33,7 +33,7 @@ namespace mdf {
         void setCycleCount(uint64_t cycleCount);
         void setVLSDDataBytes(uint64_t dataBytes);
     protected:
-        bool load(uint8_t const* dataPtr) override;
+        bool load(std::shared_ptr<std::streambuf> stream) override;
         bool saveBlockData(uint8_t * dataPtr) override;
     private:
         uint64_t cycleCount;

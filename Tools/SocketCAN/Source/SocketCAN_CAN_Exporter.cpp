@@ -6,7 +6,7 @@
 
 namespace mdf::tools::socketcan {
 
-    SocketCAN_CAN_Exporter::SocketCAN_CAN_Exporter(std::ostream &output, FileInfo const& fileInfo, tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(output), fileInfo(fileInfo), displayLocalTime(displayLocalTime) {
+    SocketCAN_CAN_Exporter::SocketCAN_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const& fileInfo, tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(output), fileInfo(fileInfo), displayLocalTime(displayLocalTime) {
 
     }
 

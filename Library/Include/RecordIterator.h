@@ -10,26 +10,36 @@
 
 namespace mdf {
 
-  template <typename RecordType>
-  struct RecordIterator : public boost::iterator_facade<RecordIterator<RecordType>, RecordType const, boost::forward_traversal_tag, RecordType const&, std::size_t> {
-    RecordIterator();
-    explicit RecordIterator(std::unique_ptr<IIterator<RecordType>> iterator);
-    RecordIterator(RecordIterator<RecordType> const& other);
+    template<typename RecordType>
+    struct RecordIterator
+        : public boost::iterator_facade<RecordIterator<RecordType>, RecordType const, boost::forward_traversal_tag, RecordType const &, std::size_t> {
+        RecordIterator();
 
-    RecordIterator begin() const;
-    RecordIterator cbegin() const;
-    RecordIterator end() const;
-    RecordIterator cend() const;
+        explicit RecordIterator(std::unique_ptr<IIterator<RecordType>> iterator);
 
-  protected:
-    friend class boost::iterator_core_access;
-    std::unique_ptr<IIterator<RecordType>> iterator;
+        RecordIterator(RecordIterator<RecordType> const &other);
 
-    RecordType const& dereference() const;
-    void increment();
+        RecordIterator &operator=(RecordIterator<RecordType>&& other) noexcept;
 
-    bool equal(RecordIterator<RecordType> const& other) const;
-  };
+        RecordIterator begin() const;
+
+        RecordIterator cbegin() const;
+
+        RecordIterator end() const;
+
+        RecordIterator cend() const;
+
+    protected:
+        friend class boost::iterator_core_access;
+
+        std::unique_ptr<IIterator<RecordType>> iterator;
+
+        RecordType const &dereference() const;
+
+        void increment();
+
+        bool equal(RecordIterator<RecordType> const &other) const;
+    };
 
 }
 

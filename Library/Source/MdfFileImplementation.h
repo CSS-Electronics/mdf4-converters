@@ -9,41 +9,55 @@
 #include "Blocks/HDBlock.h"
 #include "Blocks/IDBlock.h"
 
-#include "mio.h"
-
 namespace mdf {
 
-  struct MdfFileImplementation : MdfFile {
-    MdfFileImplementation();
-    ~MdfFileImplementation();
+    struct MdfFileImplementation : MdfFile {
+        MdfFileImplementation();
 
-    bool finalize() override;
-    bool finalize_setLengthOfLastDTBlock();
-    bool finalize_updateCycleCountersInCGCABlocks();
-    bool finalize_updateByteCountersInVLSDCGBlocks();
+        ~MdfFileImplementation();
 
-    bool sort() override;
-    bool sort_VLSDCGtoSD();
-    bool sort_CGtoDG();
+        bool finalize() override;
 
-    [[nodiscard]] FileInfo getFileInfo() const override;
-    bool load(std::string fileName);
-    bool loadFileInfo() override;
-    bool save(std::string fileName) override;
+        bool finalize_setLengthOfLastDTBlock();
 
-    RecordIterator<CANRecord const> getCANIterator() override;
-    RecordIterator<LINRecord const> getLINIterator() override;
+        bool finalize_updateCycleCountersInCGCABlocks();
 
-  private:
-    [[nodiscard]] std::shared_ptr<HDBlock> getHDBlock() const;
+        bool finalize_updateByteCountersInVLSDCGBlocks();
 
-    [[nodiscard]] std::shared_ptr<DGBlock> findBUSBlock(SIBlockBusType busType) const;
-    FileInfo fileInfo;
+        bool sort() override;
 
-    std::unique_ptr<BlockStorage> blockStorage;
-    std::unique_ptr<IDBlock> idBlock;
-    mio::shared_mmap_source mmap;
-  };
+        bool sort_VLSDCGtoSD();
+
+        bool sort_CGtoDG();
+
+        MetadataMap getMetadata() const override;
+
+        FileInfo getFileInfo() override;
+
+        bool load(std::shared_ptr<std::streambuf> stream);
+
+        std::chrono::nanoseconds getFirstMeasurement() override;
+
+        bool save(std::string fileName) override;
+
+        RecordIterator<CANRecord const> getCANIterator() override;
+
+        RecordIterator<LINRecord const> getLINIterator() override;
+
+    private:
+        [[nodiscard]] std::shared_ptr<HDBlock> getHDBlock() const;
+
+        [[nodiscard]] std::shared_ptr<DGBlock> findBUSBlock(SIBlockBusType busType) const;
+
+        bool loadFileInfo();
+        FileInfo fileInfo;
+
+        MetadataMap metadata;
+
+        std::unique_ptr<BlockStorage> blockStorage;
+        std::unique_ptr<IDBlock> idBlock;
+        std::shared_ptr<std::streambuf> stream;
+    };
 
 }
 

@@ -9,8 +9,6 @@
 
 #include "IBlockStorage.h"
 
-#include "mio.h"
-
 namespace mdf {
 
     // Sort the order of the set, such that it follows:
@@ -21,13 +19,13 @@ namespace mdf {
     };
 
     struct BlockStorage : IBlockStorage {
-        explicit BlockStorage(mio::shared_mmap_source mmap);
+        explicit BlockStorage(std::shared_ptr<std::streambuf> stream);
 
         [[nodiscard]] boost::bimap<uint64_t, std::shared_ptr<MdfBlock>> const& getBlockMap() const;
         std::map<uint64_t, std::shared_ptr<MdfBlock>> getPackedBlockMap();
         std::shared_ptr<MdfBlock> getBlockAt(uint64_t address) override;
     private:
-        mio::shared_mmap_source mmap;
+        std::shared_ptr<std::streambuf> stream;
         boost::bimap<uint64_t, std::shared_ptr<MdfBlock>> blockMap;
 
         std::set<std::shared_ptr<MdfBlock>, MdfBlockSortingOrder> getLinkedBlocks(std::shared_ptr<MdfBlock> startBlock);

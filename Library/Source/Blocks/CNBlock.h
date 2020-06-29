@@ -25,7 +25,7 @@ namespace mdf {
     ByteArray = 0x0Au
   };
 
-  enum struct CNSyncType : uint8_t {
+  enum CNSyncType : uint8_t {
     None = 0x00u,
     Time = 0x01u,
   };
@@ -90,7 +90,7 @@ namespace mdf {
     [[nodiscard]] CNSyncType getSyncType() const;
 
   protected:
-    bool load(uint8_t const *dataPtr) override;
+    bool load(std::shared_ptr<std::streambuf> stream) override;
 
     bool saveBlockData(uint8_t *dataPtr) override;
 

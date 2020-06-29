@@ -17,9 +17,29 @@ if(Python3_Interpreter_FOUND AND Python3_Development_FOUND)
     message("External dependencies: ${EXTERNAL_PROJECT_NAME} not found, creating external target")
 
     # Command used for building.
-    set(EXTERNAL_PROJECT_BUILD_COMMAND
-      <SOURCE_DIR>/build-limited-api.sh ${Python3_EXECUTABLE} ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}
-      )
+    if(WIN32)
+      set(EXTERNAL_PROJECT_BUILD_COMMAND
+              COMMAND ${CMAKE_MAKE_PROGRAM} -f limited-api.mak clean
+              )
+    else()
+      set(EXTERNAL_PROJECT_BUILD_COMMAND
+              COMMAND ${CMAKE_MAKE_PROGRAM} -f limited-api.mak clean
+              COMMAND ${CMAKE_MAKE_PROGRAM} -f limited-api.mak test
+              )
+    endif()
+
+
+    message(${CMAKE_C_COMPILER})
+    message(${CMAKE_CXX_COMPILER})
+
+    # Command used for configuring the build.
+    set(EXTERNAL_PROJECT_CONFIGURE_COMMAND
+            COMMAND Python3::Interpreter <SOURCE_DIR>/setup_makefile.py linux limited-api.mak --limited-api=0x03040000
+            # The configured file does not respect the CC and CXX environment variables.
+            COMMAND sed -i s@gcc@${CMAKE_C_COMPILER}@g <SOURCE_DIR>/limited-api.mak
+            COMMAND sed -i s@g++@${CMAKE_CXX_COMPILER}@g <SOURCE_DIR>/limited-api.mak
+            #<SOURCE_DIR>/build-limited-api.sh ${Python3_EXECUTABLE} ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}
+            )
 
     # Command used for installation.
     set(EXTERNAL_PROJECT_INSTALL_COMMAND
@@ -66,7 +86,7 @@ if(Python3_Interpreter_FOUND AND Python3_Development_FOUND)
       URL               https://downloads.sourceforge.net/project/cxx/CXX/PyCXX%20V7.1.3/pycxx-7.1.3.tar.gz
       URL_HASH          MD5=0b2e64973c55a2e8dce5b4b8612bcb36
 
-      CONFIGURE_COMMAND ""
+      CONFIGURE_COMMAND ${EXTERNAL_PROJECT_CONFIGURE_COMMAND}
       BUILD_COMMAND     ${EXTERNAL_PROJECT_BUILD_COMMAND}
       INSTALL_COMMAND   ${EXTERNAL_PROJECT_INSTALL_COMMAND}
       UPDATE_COMMAND    ""

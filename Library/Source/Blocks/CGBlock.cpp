@@ -1,6 +1,10 @@
 #include "CGBlock.h"
 
+#include <streambuf>
+
 #include <boost/endian/buffers.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
@@ -14,13 +18,13 @@ namespace mdf {
 
     #pragma pack(push, 1)
     struct CGBlockData {
-        boost::endian::little_uint64_buf_t record_id;
-        boost::endian::little_uint64_buf_t cycle_count;
-        boost::endian::little_uint16_buf_t flags;
-        boost::endian::little_uint16_buf_t path_separator;
-        boost::endian::little_uint8_buf_t reserved[4];
-        boost::endian::little_uint32_buf_t data_bytes;
-        boost::endian::little_uint32_buf_t inval_bytes;
+        be::little_uint64_buf_t record_id;
+        be::little_uint64_buf_t cycle_count;
+        be::little_uint16_buf_t flags;
+        be::little_uint16_buf_t path_separator;
+        be::little_uint8_buf_t reserved[4];
+        be::little_uint32_buf_t data_bytes;
+        be::little_uint32_buf_t inval_bytes;
     };
     #pragma pack(pop)
 
@@ -57,18 +61,23 @@ namespace mdf {
         return std::dynamic_pointer_cast<SIBlock>(links[3]);
     }
 
-    bool CGBlock::load(uint8_t const* dataPtr) {
+    bool CGBlock::load(std::shared_ptr<std::streambuf> stream) {
         bool result = false;
 
         // Load data into a struct for easier access.
-        auto ptr = reinterpret_cast<CGBlockData const*>(dataPtr);
+        CGBlockData rawData;
+        std::streamsize bytesRead = stream->sgetn(reinterpret_cast<char*>(&rawData), sizeof(rawData));
 
-        cycleCount = ptr->cycle_count.value();
-        dataBytes = ptr->data_bytes.value();
-        invalDataBytes = ptr->inval_bytes.value();
-        flags = ptr->flags.value();
-        recordID = ptr->record_id.value();
-        pathSeparator = ptr->path_separator.value();
+        if(bytesRead != sizeof(rawData)) {
+            return false;
+        }
+
+        cycleCount = rawData.cycle_count.value();
+        dataBytes = rawData.data_bytes.value();
+        invalDataBytes = rawData.inval_bytes.value();
+        flags = rawData.flags.value();
+        recordID = rawData.record_id.value();
+        pathSeparator = rawData.path_separator.value();
 
         if(flags != 0x01) {
             // Calculate record size all from channels.

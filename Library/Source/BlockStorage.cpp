@@ -2,7 +2,12 @@
 #include "Blocks/MdfBlock.h"
 
 #include <cstring>
+#include <streambuf>
 #include <set>
+
+#include <boost/endian.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
@@ -23,7 +28,7 @@ namespace mdf {
         return lhs.get() < rhs.get();
     }
 
-    BlockStorage::BlockStorage(mio::shared_mmap_source mmap) : mmap(std::move(mmap)) {
+    BlockStorage::BlockStorage(std::shared_ptr<std::streambuf> stream) : stream(stream) {
 
     }
 
@@ -33,30 +38,49 @@ namespace mdf {
         // Is this block already loaded.
         auto iter = blockMap.left.find(address);
         if(iter == std::end(blockMap.left)) {
-            uint8_t const* dataPtr = reinterpret_cast<uint8_t const*>(mmap.data()) + address;
-
             // Attempt to read the header at the address.
+            char buffer[sizeof(MdfHeader)] = { 0 };
+            std::streampos streamLocation = stream->pubseekpos(address);
+
+            if(streamLocation != address) {
+                throw std::runtime_error("Could not seek to header");
+            }
+
+            std::streamsize bytesRead = stream->sgetn(buffer, sizeof(buffer));
+
+            if(bytesRead != sizeof(buffer)) {
+                throw std::runtime_error("Could not read enough bytes to fill header");
+            }
+
+            // Read into header structure.
             MdfHeader header;
-            static_assert(sizeof(MdfHeader) == 3 * sizeof(uint64_t));
-            std::memcpy(&header, dataPtr, sizeof(header));
-            dataPtr += sizeof(header);
+            std::memcpy(&header, buffer, sizeof(header));
 
             // TODO: Only continue if the header is valid.
 
             // Load all the links.
             std::vector<std::shared_ptr<MdfBlock>> links(header.linkCount);
             for (uint64_t linkNumber = 0; linkNumber < header.linkCount; linkNumber++) {
-                auto linkLocation = reinterpret_cast<uint64_t const*>(dataPtr);
+                be::little_uint64_at linkLocation = 0;
 
-                if (*linkLocation != 0) {
-                    links[linkNumber] = getBlockAt(*linkLocation);
+                bytesRead = stream->sgetn(reinterpret_cast<char *>(linkLocation.data()), sizeof(linkLocation));
+                if(bytesRead != sizeof(linkLocation)) {
+                    throw std::runtime_error("Could not load link");
                 }
 
-                dataPtr += sizeof(uint64_t);
+                // Skip unset links.
+                if(linkLocation == 0) {
+                    continue;
+                }
+
+                // Recursive loading. Since this seeks to a new position, store the current location.
+                auto position = stream->pubseekoff(0, std::ios_base::cur);
+                links[linkNumber] = getBlockAt(linkLocation);
+                stream->pubseekpos(position);
             }
 
             // Construct the block at this location, and store it.
-            result = createBlock(header, links, dataPtr);
+            result = createBlock(header, links, stream);
 
             if (result) {
                 // If any blocks were redefined, replace them in the map.

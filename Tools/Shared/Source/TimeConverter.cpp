@@ -4,7 +4,7 @@
 
 namespace mdf::tools::shared {
 
-  time_t convertTimeStamp(DisplayTimeFormat const &displayTimeFormat, time_t timeStamp, FileInfo const &loggerInfo) {
+  time_t convertTimeStamp(DisplayTimeFormat const &displayTimeFormat, time_t timeStamp, ParsedFileInfo const &loggerInfo) {
     time_t result = timeStamp;
 
     // Determine which action to take.

@@ -7,7 +7,7 @@ namespace mdf {
 
     struct FHBlock : MdfBlock {
     protected:
-        bool load(uint8_t const* dataPtr) override;
+        bool load(std::shared_ptr<std::streambuf> stream) override;
         bool saveBlockData(uint8_t * dataPtr) override;
     private:
         uint64_t timeNs;

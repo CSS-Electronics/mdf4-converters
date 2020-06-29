@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
+#include <array>
 
 #include <boost/endian/arithmetic.hpp>
 #include <boost/endian/conversion.hpp>

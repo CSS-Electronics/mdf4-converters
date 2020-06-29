@@ -6,13 +6,18 @@
 
 namespace mdf {
 
-  struct Version {
-    unsigned int major;
-    unsigned int minor;
-    std::optional<unsigned int> patch;
-  };
+    struct Version {
+        unsigned int major;
+        unsigned int minor;
+        std::optional<unsigned int> patch;
 
-  std::ostream &operator<<(std::ostream &stream, const Version &version);
+        constexpr Version(unsigned int major, unsigned int minor, std::optional<unsigned int> patch) : major(major), minor(minor), patch(patch) {
+
+        }
+        Version() = default;
+    };
+
+    std::ostream &operator<<(std::ostream &stream, const Version &version);
 
 }
 
