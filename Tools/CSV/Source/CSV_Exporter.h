@@ -9,7 +9,7 @@ class CSV_Exporter : public mdf::tools::shared::ConverterInterface {
     public:
         CSV_Exporter();
         bool convert(boost::filesystem::path inputFilePath, boost::filesystem::path outputFolder) override;
-        [[nodiscard]] Version getVersion() const override;
+        [[nodiscard]] semver::version const& getVersion() const override;
     private:
 
     };

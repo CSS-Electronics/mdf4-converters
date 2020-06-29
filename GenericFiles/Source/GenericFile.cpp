@@ -63,6 +63,10 @@ namespace mdf::generic {
         std::noskipws(fileSource);
         std::istream_iterator<uint8_t> dataStreamIterator(fileSource);
 
+        if(boost::filesystem::file_size(filePath) < headerBytes) {
+            throw std::runtime_error("File header too small");
+        }
+
         // Storage for the header data.
         std::vector<uint8_t> data(headerBytes);
 

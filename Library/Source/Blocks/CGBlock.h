@@ -4,6 +4,7 @@
 #include "MdfBlock.h"
 #include "CNBlock.h"
 #include "SIBlock.h"
+#include "TXBlock.h"
 
 #include <string>
 #include <vector>
@@ -20,6 +21,7 @@ namespace mdf {
         [[nodiscard]] std::shared_ptr<CGBlock> getNextCGBlock() const;
         [[nodiscard]] std::shared_ptr<CNBlock> getFirstCNBlock() const;
         [[nodiscard]] std::shared_ptr<SIBlock> getSIBlock() const;
+        [[nodiscard]] std::shared_ptr<TXBlock> getTXBlock() const;
 
         [[nodiscard]] uint64_t getRecordID() const;
         [[nodiscard]] int64_t getRecordSize() const;
@@ -33,8 +35,8 @@ namespace mdf {
         void setCycleCount(uint64_t cycleCount);
         void setVLSDDataBytes(uint64_t dataBytes);
     protected:
-        bool load(uint8_t const* dataPtr) override;
-        bool saveBlockData(uint8_t * dataPtr) override;
+        bool load(std::shared_ptr<std::streambuf> stream) override;
+        bool saveBlockData(std::streambuf *stream) override;
     private:
         uint64_t cycleCount;
         uint32_t dataBytes;

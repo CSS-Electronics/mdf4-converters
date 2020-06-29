@@ -1,12 +1,13 @@
 #include "SocketCAN_CAN_Exporter.h"
 
-#include <iomanip>
+#include <fmt/chrono.h>
+#include <fmt/ostream.h>
 
 #include "TimeConverter.h"
 
 namespace mdf::tools::socketcan {
 
-    SocketCAN_CAN_Exporter::SocketCAN_CAN_Exporter(std::ostream &output, FileInfo const& fileInfo, tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(output), fileInfo(fileInfo), displayLocalTime(displayLocalTime) {
+    SocketCAN_CAN_Exporter::SocketCAN_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const& fileInfo, tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(output), fileInfo(fileInfo), displayLocalTime(displayLocalTime) {
 
     }
 
@@ -14,7 +15,7 @@ namespace mdf::tools::socketcan {
         // Do nothing.
     }
 
-    void SocketCAN_CAN_Exporter::writeRecord(CANRecord const& record) {
+    void SocketCAN_CAN_Exporter::writeRecord(CAN_DataFrame const& record) {
         // The SocketCAN format is as follows:
         // Standard: (Timestamp) interface ID#XX
         // FD: (Timestamp) interface ID##FXX
@@ -28,43 +29,16 @@ namespace mdf::tools::socketcan {
         // Convert to right zone.
         std::time_t correctedTime = tools::shared::convertTimeStamp(displayLocalTime, record.TimeStamp.count(), fileInfo);
 
-        output << "(" << std::fixed << std::setprecision(6) << correctedTime * 1E-9 << ") ";
-        output << "can" << static_cast<int>(record.BusChannel - 1) << " ";
-
-        // Handle extended IDs.
-        output << std::hex << std::uppercase << std::setfill('0');
-        if(record.IDE) {
-            output << std::setw(8);
-        } else {
-            output << std::setw(3);
-        }
-        output << record.ID << std::dec << "#";
-
-        // Handle FD vs normal frames.
-        if(record.EDL) {
-            // FD frame, Additional delimiter.
-            output << "#";
-
-            // Merge flag values (Currently, only the BRS flag is stored).
-            int fdFlags = record.BRS;
-            output << std::hex << fdFlags << std::dec;
-        } else {
-            // Standard frame.
-            // TODO: Handle remote request.
-        }
-
-        // DLC.
-        // NOTE: Seems to be optional, and can cause errors, so disabled for now.
-        // output << static_cast<int>(record.DLC);
-
-        // Data.
-        output << std::hex << std::setfill('0');
-        for(int i = 0; i < record.DataLength; ++i) {
-            output << std::setw(2) << static_cast<int>(record.DataBytes[i]);
-        }
-
-        // Reset format.
-        output << std::dec << std::nouppercase << std::endl;
+        fmt::print(
+            output,
+            FMT_STRING("({:0.6f}) can{:d} {:0{}X}#{:s}{:02X}\n"),
+            correctedTime * 1E-9,
+            record.BusChannel - 1,
+            record.ID,
+            record.IDE ? 8 : 3,
+            record.EDL ? fmt::format("#{:1X}", record.BRS * 0x01 | record.ESI * 0x02) : "",
+            fmt::join(record.DataBytes, "")
+        );
     }
 
 }

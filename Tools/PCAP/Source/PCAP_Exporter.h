@@ -9,7 +9,7 @@ class PCAP_Exporter : public tools::shared::ConverterInterface {
     public:
         PCAP_Exporter();
         bool convert(boost::filesystem::path inputFilePath, boost::filesystem::path outputFolder) override;
-        [[nodiscard]] Version getVersion() const override;
+        [[nodiscard]] semver::version const& getVersion() const override;
     private:
 
     };

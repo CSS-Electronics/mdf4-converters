@@ -2,6 +2,7 @@
   "tool": "mdf2clx000",
   "cases": [
     {
+      "name": "Log - All separators enabled",
       "_comment": "All separators enabled",
       "input": [
         {
@@ -30,6 +31,7 @@
       ]
     },
     {
+      "name": "Log - No separators enabled",
       "_comment": "No separators enabled",
       "input": [
         {

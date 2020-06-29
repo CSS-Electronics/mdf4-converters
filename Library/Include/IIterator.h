@@ -5,29 +5,32 @@
 
 namespace mdf {
 
-  template <typename T>
-  struct IIterator {
-    virtual ~IIterator() = default;
+    template<typename T>
+    struct IIterator {
+        virtual ~IIterator() = default;
 
-    virtual void increment() = 0;
-    virtual T& dereference() = 0;
+        virtual void increment() = 0;
 
-    virtual std::unique_ptr<IIterator<T>> begin() const = 0;
-    virtual std::unique_ptr<IIterator<T>> end() const = 0;
+        virtual T &dereference() = 0;
 
-    virtual std::unique_ptr<IIterator<T>> clone() const = 0;
-    virtual bool equals(IIterator<T> const& other) const = 0;
+        virtual std::unique_ptr<IIterator<T>> begin() const = 0;
 
-    bool operator==(IIterator<T> const& other) const {
-      bool result = false;
+        virtual std::unique_ptr<IIterator<T>> end() const = 0;
 
-      if(typeid(*this) == typeid(other)) {
-        result = equals(other);
-      }
+        virtual std::unique_ptr<IIterator<T>> clone() const = 0;
 
-      return result;
-    }
-  };
+        virtual bool equals(IIterator<T> const &other) const = 0;
+
+        bool operator==(IIterator<T> const &other) const {
+            bool result = false;
+
+            if (typeid(*this) == typeid(other)) {
+                result = equals(other);
+            }
+
+            return result;
+        }
+    };
 
 }
 

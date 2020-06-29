@@ -16,24 +16,26 @@ namespace mdf {
 
     void index();
 
-    uint8_t const *operator[](std::size_t index) override;
+    long long findFirstMatching(std::vector<uint64_t> targetIDs);
+
+    std::size_t operator[](std::size_t index) override;
 
     [[nodiscard]] std::map<uint64_t, int64_t> getRecordCycleCounts() const;
 
-    [[nodiscard]] std::vector<uint8_t const *> getRecordIndicesAbsolute(uint64_t recordID) const;
+    [[nodiscard]] std::vector<uint64_t> getRecordIndicesAbsolute(uint64_t recordID) const;
 
     [[nodiscard]] std::vector<uint64_t> getRegisteredRecordIDs() const;
 
     [[nodiscard]] uint64_t getTotalSize(uint64_t recordID) const;
 
   protected:
-    bool saveBlockData(uint8_t *dataPtr) override;
+    bool saveBlockData(std::streambuf *stream) override;
 
     /**
      * A lookup table containing each record offset in this block. The record ID is the key, while
      * a vector of offsets is the value.
      */
-    std::map<uint64_t, std::vector<uint8_t const *>> recordIndices;
+    std::map<uint64_t, std::vector<uint64_t>> recordIndices;
 
     /**
      * A map of the total number of bytes in each record ID.

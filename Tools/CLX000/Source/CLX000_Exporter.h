@@ -14,7 +14,7 @@ namespace mdf::tools::clx {
         CLX000_Exporter();
             bool convert(boost::filesystem::path inputFilePath, boost::filesystem::path outputFolder) override;
             void configureFileParser(boost::program_options::options_description& opts) override;
-            [[nodiscard]] Version getVersion() const override;
+            [[nodiscard]] semver::version const& getVersion() const override;
             tools::shared::ParseOptionStatus parseOptions(boost::program_options::variables_map const& result) override;
         private:
             boost::program_options::options_description logOptions;

@@ -11,7 +11,6 @@ else ()
   set(_PyCXX_ROOT ${PyCXX_ROOT})
 endif ()
 
-message("PyCXX root: ${_PyCXX_ROOT}")
 find_path(PyCXX_INCLUDE_DIR
   NAMES CXX/Version.hxx
   HINTS ${_PyCXX_ROOT}/include
@@ -63,25 +62,24 @@ if (PyCXX_FOUND)
     ${_PyCXX_ROOT}/src/PyCXX/Src/cxxextensions.c
     ${_PyCXX_ROOT}/src/PyCXX/Src/cxxsupport.cxx
     ${_PyCXX_ROOT}/src/PyCXX/Src/IndirectPythonInterface.cxx
-    #${_PyCXX_ROOT}/src/PyCXX/Src/Python3/cxx_exceptions.cxx
-    #${_PyCXX_ROOT}/src/PyCXX/Src/Python3/cxx_extensions.cxx
-    #${_PyCXX_ROOT}/src/PyCXX/Src/Python3/cxxextensions.c
-    #${_PyCXX_ROOT}/src/PyCXX/Src/Python3/cxxsupport.cxx
     )
 
   # Create target if not already present.
   if (NOT TARGET PyCXX::PyCXX)
     add_library(PyCXX::PyCXX INTERFACE IMPORTED)
     set_target_properties(PyCXX::PyCXX PROPERTIES
-      INTERFACE_COMPILE_DEFINITIONS Py_LIMITED_API=0x03040000
       INTERFACE_INCLUDE_DIRECTORIES "${PyCXX_INCLUDE_DIRS}"
       )
+
+    if (UNIX)
+      set_target_properties(PyCXX::PyCXX PROPERTIES
+          INTERFACE_COMPILE_DEFINITIONS Py_LIMITED_API=0x03050000
+          )
+    endif ()
 
     target_sources(PyCXX::PyCXX
       INTERFACE ${PyCXX_SOURCES}
       )
-  else ()
-    print_target_properties(PyCXX::PyCXX)
   endif ()
 
 endif ()

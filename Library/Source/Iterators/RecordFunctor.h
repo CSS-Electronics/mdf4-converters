@@ -7,14 +7,16 @@
 
 namespace mdf {
 
-  struct RecordFunctor {
-    explicit RecordFunctor(std::shared_ptr<IDataBlock> storage);
+    struct RecordFunctor {
+        explicit RecordFunctor(std::shared_ptr<IDataBlock> storage);
 
-    uint8_t const* operator()(std::size_t index) const;
+        uint64_t operator()(std::size_t index) const;
 
-  protected:
-    std::shared_ptr<IDataBlock> storage;
-  };
+        std::streamsize getData(char* buffer, std::streamsize n);
+
+    protected:
+        std::shared_ptr<IDataBlock> storage;
+    };
 
 }
 

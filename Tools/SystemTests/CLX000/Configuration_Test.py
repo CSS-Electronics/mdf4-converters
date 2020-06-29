@@ -19,7 +19,7 @@ class CommonBase(BaseTestCase):
             command.append(key)
             
             # Handle file arguments by discarding the empty value.
-            if value is not "":
+            if value != "":
                 command.append(value)
 
         # Handle files to auto include.

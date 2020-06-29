@@ -1,0 +1,24 @@
+#ifndef TOOLS_ASC_PROJECTFORMATION_H
+#define TOOLS_ASC_PROJECTFORMATION_H
+
+#include <string_view>
+
+#include <neargye/semver.hpp>
+
+#define VERSION_MAJOR @VERSION_MAJOR@
+#define VERSION_MINOR @VERSION_MINOR@
+#define VERSION_PATCH @VERSION_PATCH@
+
+namespace mdf::tools::asc {
+
+    constexpr std::string_view PROGRAM_NAME("@PROGRAM_NAME@");
+
+    constexpr semver::version Version {
+        VERSION_MAJOR,
+        VERSION_MINOR,
+        VERSION_PATCH
+    };
+
+}
+
+#endif //TOOLS_ASC_PROJECTFORMATION_H

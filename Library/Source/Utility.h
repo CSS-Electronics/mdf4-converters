@@ -8,10 +8,11 @@
 #include <vector>
 
 namespace mdf {
-  std::vector<std::shared_ptr<CNBlock>> getAllCNBlocks(std::shared_ptr<CGBlock> parent);
-  std::vector<std::shared_ptr<CNBlock>> getAllCNBlocks(std::shared_ptr<CNBlock> parent);
+    std::vector<std::shared_ptr<CNBlock>> getAllCNBlocks(std::shared_ptr<CGBlock> parent);
 
-  bool iequals(const std::string &a, const std::string &b);
+    std::vector<std::shared_ptr<CNBlock>> getAllCNBlocks(std::shared_ptr<CNBlock> parent);
+
+    bool iequals(const std::string &a, const std::string &b);
 }
 
 

@@ -1,26 +1,26 @@
 #include "SDBlock.h"
 
-#include <boost/endian/buffers.hpp>
+#include <streambuf>
+
+#include <boost/endian.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
 #pragma pack(push, 1)
-  struct SDBlockData {
-    boost::endian::little_uint8_buf_t type;
-    boost::endian::little_uint8_buf_t bus_type;
-    boost::endian::little_uint8_buf_t flags;
-    boost::endian::little_uint8_buf_t reserved[5];
-  };
+    struct SDBlockData {
+        be::little_uint8_buf_t type;
+        be::little_uint8_buf_t bus_type;
+        be::little_uint8_buf_t flags;
+        be::little_uint8_buf_t reserved[5];
+    };
 #pragma pack(pop)
 
-  constexpr MdfHeader SDBlockHeader = {
-    .blockType = MdfBlockType_SD,
-    .blockSize = 24,
-    .linkCount = 0
-  };
+    constexpr MdfHeader SDBlockHeader(MdfBlockType_SD, 24, 0);
 
-  SDBlock::SDBlock() {
-    header = SDBlockHeader;
-  }
+    SDBlock::SDBlock() {
+        header = SDBlockHeader;
+    }
 
 }

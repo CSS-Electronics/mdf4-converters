@@ -2,6 +2,7 @@
   "tool": "mdf2clx000",
   "cases": [
     {
+      "name": "DataFields - All fields enabled",
       "_comment": "All fields enabled",
       "input": [
         {
@@ -30,6 +31,7 @@
       ]
     },
     {
+      "name": "DataFields - All fields disabled",
       "_comment": "All fields disabled",
       "input": [
         {

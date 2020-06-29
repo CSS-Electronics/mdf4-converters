@@ -6,7 +6,7 @@
 
 namespace mdf::tools::pcap {
 
-    PCAP_CAN_Exporter::PCAP_CAN_Exporter(std::ostream& output, mdf::FileInfo const& fileInfo) : GenericRecordExporter(output), fileInfo(fileInfo) {
+    PCAP_CAN_Exporter::PCAP_CAN_Exporter(std::ostream& output, mdf::tools::shared::ParsedFileInfo const& fileInfo) : GenericRecordExporter(output), fileInfo(fileInfo) {
 
     }
 
@@ -24,22 +24,30 @@ namespace mdf::tools::pcap {
 
         can1.setDescription("CAN Bus 1");
         can1.setName("CAN 1");
-        can1.setSpeed(fileInfo.BitrateCAN1);
+        if(fileInfo.BitrateCAN1) {
+            can1.setSpeed(fileInfo.BitrateCAN1.value());
+        }
         can1.linkType = 113;
 
         can2.setDescription("CAN Bus 2");
         can2.setName("CAN 2");
-        can2.setSpeed(fileInfo.BitrateCAN2);
+        if(fileInfo.BitrateCAN2) {
+            can2.setSpeed(fileInfo.BitrateCAN2.value());
+        }
         can2.linkType = 113;
 
         lin1.setDescription("LIN Bus 1");
         lin1.setName("LIN 1");
-        lin1.setSpeed(fileInfo.BitrateLIN1);
+        if(fileInfo.BitrateLIN1) {
+            lin1.setSpeed(fileInfo.BitrateLIN1.value());
+        }
         lin1.linkType = 212;
 
         lin2.setDescription("LIN Bus 2");
         lin2.setName("LIN 2");
-        lin2.setSpeed(fileInfo.BitrateLIN2);
+        if(fileInfo.BitrateLIN2) {
+            lin2.setSpeed(fileInfo.BitrateLIN2.value());
+        }
         lin2.linkType = 212;
 
         output << can1;
@@ -48,7 +56,7 @@ namespace mdf::tools::pcap {
         output << lin2;
     }
 
-    void PCAP_CAN_Exporter::writeRecord(mdf::CANRecord const& record) {
+    void PCAP_CAN_Exporter::writeRecord(mdf::CAN_DataFrame const& record) {
         output << PCAP_EnhancedPacket_CAN(record);
     }
 

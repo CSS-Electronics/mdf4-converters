@@ -17,8 +17,8 @@ namespace mdf {
         [[nodiscard]] SIBlockBusType getBusType() const;
         [[nodiscard]] std::shared_ptr<MDBlock> getComment() const;
     protected:
-        bool load(uint8_t const* dataPtr) override;
-        bool saveBlockData(uint8_t * dataPtr) override;
+        bool load(std::shared_ptr<std::streambuf> stream) override;
+        bool saveBlockData(std::streambuf *stream) override;
     private:
         uint8_t busType;
         uint8_t flags;

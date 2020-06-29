@@ -5,17 +5,13 @@ include(CMake/Package.cmake)
 set(RESOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Resources)
 set(ICON_PATH ${RESOURCE_PATH}/icon.ico)
 
-if (MSVC_VERSION GREATER_EQUAL "1900")
-
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set(RUNTIME_LIBRARIES "")
 else()
     set(RUNTIME_LIBRARIES
-        -static-libstdc++
-        -static-libgcc
-        )
-endif()
-
-if(MINGW)
-    list(APPEND RUNTIME_LIBRARIES -static)
+            -static-libstdc++
+            -static-libgcc
+            )
 endif()
 
 # Shared base for all the tools.

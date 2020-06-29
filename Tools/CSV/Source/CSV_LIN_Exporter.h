@@ -3,24 +3,24 @@
 
 #include "GenericRecordExporter.h"
 
-#include "LINRecord.h"
+#include "LIN_Frame.h"
 
 namespace mdf::tools::csv {
 
-  class CSV_LIN_Exporter : public tools::shared::GenericRecordExporter<LINRecord> {
-  public:
-    explicit CSV_LIN_Exporter(std::ostream &output, std::string delimiter = ";");
+    class CSV_LIN_Exporter : public tools::shared::GenericRecordExporter<LIN_Frame> {
+    public:
+        explicit CSV_LIN_Exporter(std::ostream &output, std::string delimiter = ";");
 
-    /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeHeader */
-    void writeHeader() override;
+        /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeHeader */
+        void writeHeader() override;
 
-    /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeRecord */
-    void writeRecord(LINRecord const& record) override;
+        /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeRecord */
+        void writeRecord(LIN_Frame const &record) override;
 
-  private:
-    /*! String representing the delimiter used between value field. */
-    std::string const delimiter;
-  };
+    private:
+        /*! String representing the delimiter used between value field. */
+        std::string const delimiter;
+    };
 
 }
 

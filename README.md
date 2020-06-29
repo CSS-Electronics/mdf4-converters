@@ -41,70 +41,115 @@ For details on using the converters, see the CANedge Intros and the `README.md` 
 ---
 
 ## Building
-The project uses CMake for configuration. All the project files are supposed to be built out-of-source, while the
-main configuration will fetch and build the dependencies under the `External` folder.
+Major dependencies are expected to be present on the system already. These include:
+
+* Boost
+* Botan
+* fmt
 
 If publishing any of the build artifacts, remember to change the "Company Name" in `Tools/CMakeLists.txt`, since the
-information is embedded in the executable targets. 
+information is embedded in the executable targets.
 
-For building under Windows using MinGW-64, Clang has to be configured as the compiler ([details](https://sourceforge.net/p/mingw-w64/bugs/727/))
+If not present, they can be installed using vcpkg. The build uses a local overlay in `External\vcpkg-overlay` and requires the following targets:
 
----
+* boost-bimap
+* boost-filesystem
+* boost-iostreams
+* boost-log
+* boost-dll
+* boost-program-options
+* botan
+* fmt
+* heatshrink
+* neargye-semver
 
-## Quick start
+All targets are build using static linking. Select the matching triplet for the target system:
+
+* `x64-windows-static`
+* `x86-windows-static`
+* `x64-linux`
+
+And install all dependencies with vcpkg. This utilizes an overlay. This can either be explicitly added to the command line, or the port can be added to vcpkg installation.
+
+#### Add to vcpkg installation
+```
+cp /path/to/mdf4-converters/External/vcpkg-overlay/heatshrink /home/docker/vcpkg/ports/
+```
+
+#### Specify on commandline
+Add the following to the vcpkg commands:
+
+```
+--overlay-ports=/path/to/mdf4-converters/External/vcpkg-overlay
+```
+
+### Install dependencies with vcpkg
+
+Run vcpkg with the triplet inserted (One of the two following commands, depending on the overlay strategy):
+
+```
+vcpkg install --triplet $SELECTED-TRIPLET boost-log boost-dll boost-filesystem boost-program-options boost-iostreams boost-bimap botan fmt neargye-semver heatshrink
+vcpkg install --triplet $SELECTED-TRIPLET boost-log boost-dll boost-filesystem boost-program-options boost-iostreams boost-bimap botan fmt neargye-semver heatshrink --overlay-ports=/path/to/mdf4-converters/External/vcpkg-overlay 
+```
+
+### Run CMake
+
 Create a new folder for out-of-source building:
+
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-This should notify that the external dependencies are missing. Build these using:
+Run CMake with the desired configuration and the correct vcpkg triplet.
+
 ```
-make Boost_builder
-make botan_builder
-make fmt_builder
-make heatshrink_builder
-make tinyxml2_builder
-make appimage_builder (Linux only)
+cmake -DVCPKG_TARGET_TRIPLET=$SELECTED-TRIPLET -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=$BUILD-TYPE ..
 ```
 
-Refresh the project configuration now that the dependencies are present:
+`$BUILD-TYPE` world normally be `Release`, but any other normal CMake build type can be inserted. Example:
+
 ```
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DVCPKG_TARGET_TRIPLET=x64-linux -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-Build either all the targets, or the requested target.
+If all dependencies are found, `make help` should provide a list of targets.
+
+### Building Python extension
+If the Python extension is to be build, build the `PyCXX_fecth` target first.
+
 ```
-make target
+make PyCXX_fetct
+rm CMakeLists.txt
 ```
 
-To see a list of currently available targets, CMake provides a help target, which list currently available targets.
+And then re-run the CMake command to use the added files. Next, the wheel can be build using:
+
 ```
-make help
+make mdf_iter_wheel
 ```
 
-For convenience, targets for building all the tools are present:
-- `ToolsRelease`: Build and pack the tools
+The resulting wheel file will be placed in `/path/to/mdf4-converters/Python/Distribution_Iterator/dist`.
 
-In Windows, the latter option gathers all the executables in the `Release` folder under
-the current build directory. Under Linux, this creates [AppImage](https://appimage.org/) packages (Still present in
-each tool's folder). The build system must have a C++17 compiler, for instance Ubuntu 18.04 LTS. Build dependencies include python and pkg-config.
+### Building converter tools
+If building the converters, either build the individual converter, or all using the `ToolsRelease` target.
+
+```
+make ToolsRelease
+```
 
 ---
 
 ## Dependencies
 The project uses the following external libraries, apart from the standard library for C++17:
-- [AppImage packer](https://github.com/linuxdeploy/linuxdeploy) - MIT license
 - [Boost](https://www.boost.org/) - Boost license
 - [Botan](https://botan.randombit.net/) - Simplified BSD license
 - [fmt](https://github.com/fmtlib/fmt) - Custom license, see repository for details
 - [heatshrink](https://github.com/atomicobject/heatshrink) - ISC license
-- [tinyxml2](https://github.com/leethomason/tinyxml2) - Zlib license
 
 In the project the following header-only libraries are used and distributed:
-- [mio](https://github.com/mandreyel/mio) - MIT license
 - [SPIMPL](https://github.com/oliora/samples/blob/master/spimpl.h) - Boost license
+- [semver](https://github.com/Neargye/semver) - MIT license
 
 ### Boost license
 Copyright Beman Dawes, Daniel Frey, David Abrahams, 2003-2004.

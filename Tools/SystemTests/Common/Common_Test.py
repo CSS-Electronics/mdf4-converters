@@ -76,7 +76,7 @@ class CommonBase(BaseTestCase):
                 
             if not comparison_result:
                 comparison_errors.append(output_file.name)
-        
+
         assert len(comparison_errors) == 0, f"Mismatch in output data for the following file(s): {comparison_errors}"
         
         return

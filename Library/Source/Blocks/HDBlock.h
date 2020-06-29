@@ -8,34 +8,36 @@
 
 namespace mdf {
 
-  struct HDBlock : MdfBlock {
-    [[nodiscard]] std::shared_ptr<DGBlock> getFirstDGBlock() const;
+    struct HDBlock : MdfBlock {
+        [[nodiscard]] std::shared_ptr<DGBlock> getFirstDGBlock() const;
 
-    /*!Get the start time of the measurement in nanoseconds.
-     * @return
-     */
-    [[nodiscard]] uint64_t getStartTimeNs() const;
+        /*!Get the start time of the measurement in nanoseconds.
+         * @return
+         */
+        [[nodiscard]] uint64_t getStartTimeNs() const;
 
-    [[nodiscard]] int16_t getTzOffsetMin() const;
-    [[nodiscard]] int16_t getDstOffsetMin() const;
+        [[nodiscard]] int16_t getTzOffsetMin() const;
 
-    std::shared_ptr<MDBlock> getComment() const;
+        [[nodiscard]] int16_t getDstOffsetMin() const;
 
-  protected:
-    bool load(uint8_t const *dataPtr) override;
-    bool saveBlockData(uint8_t *dataPtr) override;
+        std::shared_ptr<MDBlock> getComment() const;
 
-  private:
-    uint64_t startTimeNs;
-    int16_t tzOffsetMin;
-    int16_t dstOffsetMin;
-    uint8_t timeFlags;
-    uint8_t timeClass;
-    uint8_t flags;
-    uint8_t reserved;
-    double start_angle_rad;
-    double start_distance_m;
-  };
+    protected:
+        bool load(std::shared_ptr<std::streambuf> stream) override;
+
+        bool saveBlockData(std::streambuf *stream) override;
+
+    private:
+        uint64_t startTimeNs;
+        int16_t tzOffsetMin;
+        int16_t dstOffsetMin;
+        uint8_t timeFlags;
+        uint8_t timeClass;
+        uint8_t flags;
+        uint8_t reserved;
+        double start_angle_rad;
+        double start_distance_m;
+    };
 
 }
 

@@ -8,7 +8,6 @@
 #include <boost/program_options.hpp>
 
 #include "ConverterInterface.h"
-#include "Library.h"
 #include "ParseOptionStatus.h"
 #include "PasswordStorage.h"
 #include "StatusCode.h"

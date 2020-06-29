@@ -1,0 +1,8 @@
+.idea
+vcpkg
+cmake-build-*
+venv*
+__pycache__
+
+*.exe
+*.zip

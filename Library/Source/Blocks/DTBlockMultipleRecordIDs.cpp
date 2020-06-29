@@ -1,27 +1,30 @@
 #include "DTBlockMultipleRecordIDs.h"
 
-#include <boost/endian/buffers.hpp>
+#include <algorithm>
+#include <iterator>
+#include <streambuf>
+
+#include <boost/endian.hpp>
+
+namespace be = boost::endian;
 
 namespace mdf {
 
-    constexpr MdfHeader DTBlockHeader = {
-        .blockType = MdfBlockType_DT,
-        .blockSize = 24,
-        .linkCount = 0
-    };
+    constexpr MdfHeader DTBlockHeader(MdfBlockType_DT, 24, 0);
 
-    #pragma pack(push, 1)
+#pragma pack(push, 1)
     struct SDRecord {
-        boost::endian::little_uint32_buf_t recordSize;
-        boost::endian::little_uint8_buf_t recordData[];
+        be::little_uint32_buf_t recordSize;
+        be::little_uint8_buf_t recordData[];
     };
-    #pragma pack(pop)
+#pragma pack(pop)
 
-    DTBlockMultipleRecordIDs::DTBlockMultipleRecordIDs(DTBlock const& parent) : DTBlock(parent) {
+    DTBlockMultipleRecordIDs::DTBlockMultipleRecordIDs(DTBlock const &parent) : DTBlock(parent) {
 
     }
 
-    DTBlockMultipleRecordIDs::DTBlockMultipleRecordIDs(DTBlockMultipleRecordIDs const& parent, std::vector<uint64_t> IDs) : DTBlock(parent) {
+    DTBlockMultipleRecordIDs::DTBlockMultipleRecordIDs(DTBlockMultipleRecordIDs const &parent,
+                                                       std::vector<uint64_t> IDs) : DTBlock(parent) {
         // Reset header.
         header = DTBlockHeader;
 
@@ -33,7 +36,7 @@ namespace mdf {
 
             header.blockSize += parent.recordSizes.at(recordID);
 
-            if(parent.recordSizeMap.at(recordID) == -1) {
+            if (parent.recordSizeMap.at(recordID) == -1) {
                 header.blockSize += 4 * parent.recordIndices.at(recordID).size();
             }
         }
@@ -49,14 +52,14 @@ namespace mdf {
         return result;
     }
 
-    std::vector<uint8_t const*> DTBlockMultipleRecordIDs::getRecordIndicesAbsolute(uint64_t recordID) const {
-        std::vector<uint8_t const*> result;
+    std::vector<uint64_t> DTBlockMultipleRecordIDs::getRecordIndicesAbsolute(uint64_t recordID) const {
+        std::vector<uint64_t> result;
 
         auto iter = recordIndices.find(recordID);
-        if(iter != std::end(recordIndices)) {
+        if (iter != std::end(recordIndices)) {
             result.reserve(iter->second.size());
 
-            for(auto const& record: iter->second) {
+            for (auto const &record: iter->second) {
                 result.emplace_back(record);
             }
         }
@@ -67,7 +70,7 @@ namespace mdf {
     std::vector<uint64_t> DTBlockMultipleRecordIDs::getRegisteredRecordIDs() const {
         std::vector<uint64_t> result;
 
-        for(auto const& recordID: recordSizes) {
+        for (auto const &recordID: recordSizes) {
             result.emplace_back(recordID.first);
         }
 
@@ -78,8 +81,49 @@ namespace mdf {
         uint64_t result = 0;
 
         auto iter = recordSizes.find(recordID);
-        if(iter != std::end(recordSizes)) {
+        if (iter != std::end(recordSizes)) {
             result = iter->second;
+        }
+
+        return result;
+    }
+
+    long long DTBlockMultipleRecordIDs::findFirstMatching(std::vector<uint64_t> targetIDs) {
+        long long result = -1;
+
+        std::size_t currentLocation = stream->pubseekoff(rawFileLocation + 24, std::ios_base::beg);
+        std::size_t endLocation = currentLocation + header.blockSize - sizeof(header);
+
+        while (currentLocation < endLocation) {
+            stream->pubseekoff(currentLocation, std::ios_base::beg);
+
+            // Read the record id.
+            uint64_t recordID = 0;
+            stream->sgetn(reinterpret_cast<char *>(&recordID), recordLength);
+
+            // Stop iterating if this is a match.
+            if (std::find(targetIDs.begin(), targetIDs.end(), recordID) != targetIDs.end()) {
+                result = currentLocation;
+                break;
+            }
+
+            currentLocation += recordLength;
+
+            // Determine how many bytes to jump forward.
+            int64_t recordSize = recordSizeMap.at(recordID);
+
+            if (recordSize < 0) {
+                // VLSD record, read the next 4 bytes instead as record size.
+                uint32_t VLSDrecordSize = 0;
+                stream->sgetn(reinterpret_cast<char *>(&VLSDrecordSize), sizeof(VLSDrecordSize));
+                currentLocation += sizeof(VLSDrecordSize);
+                recordSize = VLSDrecordSize;
+            }
+
+            // Update record size and jump to next record.
+            recordSizes.at(recordID) += recordSize;
+
+            currentLocation += recordSize;
         }
 
         return result;
@@ -91,49 +135,82 @@ namespace mdf {
 
         // Create a index entry for each.
         for (auto &entry: recordSizeMap) {
-            recordIndices.insert(std::make_pair(entry.first, std::vector<uint8_t const*>()));
+            recordIndices.insert(std::make_pair(entry.first, std::vector<uint64_t>()));
             recordSizes.insert(std::make_pair(entry.first, 0));
         }
 
         // Iterate over all the records, saving indices for quick access.
-        uint8_t const* currentPtr = dataPtr;
-        uint8_t const* const endPtr = dataPtr + header.blockSize - sizeof(header);
+        std::streampos const blockDataStart = getFileLocation();
+        std::streampos const blockDataEnd = getFileLocation() + header.blockSize - sizeof(header);
+        std::streampos currentLocation = blockDataStart;
 
-        while (currentPtr < endPtr) {
+        while (currentLocation < blockDataEnd) {
             // Read the record id.
+            stream->pubseekpos(currentLocation);
+            //be::little_uint64_at recordID = 0;
+            // TODO: Investigate endian
             uint64_t recordID = 0;
-            memcpy(&recordID, currentPtr, recordLength);
-            currentPtr += recordLength;
+
+            std::streamsize bytesRead = stream->sgetn(reinterpret_cast<char *>(&recordID), recordLength);
+
+            if (bytesRead != recordLength) {
+                throw std::runtime_error("Could not read record ID");
+            }
+
+            currentLocation += recordLength;
 
             // Store this in the index.
-            recordIndices.at(recordID).emplace_back(currentPtr);
+            recordIndices.at(recordID).emplace_back(currentLocation);
 
             // Determine how many bytes to jump forward.
             int64_t recordSize = recordSizeMap.at(recordID);
 
             if (recordSize < 0) {
                 // VLSD record, read the next 4 bytes instead as record size.
-                auto ptr = reinterpret_cast<uint32_t const*>(currentPtr);
-                recordSize = *ptr;
+                be::little_uint32_at vlsdSize;
 
-                currentPtr += 4;
+                bytesRead = stream->sgetn(reinterpret_cast<char *>(vlsdSize.data()), 4);
+                if (bytesRead != 4) {
+                    throw std::runtime_error("Could not read VLSD length");
+                }
+                recordSize = vlsdSize;
+
+                currentLocation += 4;
             }
 
             // Update record size and jump to next record.
             recordSizes.at(recordID) += recordSize;
 
-            currentPtr += recordSize;
+            currentLocation += recordSize;
         }
     }
 
-    bool DTBlockMultipleRecordIDs::saveBlockData(uint8_t* dataPtr) {
-        // TODO: Does not handle record IDs.
+    void
+    DTBlockMultipleRecordIDs::setRecordInformation(std::map<uint64_t, int64_t> recordSizes, uint64_t recordLength) {
+        this->recordSizeMap = std::move(recordSizes);
+        this->recordLength = recordLength;
+    }
+
+    std::size_t DTBlockMultipleRecordIDs::operator[](std::size_t index) {
+        return 0;
+    }
+
+    bool DTBlockMultipleRecordIDs::saveBlockData(std::streambuf *outputStream) {
+        std::streamsize written = 0;
+
+        // Create output iterator.
+        std::ostreambuf_iterator<char> iterOut(outputStream);
+
         for(auto const& recordInformation: recordIndices) {
             uint64_t recordSize = recordSizeMap.at(recordInformation.first);
 
             if(recordSize < 0) {
-                for(auto const& sourceAddress: recordInformation.second) {
-                    // Determine how many bytes to read.
+                /*for(auto const& sourceAddress: recordInformation.second) {
+                    // Re-seek the input stream, and determine how many bytes to read.
+                    stream->pubseekoff(sourceAddress, std::ios_base::beg);
+                    boost::endian::little_uint32_buf_t recordSizeData;
+                    stream->sgetn(reinterpret_cast<char *>(recordSizeData.data()), sizeof(recordSizeData));
+
                     auto input = reinterpret_cast<SDRecord const*>(sourceAddress);
 
                     auto output = reinterpret_cast<SDRecord*>(dataPtr);
@@ -141,11 +218,14 @@ namespace mdf {
 
                     std::copy(input->recordData, input->recordData + input->recordSize.value(), output->recordData);
                     dataPtr += sizeof(SDRecord) + input->recordSize.value();
-                }
+                }*/
             } else {
                 for(auto const& sourceAddress: recordInformation.second) {
-                    std::copy(sourceAddress, sourceAddress + recordSize, dataPtr);
-                    dataPtr += recordSize;
+                    stream->pubseekoff(sourceAddress, std::ios_base::beg);
+                    std::istreambuf_iterator<char> iterIn(stream.get());
+
+                    std::copy_n(iterIn, recordSize, iterOut);
+                    written += recordSize;
                 }
             }
 
@@ -153,14 +233,5 @@ namespace mdf {
 
         return true;
     }
-
-    void DTBlockMultipleRecordIDs::setRecordInformation(std::map<uint64_t, int64_t> recordSizes, uint64_t recordLength) {
-        this->recordSizeMap = std::move(recordSizes);
-        this->recordLength = recordLength;
-    }
-
-  uint8_t const *DTBlockMultipleRecordIDs::operator[](std::size_t index) {
-    return nullptr;
-  }
 
 }

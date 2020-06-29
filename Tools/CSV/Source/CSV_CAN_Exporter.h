@@ -3,24 +3,28 @@
 
 #include "GenericRecordExporter.h"
 
-#include "CANRecord.h"
+#include "CSV_Common.h"
 
 namespace mdf::tools::csv {
 
-  class CSV_CAN_Exporter : public mdf::tools::shared::GenericRecordExporter<mdf::CANRecord> {
-  public:
-    explicit CSV_CAN_Exporter(std::ostream &output, std::string delimiter = ";");
+    class CSV_CAN_Exporter : public mdf::tools::shared::GenericRecordExporter<CSV_Record> {
+    public:
+        explicit CSV_CAN_Exporter(std::ostream &output, std::string delimiter = ";");
 
-    /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeHeader */
-    void writeHeader() override;
+        /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeHeader */
+        void writeHeader() override;
 
-    /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeRecord */
-    void writeRecord(mdf::CANRecord const& record) override;
+        /*! @copydoc mdf::tools::shared::GenericRecordExporter::writeRecord */
+        void writeRecord(CSV_Record const &record) override;
 
-  private:
-    /*! String representing the delimiter used between value field. */
-    std::string const delimiter;
-  };
+    private:
+        /*! String representing the delimiter used between value field. */
+        std::string const delimiter;
+
+        void write_CAN_DataFrame(mdf::CAN_DataFrame const &record);
+
+        void write_CAN_RemoteFrame(mdf::CAN_RemoteFrame const &record);
+    };
 
 }
 

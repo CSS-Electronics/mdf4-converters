@@ -1,30 +1,39 @@
 #include "MDBlock.h"
 
+#include <algorithm>
+#include <iterator>
 #include <sstream>
+#include <streambuf>
 
 namespace mdf {
 
-  std::string_view MDBlock::getMetaData() const {
-    return std::string_view(metaData);
-  }
+    std::string_view MDBlock::getMetaData() const {
+        return std::string_view(metaData);
+    }
 
-  bool MDBlock::load(uint8_t const *dataPtr) {
-    bool result = false;
+    bool MDBlock::load(std::shared_ptr<std::streambuf> stream) {
+        bool result = false;
 
-    // Load the data as string.
-    std::stringstream ss;
-    ss.write(reinterpret_cast<char const *>(dataPtr), header.blockSize - sizeof(header));
-    metaData = ss.str();
+        // Load the data as string.
+        std::stringstream ss;
+        std::copy_n(
+            std::istreambuf_iterator<char>(stream.get()),
+            header.blockSize - sizeof(header),
+            std::ostream_iterator<char>(ss)
+        );
 
-    result = true;
+        metaData = ss.str();
 
-    return result;
-  }
+        result = true;
 
-  bool MDBlock::saveBlockData(uint8_t *dataPtr) {
-    std::copy(std::begin(metaData), std::end(metaData), dataPtr);
+        return result;
+    }
 
-    return true;
-  }
+    bool MDBlock::saveBlockData(std::streambuf *stream) {
+        std::streamsize written = stream->sputn(metaData.c_str(), metaData.size());
+        written += stream->sputc('\0');
+
+        return (written == (metaData.size() + 1));
+    }
 
 }

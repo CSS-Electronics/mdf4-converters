@@ -1,14 +1,18 @@
 #ifndef TOOLS_SHARED_VERSIONINFORMATION_H
 #define TOOLS_SHARED_VERSIONINFORMATION_H
 
-#include "Version.h"
+#include <neargye/semver.hpp>
+
+#define MDFSimpleConverters_Shared_VERSION_MAJOR @MDFSimpleConverters_Shared_VERSION_MAJOR@
+#define MDFSimpleConverters_Shared_VERSION_MINOR @MDFSimpleConverters_Shared_VERSION_MINOR@
+#define MDFSimpleConverters_Shared_VERSION_PATCH @MDFSimpleConverters_Shared_VERSION_PATCH@
 
 namespace mdf::tools::shared {
 
-    constexpr Version const version = {
-        .major = @VERSION_MAJOR@,
-        .minor = @VERSION_MINOR@,
-        .patch = @VERSION_PATCH@
+    constexpr semver::version MDFSimpleConverters_Shared_VERSION {
+        MDFSimpleConverters_Shared_VERSION_MAJOR,
+        MDFSimpleConverters_Shared_VERSION_MINOR,
+        MDFSimpleConverters_Shared_VERSION_PATCH
     };
 
 }

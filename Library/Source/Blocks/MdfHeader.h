@@ -11,6 +11,11 @@ namespace mdf {
         MdfBlockType blockType;
         uint64_t blockSize;
         uint64_t linkCount;
+
+        constexpr MdfHeader(MdfBlockType blockType, uint64_t blockSize, uint64_t linkCount) : blockType(blockType), blockSize(blockSize), linkCount(linkCount) {
+
+        }
+        MdfHeader() = default;
     };
 
 }

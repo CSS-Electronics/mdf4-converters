@@ -1,20 +1,16 @@
 #ifndef MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H
 #define MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H
 
-#include <string_view>
+#include <semver.hpp>
 
-#include "Version.h"
+#define GenericFiles_VERSION_MAJOR @GenericFiles_VERSION_MAJOR@
+#define GenericFiles_VERSION_MINOR @GenericFiles_VERSION_MINOR@
+#define GenericFiles_VERSION_PATCH @GenericFiles_VERSION_PATCH@
 
-namespace mdf {
-
-    constexpr std::string_view PROGRAM_NAME = "@PROGRAM_NAME@";
-
-    constexpr Version const version = {
-        .major = @VERSION_MAJOR@,
-        .minor = @VERSION_MINOR@,
-        .patch = @VERSION_PATCH@
-    };
-
-}
+constexpr semver::version GenericFiles_VERSION {
+    GenericFiles_VERSION_MAJOR,
+    GenericFiles_VERSION_MINOR,
+    GenericFiles_VERSION_PATCH
+};
 
 #endif //MDFSIMPLECONVERTERS_GENERIC_PROJECTFORMATION_H

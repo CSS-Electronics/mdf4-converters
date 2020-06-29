@@ -7,32 +7,34 @@
 #include <ctime>
 #include <sstream>
 
-#include "CANRecord.h"
+#include "CAN_DataFrame.h"
 #include "FileInfo.h"
 #include "PEAK_TraceFormat.h"
 
 namespace mdf::tools::peak {
 
-  // Define new floating precision time base for time in ms.
-  using milliseconds = std::chrono::duration<double, std::milli>;
+    // Define new floating precision time base for time in ms.
+    using milliseconds = std::chrono::duration<double, std::milli>;
 
-  class PEAK_CAN_Exporter : public tools::shared::GenericRecordExporter<CANRecord> {
-  public:
-    explicit PEAK_CAN_Exporter(std::ostream &output, FileInfo const &fileInfo);
+    class PEAK_CAN_Exporter : public tools::shared::GenericRecordExporter<PEAK_Record> {
+    public:
+        explicit PEAK_CAN_Exporter(std::ostream &output, FileInfo const &fileInfo);
 
-    virtual void correctHeader() = 0;
+        virtual void correctHeader() = 0;
 
-  protected:
-    milliseconds convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const;
+    protected:
+        milliseconds convertTimestampToRelative(std::chrono::nanoseconds timeStamp) const;
 
-    FileInfo const &fileInfo;
+        FileInfo const &fileInfo;
 
-    unsigned long long recordCounter;
+        unsigned long long recordCounter;
 
-    std::fpos<mbstate_t> startTimePosition;
-    std::chrono::nanoseconds headerTimeStamp;
-    bool timeStampSet = false;
-  };
+        std::fpos<mbstate_t> startTimePosition;
+        std::chrono::nanoseconds headerTimeStamp;
+        bool timeStampSet = false;
+    };
+    
+    template<typename T> inline constexpr bool always_false_v = false;
 
 }
 

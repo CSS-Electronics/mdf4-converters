@@ -5,7 +5,7 @@
 
 namespace mdf::tools::pcap {
 
-    PCAP_EnhancedPacket_CAN::PCAP_EnhancedPacket_CAN(mdf::CANRecord const& canDataFrame) : data({0}) {
+    PCAP_EnhancedPacket_CAN::PCAP_EnhancedPacket_CAN(mdf::CAN_DataFrame const& canDataFrame) : data({0}) {
         // Set options for Linux SLL.
         link_layer_address_length = 0;
         link_layer_address = 0x00000000;

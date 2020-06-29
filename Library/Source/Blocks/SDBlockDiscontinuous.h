@@ -8,17 +8,20 @@
 
 namespace mdf {
 
-  struct SDBlockDiscontinuous : public SDBlock {
-    explicit SDBlockDiscontinuous(std::vector<uint8_t const *> const& dataPtr);
+    struct SDBlockDiscontinuous : public SDBlock {
+        SDBlockDiscontinuous(std::vector<uint64_t> const &dataPtr, std::shared_ptr<std::streambuf> stream);
 
-    uint8_t const *operator[](std::size_t index) override;
-  protected:
-    bool load(uint8_t const *dataPtr) override;
-    bool saveBlockData(uint8_t *dataPtr) override;
+        std::size_t operator[](std::size_t index) override;
 
-    std::vector<uint8_t const *> dataRecords;
-    std::map<uint8_t const *, std::size_t> dataRecordsMap;
-  };
+    protected:
+        bool load(std::shared_ptr<std::streambuf> stream) override;
+
+        bool saveBlockData(std::streambuf *stream) override;
+
+        std::vector<uint64_t> dataRecords;
+        std::map<uint64_t, std::size_t> dataRecordsMap;
+        std::shared_ptr<std::streambuf> stream;
+    };
 
 }
 

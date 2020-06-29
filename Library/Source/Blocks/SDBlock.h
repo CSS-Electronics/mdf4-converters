@@ -6,9 +6,9 @@
 
 namespace mdf {
 
-  struct SDBlock : MdfBlock, IDataBlock {
-    SDBlock();
-  };
+    struct SDBlock : MdfBlock, IDataBlock {
+        SDBlock();
+    };
 
 }
 

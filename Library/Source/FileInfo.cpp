@@ -2,21 +2,18 @@
 
 namespace mdf {
 
-  FileInfo::FileInfo() :
-    Session(0),
-    Split(0),
-    LoggerID(0),
-    LoggerType(0),
-    BitrateCAN1(0),
-    BitrateCAN2(0),
-    BitrateLIN1(0),
-    BitrateLIN2(0),
-    CANMessages(0),
-    LINMessages(0),
-    Time(0),
-    TimezoneOffsetMinutes(0)
-  {
-    //
-  }
+    FileInfo::FileInfo() :
+        CANMessages(0),
+        LINMessages(0),
+        Time(0),
+        TimezoneOffsetMinutes(0) {
+        //
+    }
 
+    void FileInfo::clear() {
+        CANMessages = 0;
+        LINMessages = 0;
+        Time = std::chrono::nanoseconds(0);
+        TimezoneOffsetMinutes = 0;
+    }
 }

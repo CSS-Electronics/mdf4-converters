@@ -5,9 +5,9 @@
 
 namespace mdf {
 
-  struct IDataBlock {
-    virtual uint8_t const *operator[](std::size_t index) = 0;
-  };
+    struct IDataBlock {
+        virtual std::size_t operator[](std::size_t index) = 0;
+    };
 
 }
 

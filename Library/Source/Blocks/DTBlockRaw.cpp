@@ -4,12 +4,12 @@
 
 namespace mdf {
 
-    bool DTBlockRaw::saveBlockData(uint8_t* dataPtr) {
+    bool DTBlockRaw::saveBlockData(std::streambuf *dataPtr) {
         throw std::runtime_error("This method should never be called");
     }
 
-  uint8_t const *DTBlockRaw::operator[](std::size_t index) {
-    return nullptr;
-  }
+    std::size_t DTBlockRaw::operator[](std::size_t index) {
+        return 0;
+    }
 
 }

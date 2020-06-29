@@ -7,45 +7,46 @@
 
 namespace mdf::tools::shared {
 
-  struct ProgressIndicator {
-    ProgressIndicator(std::size_t start, std::size_t stop, bool suppressed = false);
+    struct ProgressIndicator {
+        ProgressIndicator(std::size_t start, std::size_t stop, bool suppressed = false);
 
-    void begin();
-    void update(std::size_t current);
-    void end();
+        void begin();
 
-    void setPrefix(std::string value);
+        void update(std::size_t current);
 
-    void setSuffix(std::string value);
+        void end();
 
-  private:
-    std::size_t getTerminalSize() const;
+        void setPrefix(std::string value);
 
-    std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> lastUpdate;
-    std::stringstream leftStream;
-    std::stringstream rightStream;
-    std::size_t start;
-    std::size_t stop;
+        void setSuffix(std::string value);
 
-    std::string prefix;
-    std::string suffix;
-    bool suppressed;
+    private:
+        std::size_t getTerminalSize() const;
 
-    void update_percent(std::size_t percent);
-  };
+        std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> lastUpdate;
+        std::stringstream leftStream;
+        std::stringstream rightStream;
+        std::size_t start;
+        std::size_t stop;
 
-  // generic solution
-  template <class T>
-  int numDigits(T number)
-  {
-    int digits = 0;
-    if (number < 0) digits = 1; // remove this line if '-' counts as a digit
-    while (number) {
-      number /= 10;
-      digits++;
+        std::string prefix;
+        std::string suffix;
+        bool suppressed;
+
+        void update_percent(std::size_t percent);
+    };
+
+    // generic solution
+    template<class T>
+    int numDigits(T number) {
+        int digits = 0;
+        if (number < 0) digits = 1; // remove this line if '-' counts as a digit
+        while (number) {
+            number /= 10;
+            digits++;
+        }
+        return digits;
     }
-    return digits;
-  }
 
 }
 

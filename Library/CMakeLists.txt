@@ -1,8 +1,8 @@
 project(MDF_BusLogging_Library)
 
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 3)
+set(MDF_BusLogging_Library_VERSION_MAJOR 1)
+set(MDF_BusLogging_Library_VERSION_MINOR 0)
+set(MDF_BusLogging_Library_VERSION_PATCH 3)
 
 # Search for Boost.
 find_package(Boost REQUIRED COMPONENTS filesystem log)
@@ -10,29 +10,33 @@ find_package(Boost REQUIRED COMPONENTS filesystem log)
 # Improved formatting to string.
 find_package(fmt REQUIRED)
 
-# Support for reading XML.
-find_package(tinyxml2 REQUIRED)
+find_path(NEARGYE_SEMVER_INCLUDE_DIRS "neargye/semver.hpp" REQUIRED)
 
 # Embed information in the source code.
 configure_file(
-    Source/ProjectInformation.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/Source/ProjectInformation.h
+    Source/Version.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/Source/Version.h
     @ONLY
 )
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/Source)
 
 # List of all public header files.
 set(INCLUDE_FILES
-    Include/CANRecord.h
     Include/FileInfo.h
     Include/IIterator.h
-    Include/Library.h
-    Include/LINRecord.h
+    Include/MDFBusLoggingLibrary.h
     Include/MdfFile.h
+    Include/Metadata.h
     Include/RecordIterator.h
-    Include/Version.h
 
-    Include/spimpl.h
+    Include/CAN_DataFrame.h
+    Include/CAN_ErrorFrame.h
+    Include/CAN_RemoteFrame.h
+    Include/LIN_ChecksumError.h
+    Include/LIN_Frame.h
+    Include/LIN_SyncError.h
+    Include/LIN_TransmissionError.h
+    Include/LIN_ReceiveError.h
     )
 
 include_directories(Include)
@@ -41,9 +45,12 @@ include_directories(Include)
 set(SOURCE_HEADERS
     Source/BlockStorage.h
     Source/IBlockStorage.h
+    Source/CachingStreamBuffer.h
     Source/ExtractMetaData.h
+    Source/Logger.h
     Source/MdfFileImplementation.h
     Source/StructAdaptors.h
+    Source/UnfinalizedFileInfo.h
     Source/Utility.h
 
     Source/Blocks/CCBlock.h
@@ -70,25 +77,24 @@ set(SOURCE_HEADERS
     Source/Blocks/TXBlock.h
 
     Source/Iterators/Assign.h
+    Source/Iterators/EmptyIterator.h
     Source/Iterators/GenericIterator.h
     Source/Iterators/MappingInformation.h
     Source/Iterators/RecordFunctor.h
-
-    Source/mio.h
     )
 
 # List of all core source files.
 set(SOURCE_FILES
     Source/BlockStorage.cpp
-    Source/CANRecord.cpp
+    Source/CachingStreamBuffer.cpp
     Source/ExtractMetaData.cpp
     Source/FileInfo.cpp
-    Source/Library.cpp
-    Source/LINRecord.cpp
+    Source/MDFBusLoggingLibrary.cpp
+    Source/Logger.cpp
     Source/MdfFile.cpp
     Source/MdfFileImplementation.cpp
+    Source/UnfinalizedFileInfo.cpp
     Source/Utility.cpp
-    Source/Version.cpp
 
     Source/Blocks/CCBlock.cpp
     Source/Blocks/CGBlock.cpp
@@ -110,9 +116,20 @@ set(SOURCE_FILES
     Source/Blocks/SIBlock.cpp
     Source/Blocks/TXBlock.cpp
 
+    Source/Iterators/EmptyIterator.cpp
     Source/Iterators/GenericIterator.cpp
     Source/Iterators/RecordIterator.cpp
     Source/Iterators/RecordFunctor.cpp
+
+    Source/Records/CAN_DataFrame.cpp
+    Source/Records/CAN_ErrorFrame.cpp
+    Source/Records/CAN_RemoteFrame.cpp
+    Source/Records/LIN_ChecksumError.cpp
+    Source/Records/LIN_Frame.cpp
+    Source/Records/LIN_ReceiveError.cpp
+    Source/Records/LIN_SyncError.cpp
+    Source/Records/LIN_TransmissionError.cpp
+    Source/Records/RecordTypes.cpp
     )
 
 # Create an amalgamated list for sources and target libraries depending on the options.
@@ -127,28 +144,25 @@ set(LIBRARIES_FINAL
     Boost::filesystem
     Boost::log
     fmt::fmt
-    tinyxml2::tinyxml2
     )
+
+include(CMakePackageConfigHelpers)
 
 # Create static library.
-add_library(${PROJECT_NAME}_static STATIC ${SOURCE_FINAL})
-add_library(${PROJECT_NAME}::static ALIAS ${PROJECT_NAME}_static)
-target_link_libraries(${PROJECT_NAME}_static ${LIBRARIES_FINAL})
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FINAL})
 
-target_include_directories(${PROJECT_NAME}_static INTERFACE
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBRARIES_FINAL})
+
+target_include_directories(${PROJECT_NAME} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
     )
-
-# Create shared library.
-add_library(${PROJECT_NAME}_shared SHARED ${SOURCE_FINAL})
-add_library(${PROJECT_NAME}::shared ALIAS ${PROJECT_NAME}_shared)
-target_link_libraries(${PROJECT_NAME}_shared
-    -static-libstdc++
-    -static-libgcc
-    -static
-    ${LIBRARIES_FINAL}
-    )
-
-target_include_directories(${PROJECT_NAME}_shared INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${NEARGYE_SEMVER_INCLUDE_DIRS}
     )

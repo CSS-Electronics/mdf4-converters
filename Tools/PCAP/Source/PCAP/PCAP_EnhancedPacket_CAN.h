@@ -5,13 +5,13 @@
 
 #include "PCAP_EnhancedPacket.h"
 
-#include "CANRecord.h"
+#include "CAN_DataFrame.h"
 
 namespace mdf::tools::pcap {
 
     class PCAP_EnhancedPacket_CAN : public PCAP_EnhancedPacket {
     public:
-        explicit PCAP_EnhancedPacket_CAN(mdf::CANRecord const& data);
+        explicit PCAP_EnhancedPacket_CAN(mdf::CAN_DataFrame const& data);
     private:
         bool brs;
         uint32_t id;

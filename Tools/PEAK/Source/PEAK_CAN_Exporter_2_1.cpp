@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iomanip>
+
 #include <fmt/printf.h>
 #include <fmt/ostream.h>
 
@@ -8,7 +9,7 @@
 namespace mdf::tools::peak {
 
     PEAK_CAN_Exporter_2_1::PEAK_CAN_Exporter_2_1(std::ostream &output, FileInfo const &fileInfo) : PEAK_CAN_Exporter(
-            output, fileInfo) {
+        output, fileInfo) {
     }
 
     static double constexpr daysBetweenCenturyAndEpoch = 25568.0f;
@@ -45,7 +46,21 @@ namespace mdf::tools::peak {
         fmt::print(output, FMT_STRING(";$COLUMNS=N,O,T,B,I,d,L,D\n"));
     }
 
-    void PEAK_CAN_Exporter_2_1::writeRecord(CANRecord const &record) {
+    void PEAK_CAN_Exporter_2_1::writeRecord(PEAK_Record const &record) {
+        std::visit([&](auto&& arg) {
+            using T = std::decay_t<decltype(arg)>;
+            if constexpr (std::is_same_v<T, mdf::CAN_DataFrame>) {
+                write_CAN_DataFrame(arg);
+            } else if constexpr (std::is_same_v<T, mdf::CAN_RemoteFrame>) {
+                write_CAN_RemoteFrame(arg);
+            } else
+            {
+                static_assert(always_false_v<T>, "Missing visitor");
+            }
+        }, record);
+    }
+
+    void PEAK_CAN_Exporter_2_1::write_CAN_DataFrame(mdf::CAN_DataFrame const &record) {
         // If this is the first record, extract the timestamp from this.
         if (!timeStampSet) {
             timeStampSet = true;
@@ -76,30 +91,72 @@ namespace mdf::tools::peak {
 
         if (record.IDE) {
             fmt::print(
-                    output,
-                    FMT_STRING("{:7d} {:13.3f} {:s} {:d} {:08X} {:s} {:02d} {:02X}\n"),
-                    recordCounter++,
-                    timeStamp.count(),
-                    messageType,
-                    record.BusChannel,
-                    record.ID,
-                    (record.Dir == 0) ? "Rx" : "Tx",
-                    record.DLC,
-                    fmt::join(record.DataBytes, " ")
-            );
+                output,
+                FMT_STRING("{:7d} {:13.3f} {:s} {:d} {:08X} {:s} {:02d} {:02X}\n"),
+                recordCounter++,
+                timeStamp.count(),
+                messageType,
+                record.BusChannel,
+                record.ID,
+                (record.Dir == 0) ? "Rx" : "Tx",
+                record.DLC,
+                fmt::join(record.DataBytes, " ")
+                );
         } else {
             fmt::print(
-                    output,
-                    FMT_STRING("{:7d} {:13.3f} {:s} {:d}     {:04X} {:s} {:02d} {:02X}\n"),
-                    recordCounter++,
-                    timeStamp.count(),
-                    messageType,
-                    record.BusChannel,
-                    record.ID,
-                    (record.Dir == 0) ? "Rx" : "Tx",
-                    record.DLC,
-                    fmt::join(record.DataBytes, " ")
-            );
+                output,
+                FMT_STRING("{:7d} {:13.3f} {:s} {:d}     {:04X} {:s} {:02d} {:02X}\n"),
+                recordCounter++,
+                timeStamp.count(),
+                messageType,
+                record.BusChannel,
+                record.ID,
+                (record.Dir == 0) ? "Rx" : "Tx",
+                record.DLC,
+                fmt::join(record.DataBytes, " ")
+                );
+        }
+    }
+
+    void PEAK_CAN_Exporter_2_1::write_CAN_RemoteFrame(mdf::CAN_RemoteFrame const &record) {
+        // If this is the first record, extract the timestamp from this.
+        if (!timeStampSet) {
+            timeStampSet = true;
+            headerTimeStamp = record.TimeStamp;
+        }
+
+        // Columns:
+        // Record number (In this file).
+        // Time offset from start of file in ms.us.
+        // Message type (RR).
+        // Bus number.
+        // CAN ID.
+        // Direction of data.
+        // DLC field.
+        milliseconds timeStamp = convertTimestampToRelative(record.TimeStamp);
+
+        if (record.IDE) {
+            fmt::print(
+                output,
+                FMT_STRING("{:7d} {:13.3f} RR {:d} {:08X} {:s} {:02d}\n"),
+                recordCounter++,
+                timeStamp.count(),
+                record.BusChannel,
+                record.ID,
+                (record.Dir == 0) ? "Rx" : "Tx",
+                record.DLC
+                );
+        } else {
+            fmt::print(
+                output,
+                FMT_STRING("{:7d} {:13.3f} RR {:d}     {:04X} {:s} {:02d}\n"),
+                recordCounter++,
+                timeStamp.count(),
+                record.BusChannel,
+                record.ID,
+                (record.Dir == 0) ? "Rx" : "Tx",
+                record.DLC
+                );
         }
     }
 
