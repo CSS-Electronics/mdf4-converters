@@ -6,7 +6,7 @@ set(DESCRIPTION "MDF4 bus logging to SocketCAN format")
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 5)
+set(VERSION_PATCH 6)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)

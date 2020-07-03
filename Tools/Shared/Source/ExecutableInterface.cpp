@@ -298,9 +298,9 @@ namespace mdf::tools::shared {
         bfs::path temporaryPath = temporaryDirectoryPath / inputFilePath.filename();
 
         // Attempt to use the correct naming scheme.
-        if( boost::algorithm::equals(temporaryPath.extension().string(), ".MFM") ) {
+        if( boost::algorithm::iequals(temporaryPath.extension().string(), ".MFM") ) {
             temporaryPath.replace_extension(".MFC");
-        } else if( boost::algorithm::equals(temporaryPath.extension().string(), ".MFE") ) {
+        } else if( boost::algorithm::iequals(temporaryPath.extension().string(), ".MFE") ) {
             temporaryPath.replace_extension(".MF4");
         }
 

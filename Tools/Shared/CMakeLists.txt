@@ -6,7 +6,7 @@ find_package(Heatshrink 0.4.1 REQUIRED)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 5)
+set(VERSION_PATCH 6)
 
 # Embed information in the source code.
 configure_file(
