@@ -1,6 +1,8 @@
-#include "UnfinalizedFileInfo.h"
-#include "Blocks/DTBlockMultipleRecordIDs.h"
-#include "Logger.h"
+#include "FinalizedFileInfo.h"
+#include "FileInfoUtility.h"
+#include "../Blocks/DTBlockMultipleRecordIDs.h"
+#include "../Logger.h"
+#include "../Blocks/DTBlockSingleContinuous.h"
 
 #include <boost/dynamic_bitset.hpp>
 
@@ -11,19 +13,15 @@
 namespace mdf {
 
     // Static helper functions.
-    std::shared_ptr<CNBlock> getMasterTimeChannel(std::shared_ptr<CGBlock> cgBlock);
-    long long findMatchingLocation(std::shared_ptr<DGBlock> dgBlock, std::vector<std::shared_ptr<CGBlock>> targets);
+    static long long findMatchingLocation(std::shared_ptr<DGBlock> dgBlock, std::vector<std::shared_ptr<CGBlock>> targets);
 
-    UnfinalizedFileInfo::UnfinalizedFileInfo(std::shared_ptr<HDBlock> hdBlock, std::shared_ptr<std::streambuf> dataSource) :
+    FinalizedFileInfo::FinalizedFileInfo(std::shared_ptr<HDBlock> hdBlock, std::shared_ptr<std::streambuf> dataSource) :
         hdBlock(std::move(hdBlock)),
         dataSource(std::move(dataSource)) {
     }
 
-    std::chrono::nanoseconds UnfinalizedFileInfo::firstMeasurement() const {
-        std::chrono::nanoseconds result;
-
-        // Extract the start time from the HD block.
-        result = static_cast<std::chrono::nanoseconds>(hdBlock->getStartTimeNs());
+    std::chrono::nanoseconds FinalizedFileInfo::firstMeasurement() const {
+        std::chrono::nanoseconds result = std::chrono::nanoseconds::max();
 
         // Find all channel groups with time as master channel.
         std::vector<std::shared_ptr<CGBlock>> masterChannels;
@@ -34,11 +32,14 @@ namespace mdf {
             std::shared_ptr<CGBlock> cgBlock = dgBlock->getFirstCGBlock();
 
             while(cgBlock) {
-                // Extract the master from this group.
-                std::shared_ptr<CNBlock> masterBlock = getMasterTimeChannel(cgBlock);
+                // Only use blocks with records.
+                if(cgBlock->getCycleCount() != 0) {
+                    // Extract the master from this group.
+                    std::shared_ptr<CNBlock> masterBlock = getMasterTimeChannel(cgBlock);
 
-                if(masterBlock) {
-                    masterChannels.push_back(cgBlock);
+                    if(masterBlock) {
+                        masterChannels.push_back(cgBlock);
+                    }
                 }
 
                 cgBlock = cgBlock->getNextCGBlock();
@@ -64,32 +65,47 @@ namespace mdf {
                 cgBlock = cgBlock->getNextCGBlock();
             }
 
-            // Read records from the DT block until a matching block is found.
-            long long location = findMatchingLocation(dgBlock, channelsInDGBlock);
-
             do {
+                if(channelsInDGBlock.empty()) {
+                    // No target blocks in this DG block, skip.
+                    break;
+                }
+
+                // Read records from the DT block until a matching block is found.
+                long long location = findMatchingLocation(dgBlock, channelsInDGBlock);
+
                 if(location == -1) {
-                    std::cout << "Break due to location" << std::endl;
+                    // Could not find a matching DT block.
                     break;
                 }
 
                 // Read the record ID.
                 uint64_t recordID = 0;
                 auto recordLength = dgBlock->getRecordSize();
+                std::shared_ptr<CGBlock> cgBlock_;
                 dataSource->pubseekoff(location, std::ios_base::beg);
-                dataSource->sgetn(reinterpret_cast<char*>(&recordID), recordLength);
 
                 // Find the matching CG block.
-                std::shared_ptr<CGBlock> cgBlock_;
-                for(auto block: masterChannels) {
-                    if(block->getRecordID() == recordID) {
-                        cgBlock_ = block;
-                        break;
+                if(recordLength != 0) {
+                    dataSource->sgetn(reinterpret_cast<char*>(&recordID), recordLength);
+
+                    for (auto block: masterChannels) {
+                        if (block->getRecordID() == recordID) {
+                            cgBlock_ = block;
+                            break;
+                        }
+                    }
+                } else {
+                    // Only a single CG block.
+                    for (auto block: masterChannels) {
+                        if (block == dgBlock->getFirstCGBlock()) {
+                            cgBlock_ = block;
+                            break;
+                        }
                     }
                 }
 
                 if(!cgBlock_) {
-                    std::cout << "Break due to missing CG block" << std::endl;
                     break;
                 }
 
@@ -130,67 +146,48 @@ namespace mdf {
                 uint64_t ns = value;
                 std::chrono::nanoseconds dur(ns);
 
-                // TODO: If multiple DG are present, this needs to take those into account. Since this is not the
-                //       case for CANedge, this is left for the future.
-                result += dur;
+                if(dur < result) {
+                    result = dur;
+                }
             } while(false);
 
             // Iterate to the next DG block in the chain.
             dgBlock = dgBlock->getNextDGBlock();
         }
 
+        // Extract the start time from the HD block.
+        result += static_cast<std::chrono::nanoseconds>(hdBlock->getStartTimeNs());
+
         return result;
     }
 
-    long long findMatchingLocation(std::shared_ptr<DGBlock> dgBlock, std::vector<std::shared_ptr<CGBlock>> targets) {
+    static long long findMatchingLocation(std::shared_ptr<DGBlock> dgBlock, std::vector<std::shared_ptr<CGBlock>> targets) {
         long long result = -1;
 
-        std::shared_ptr<DTBlockMultipleRecordIDs> dtBlock = std::dynamic_pointer_cast<DTBlockMultipleRecordIDs>(dgBlock->getDataBlock());
+        if(dgBlock->getFirstCGBlock()->getNextCGBlock()) {
+            // Multiple CG blocks in the same DT block.
+            auto dtBlock = std::dynamic_pointer_cast<DTBlockMultipleRecordIDs>(dgBlock->getDataBlock());
 
-        if(!dtBlock) {
-            std::cout << "Wrong block type" << std::endl;
-            return result;
-        }
-
-        std::vector<uint64_t> targetIDs;
-
-        for(auto const& target: targets) {
-            targetIDs.emplace_back(target->getRecordID());
-        }
-
-        result = dtBlock->findFirstMatching(targetIDs);
-
-        return result;
-    }
-
-    std::shared_ptr<CNBlock> getMasterTimeChannel(std::shared_ptr<CGBlock> cgBlock) {
-        std::shared_ptr<CNBlock> cnBlock = cgBlock->getFirstCNBlock();
-
-        while(cnBlock) {
-            bool resultFound = false;
-
-            do {
-                if((cnBlock->getChannelType() & CNType::MasterChannel) != CNType::MasterChannel) {
-                    break;
-                }
-
-                if((cnBlock->getSyncType() & CNSyncType::Time) != CNSyncType::Time) {
-                    break;
-                }
-
-                resultFound = true;
-            } while(false);
-
-            if(resultFound) {
-                break;
+            if(!dtBlock) {
+                std::cout << "Wrong block type" << std::endl;
+                return result;
             }
 
-            // NOTE: No need to check composition blocks, as they cannot contain the master channel.
-            cnBlock = cnBlock->getNextCNBlock();
+            std::vector<uint64_t> targetIDs;
+
+            for(auto const& target: targets) {
+                targetIDs.emplace_back(target->getRecordID());
+            }
+
+            result = dtBlock->findFirstMatching(targetIDs);
+        } else {
+            // Sorted, only a single CG block in the DT block.
+            //auto dtBlock = std::dynamic_pointer_cast<DTBlockSingleContinuous>(dgBlock->getDataBlock());
+
+            result = dgBlock->getDataBlock()->getFileLocation();
         }
 
-        // If a result was located, cnBlock is a valid pointer to the master channel. Else, it has no reference.
-        return cnBlock;
+        return result;
     }
 
 }

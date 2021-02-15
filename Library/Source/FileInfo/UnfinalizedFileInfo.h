@@ -4,7 +4,7 @@
 #include <chrono>
 #include <streambuf>
 
-#include "Blocks/HDBlock.h"
+#include "../Blocks/HDBlock.h"
 
 namespace mdf {
 

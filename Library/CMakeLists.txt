@@ -50,7 +50,9 @@ set(SOURCE_HEADERS
     Source/Logger.h
     Source/MdfFileImplementation.h
     Source/StructAdaptors.h
-    Source/UnfinalizedFileInfo.h
+    Source/FileInfo/FileInfoUtility.h
+    Source/FileInfo/FinalizedFileInfo.h
+    Source/FileInfo/UnfinalizedFileInfo.h
     Source/Utility.h
 
     Source/Blocks/CCBlock.h
@@ -88,12 +90,14 @@ set(SOURCE_FILES
     Source/BlockStorage.cpp
     Source/CachingStreamBuffer.cpp
     Source/ExtractMetaData.cpp
-    Source/FileInfo.cpp
+    Source/FileInfoUtility.cpp
     Source/MDFBusLoggingLibrary.cpp
     Source/Logger.cpp
     Source/MdfFile.cpp
     Source/MdfFileImplementation.cpp
-    Source/UnfinalizedFileInfo.cpp
+    Source/FileInfo/FileInfoUtility.cpp
+    Source/FileInfo/FinalizedFileInfo.cpp
+    Source/FileInfo/UnfinalizedFileInfo.cpp
     Source/Utility.cpp
 
     Source/Blocks/CCBlock.cpp

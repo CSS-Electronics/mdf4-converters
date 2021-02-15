@@ -7,7 +7,7 @@
 #include "BlockStorage.h"
 #include "ExtractMetaData.h"
 #include "MdfFileImplementation.h"
-#include "UnfinalizedFileInfo.h"
+#include "FileInfo/UnfinalizedFileInfo.h"
 #include "Utility.h"
 #include "RecordIterator.h"
 #include "Iterators/EmptyIterator.h"
@@ -26,6 +26,7 @@
 #include "Blocks/SDBlockDiscontinuous.h"
 
 #include "Records/RecordTypes.h"
+#include "FileInfo/FinalizedFileInfo.h"
 
 namespace mdf {
 
@@ -209,18 +210,30 @@ namespace mdf {
     }
 
     std::chrono::nanoseconds MdfFileImplementation::getFirstMeasurement() {
+        std::chrono::nanoseconds result;
+
         FinalizationFlags flags = idBlock->getFinalizationFlags();
 
-        if (flags & FinalizationFlags_UpdateLengthInLastDT) {
-            finalize_setLengthOfLastDTBlock();
-            flags &= (~FinalizationFlags_UpdateLengthInLastDT);
+        if(flags == FinalizationFlags_None) {
+            // Finalized file.
+            FinalizedFileInfo info(getHDBlock(), stream);
+
+            result = info.firstMeasurement();
+        } else {
+            // Unfinalized file.
+            if (flags & FinalizationFlags_UpdateLengthInLastDT) {
+                finalize_setLengthOfLastDTBlock();
+                flags &= (~FinalizationFlags_UpdateLengthInLastDT);
+            }
+
+            idBlock->setFinalizationFlags(flags);
+
+            UnfinalizedFileInfo info(getHDBlock(), stream);
+
+            result = info.firstMeasurement();
         }
 
-        idBlock->setFinalizationFlags(flags);
-
-        UnfinalizedFileInfo info(getHDBlock(), stream);
-
-        return info.firstMeasurement();
+        return result;
     }
 
     bool MdfFileImplementation::loadFileInfo() {
