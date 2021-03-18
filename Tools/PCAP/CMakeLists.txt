@@ -5,8 +5,8 @@ set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to PCAP-NG format")
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 7)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 0)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)

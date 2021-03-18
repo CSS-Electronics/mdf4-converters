@@ -1,8 +1,8 @@
 project(MDF_BusLogging_Library)
 
 set(MDF_BusLogging_Library_VERSION_MAJOR 1)
-set(MDF_BusLogging_Library_VERSION_MINOR 0)
-set(MDF_BusLogging_Library_VERSION_PATCH 3)
+set(MDF_BusLogging_Library_VERSION_MINOR 1)
+set(MDF_BusLogging_Library_VERSION_PATCH 0)
 
 # Search for Boost.
 find_package(Boost REQUIRED COMPONENTS filesystem log)
