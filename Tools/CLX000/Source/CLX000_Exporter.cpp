@@ -64,8 +64,9 @@ namespace mdf::tools::clx {
                 auto const outputFilePathCAN_2 = outputFolder / (outputFileBase + "CAN_2.txt");
 
                 // Create exporters for each channel and perform common setup.
-                std::ofstream output_1(outputFilePathCAN_1.string());
-                std::ofstream output_2(outputFilePathCAN_2.string());
+                // NOTE: These are created in binary mode to force the output of only '\n'.
+                std::ofstream output_1(outputFilePathCAN_1.string(), std::ios_base::binary | std::ios_base::out);
+                std::ofstream output_2(outputFilePathCAN_2.string(), std::ios_base::binary | std::ios_base::out);
                 CLX000_CAN_Exporter exporter_1(output_1, info, 1, configuration, commonOptions->displayTimeFormat);
                 CLX000_CAN_Exporter exporter_2(output_2, info, 2, configuration, commonOptions->displayTimeFormat);
 
