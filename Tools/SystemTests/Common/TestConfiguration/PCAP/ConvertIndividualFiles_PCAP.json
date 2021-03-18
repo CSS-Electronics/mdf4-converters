@@ -65,7 +65,7 @@
       ]
     },
     {
-      "_comment": "Individual file with output folder, short form",
+      "name": "Individual file with output folder, short form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -82,7 +82,7 @@
       }
     },
     {
-      "_comment": "Individual file with output folder, long form",
+      "name": "Individual file with output folder, long form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -99,7 +99,7 @@
       }
     },
     {
-      "_comment": "Individual file with output folder, short form and relative path",
+      "name": "Individual file with output folder, short form and relative path",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -117,7 +117,7 @@
       "options_uses_relative": 1
     },
     {
-      "_comment": "Individual file with output folder, long form and relative path",
+      "name": "Individual file with output folder, long form and relative path",
       "input": [
         {
           "name": "single_can_bus_1.MF4"

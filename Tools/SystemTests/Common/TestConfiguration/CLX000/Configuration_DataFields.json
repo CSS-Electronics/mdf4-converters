@@ -3,7 +3,7 @@
   "cases": [
     {
       "name": "DataFields - All fields enabled",
-      "_comment": "All fields enabled",
+      "name": "All fields enabled",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -32,7 +32,7 @@
     },
     {
       "name": "DataFields - All fields disabled",
-      "_comment": "All fields disabled",
+      "name": "All fields disabled",
       "input": [
         {
           "name": "single_can_bus_1.MF4"

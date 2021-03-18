@@ -42,7 +42,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and default key",
+      "name": "Password file next to data with default name and default key",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and (wrong) default key but correct device key",
+      "name": "Password file next to data with default name and (wrong) default key but correct device key",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -82,7 +82,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and no default or device key",
+      "name": "Password file next to data with default name and no default or device key",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and no default key or but device key as first in list",
+      "name": "Password file next to data with default name and no default key or but device key as first in list",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and no default key or but device key as middle in list",
+      "name": "Password file next to data with default name and no default key or but device key as middle in list",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -137,7 +137,7 @@
       ]
     },
     {
-      "_comment": "Password file next to data with default name and no default key or but device key as last in list",
+      "name": "Password file next to data with default name and no default key or but device key as last in list",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -157,7 +157,7 @@
       ]
     },
     {
-      "_comment": "Encrypted file with password file stored in non-default location, short form",
+      "name": "Encrypted file with password file stored in non-default location, short form",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -182,7 +182,7 @@
       ]
     },
     {
-      "_comment": "Encrypted file with password file stored in non-default location, long form",
+      "name": "Encrypted file with password file stored in non-default location, long form",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -207,7 +207,7 @@
       ]
     },
     {
-      "_comment": "Tests both encryption and compression. Placed in the encryption section to handle the password file setup",
+      "name": "Tests both encryption and compression. Placed in the encryption section to handle the password file setup",
       "input": [
         {
           "name": "single_message_can_bus_1_1024_window.MFM"

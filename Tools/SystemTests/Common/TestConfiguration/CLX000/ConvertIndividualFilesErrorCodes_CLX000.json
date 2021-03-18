@@ -2,32 +2,32 @@
   "tool": "mdf2clx000",
   "cases": [
     {
-      "_comment": "No input files",
+      "name": "No input files",
       "return_code": 0
     },
     {
-      "_comment": "Input file not present",
+      "name": "Input file not present",
       "options": {
         "-i": "test.MF4"
       },
       "return_code": 1
     },
     {
-      "_comment": "Password file specified but not present, short form",
+      "name": "Password file specified but not present, short form",
       "options": {
         "-p": "test.json"
       },
       "return_code": 131
     },
     {
-      "_comment": "Password file specified but not present, long form",
+      "name": "Password file specified but not present, long form",
       "options": {
         "--password-file": "test.json"
       },
       "return_code": 131
     },
     {
-      "_comment": "Single message on CAN bus 1, encrypted, passwords file not present",
+      "name": "Single message on CAN bus 1, encrypted, passwords file not present",
       "input": [
         {
           "name": "single_can_bus_1.MFE"
@@ -36,21 +36,21 @@
       "return_code": 2
     },
     {
-      "_comment": "Missing configuration file, but configuration required",
+      "name": "Missing configuration file, but configuration required",
       "options": {
         "-e": ""
       },
       "return_code": 133
     },
     {
-      "_comment": "Input argument with missing value",
+      "name": "Input argument with missing value",
       "options": {
         "-p": ""
       },
       "return_code": 130
     },
     {
-      "_comment": "Unknown argument",
+      "name": "Unknown argument",
       "options": {
         "--unknown": ""
       },

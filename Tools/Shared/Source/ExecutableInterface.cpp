@@ -193,7 +193,7 @@ namespace mdf::tools::shared {
             return StatusCode::NoErrors;
         }
 
-        std::vector<boost::filesystem::path> curatedInputFiles;
+        std::map<boost::filesystem::path, boost::filesystem::path> curatedInputFiles;
 
         // Create a list of files to work on. For each folder in the input, walk it recursively (without following links).
         for (auto &path: inputFiles) {
@@ -215,6 +215,11 @@ namespace mdf::tools::shared {
             if (bfs::is_directory(inputPath)) {
                 BOOST_LOG_TRIVIAL(info) << "Received folder as input argument, performing recursive walk: "
                                         << inputPath;
+
+                /* Determine name of target output directory */
+                bfs::path const baseDirectory = inputPath;
+                bfs::path const baseOutputDirectory = inputPath.string() + "_out";
+
                 for (auto &entry: bfs::recursive_directory_iterator(inputPath, bfs::symlink_option::no_recurse)) {
                     std::string extension = entry.path().extension().string();
                     boost::algorithm::to_lower(extension);
@@ -222,11 +227,24 @@ namespace mdf::tools::shared {
                     if (std::find(std::cbegin(acceptableExtensions), std::cend(acceptableExtensions), extension) !=
                         std::end(acceptableExtensions)) {
                         BOOST_LOG_TRIVIAL(info) << "Found file with matching extensions; " << entry;
-                        curatedInputFiles.push_back(entry);
+
+                        auto rel = bfs::relative(entry.path().parent_path(), baseDirectory);
+
+                        curatedInputFiles.insert(
+                            {
+                                entry,
+                                baseOutputDirectory / rel
+                            }
+                        );
                     }
                 }
             } else {
-                curatedInputFiles.push_back(inputPath);
+                curatedInputFiles.insert(
+                    {
+                        inputPath,
+                        inputPath.parent_path()
+                    }
+                );
             }
         }
 
@@ -235,7 +253,7 @@ namespace mdf::tools::shared {
         // input file.
 
         for (auto &path: curatedInputFiles) {
-            bfs::path inputFilePath(path);
+            bfs::path inputFilePath(path.first);
             bool inputFileIsTemporary = false;
 
             // Determine where to place the result.
@@ -243,25 +261,25 @@ namespace mdf::tools::shared {
             if (optionResult.count("output-directory")) {
                 // An output directory is specified, place everything here.
                 outputFolder = boost::filesystem::path(optionResult["output-directory"].as<std::string>());
-
-                if (!outputFolder.is_absolute()) {
-                    boost::filesystem::weakly_canonical(outputFolder);
-                }
-
-                if (!boost::filesystem::exists(outputFolder)) {
-                    BOOST_LOG_TRIVIAL(info) << "Output folder does not exists. Creating " << outputFolder << "";
-                    try {
-                        boost::filesystem::create_directories(outputFolder);
-                    } catch (boost::filesystem::filesystem_error &e) {
-                        BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder
-                                                 << ". Logged error is:\n"
-                                                 << e.what();
-                        return StatusCode::CriticalError;
-                    }
-                }
             } else {
-                // Use the same folder as the input file.
-                outputFolder = inputFilePath.parent_path();
+                // The output path is already calculated.
+                outputFolder = path.second;
+            }
+
+            if (!outputFolder.is_absolute()) {
+                boost::filesystem::weakly_canonical(outputFolder);
+            }
+
+            if (!boost::filesystem::exists(outputFolder)) {
+                BOOST_LOG_TRIVIAL(info) << "Output folder does not exists. Creating " << outputFolder << "";
+                try {
+                    boost::filesystem::create_directories(outputFolder);
+                } catch (boost::filesystem::filesystem_error &e) {
+                    BOOST_LOG_TRIVIAL(fatal) << "Could not create output folder " << outputFolder
+                                             << ". Logged error is:\n"
+                                             << e.what();
+                    return StatusCode::CriticalError;
+                }
             }
 
             // If the file is encrypted, decrypt it first.
@@ -428,7 +446,6 @@ namespace mdf::tools::shared {
             ("help,h", bpo::bool_switch()->default_value(false), "Print this help message.")
             ("version,v", bpo::bool_switch()->default_value(false), "Print version information.")
             ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
-            ("input-directory,I", bpo::value<std::string>(), "Input directory to convert files from.")
             ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
             ("non-interactive", bpo::bool_switch()->default_value(false),
              "Run in non-interactive mode, with no progress output.")
@@ -437,7 +454,7 @@ namespace mdf::tools::shared {
             ("password-file,p", bpo::value<std::string>(),
              "Path to password json file. If left empty, and an encrypted file is encountered, the folder of the input file will be searched.")
             ("input-files,i", bpo::value<std::vector<std::string>>(),
-             "List of files to convert, ignored if input-directory is specified. All unknown arguments will be interpreted as input files.");
+             "List of files to convert. All unknown arguments will be interpreted as input files.");
 
         if (interface->usesConfigFile()) {
             commandlineOptions.add_options()
@@ -596,35 +613,7 @@ namespace mdf::tools::shared {
             }
         }
 
-        // Is an input directory specified? In that case, ignore any files passed to the program and instead populate
-        // the files list from the directory.
-        if (result.count("input-directory")) {
-            std::string inputDirectoryToken = result["input-directory"].as<std::string>();
-            boost::algorithm::trim_left_if(inputDirectoryToken, predicate);
-
-            boost::filesystem::path inputDirectory(inputDirectoryToken);
-
-            if (!inputDirectory.is_absolute()) {
-                inputDirectory = boost::filesystem::weakly_canonical(inputDirectory);
-            }
-
-            // Ensure the location exists.
-            if (!boost::filesystem::exists(inputDirectory)) {
-                std::cout << inputDirectory << std::endl;
-            } else if (!boost::filesystem::is_directory(inputDirectory)) {
-                std::cout << inputDirectory << std::endl;
-            } else {
-                for (auto &entry : boost::make_iterator_range(boost::filesystem::directory_iterator(inputDirectory),
-                                                              {})) {
-                    if (boost::filesystem::is_regular_file(entry)) {
-                        // Case insensitive compare.
-                        if (boost::iequals(bfs::extension(entry), ".mf4")) {
-                            inputFiles.push_back(entry);
-                        }
-                    }
-                }
-            }
-        } else if (result.count("input-files")) {
+        if (result.count("input-files")) {
             std::vector<std::string> files = result["input-files"].as<std::vector<std::string>>();
             for (std::string const &entry: files) {
                 inputFiles.emplace_back(entry);

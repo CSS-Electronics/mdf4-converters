@@ -2,7 +2,7 @@
   "tool": "mdf2clx000",
   "cases": [
     {
-      "_comment": "Timeformat 0",
+      "name": "Timeformat 0",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 1",
+      "name": "Timeformat 1",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 2",
+      "name": "Timeformat 2",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 3",
+      "name": "Timeformat 3",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 4",
+      "name": "Timeformat 4",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -142,7 +142,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 5",
+      "name": "Timeformat 5",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -170,7 +170,7 @@
       ]
     },
     {
-      "_comment": "Timeformat 6",
+      "name": "Timeformat 6",
       "input": [
         {
           "name": "single_can_bus_1.MF4"

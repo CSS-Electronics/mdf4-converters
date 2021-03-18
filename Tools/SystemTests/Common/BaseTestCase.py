@@ -66,8 +66,6 @@ class BaseTestCase(object):
             "--input-files",
             "-O",
             "--output-directory",
-            "-I",
-            "--input-directory",
             "-p",
             "--password-file"
         ]

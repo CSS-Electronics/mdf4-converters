@@ -85,7 +85,7 @@
       ]
     },
     {
-      "_comment": "Invalid file simply skips and does not break the entire flow",
+      "name": "Invalid file simply skips and does not break the entire flow",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -108,7 +108,7 @@
       "return_code": 8
     },
     {
-      "_comment": "Missing file simply skips and does not break the entire flow",
+      "name": "Missing file simply skips and does not break the entire flow",
       "input": [
         {
           "name": "single_can_bus_1.MF4",

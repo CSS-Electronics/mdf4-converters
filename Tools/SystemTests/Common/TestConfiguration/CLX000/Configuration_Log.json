@@ -3,7 +3,7 @@
   "cases": [
     {
       "name": "Log - All separators enabled",
-      "_comment": "All separators enabled",
+      "name": "All separators enabled",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -32,7 +32,7 @@
     },
     {
       "name": "Log - No separators enabled",
-      "_comment": "No separators enabled",
+      "name": "No separators enabled",
       "input": [
         {
           "name": "single_can_bus_1.MF4"

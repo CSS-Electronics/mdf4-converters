@@ -2,7 +2,7 @@
   "tool": "mdf2asc",
   "cases": [
     {
-      "_comment": "Convert to logger local time, short form",
+      "name": "Convert to logger local time, short form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -18,7 +18,7 @@
       }
     },
     {
-      "_comment": "Convert to logger local time, long form",
+      "name": "Convert to logger local time, long form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -34,7 +34,7 @@
       }
     },
     {
-      "_comment": "Convert to UTC time, short form",
+      "name": "Convert to UTC time, short form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -50,7 +50,7 @@
       }
     },
     {
-      "_comment": "Convert to UTC time, long form",
+      "name": "Convert to UTC time, long form",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -65,7 +65,7 @@
         "--timezone": "u"
       }
     },{
-      "_comment": "Convert to PC local time, short form. Note, this may break/require editing depending on the timezone of the PC",
+      "name": "Convert to PC local time, short form. Note, this may break/require editing depending on the timezone of the PC",
       "input": [
         {
           "name": "single_can_bus_1.MF4"
@@ -82,7 +82,7 @@
       }
     },
     {
-      "_comment": "Convert to PC local time, long form. Note, this may break/require editing depending on the timezone of the PC",
+      "name": "Convert to PC local time, long form. Note, this may break/require editing depending on the timezone of the PC",
       "input": [
         {
           "name": "single_can_bus_1.MF4"

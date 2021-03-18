@@ -2,7 +2,7 @@
   "tool": "mdf2csv",
   "cases": [
     {
-      "_comment": "Convert multiple files by folder instead of by name, short form",
+      "name": "Convert multiple files by folder instead of by name, short form",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -23,25 +23,29 @@
       ],
       "output": [
         {
-          "name": "single_can_bus_1_CAN.csv"
+          "name": "single_can_bus_1_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_can_bus_2_CAN.csv"
+          "name": "single_can_bus_2_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_1_LIN.csv"
+          "name": "single_lin_bus_1_LIN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_2_LIN.csv"
+          "name": "single_lin_bus_2_LIN.csv",
+          "relative_path": "../data_out"
         }
       ],
       "options":
       {
-        "-I": "."
+        "-i": "."
       }
     },
     {
-      "_comment": "Convert multiple files by folder instead of by name, long form",
+      "name": "Convert multiple files by folder instead of by name, long form",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -62,25 +66,29 @@
       ],
       "output": [
         {
-          "name": "single_can_bus_1_CAN.csv"
+          "name": "single_can_bus_1_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_can_bus_2_CAN.csv"
+          "name": "single_can_bus_2_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_1_LIN.csv"
+          "name": "single_lin_bus_1_LIN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_2_LIN.csv"
+          "name": "single_lin_bus_2_LIN.csv",
+          "relative_path": "../data_out"
         }
       ],
       "options":
       {
-        "--input-directory": "."
+        "--input-files": "."
       }
     },
     {
-      "_comment": "Convert multiple files by folder instead of by name, short form and relative path",
+      "name": "Convert multiple files by folder instead of by name, short form and relative path",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -101,26 +109,30 @@
       ],
       "output": [
         {
-          "name": "single_can_bus_1_CAN.csv"
+          "name": "single_can_bus_1_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_can_bus_2_CAN.csv"
+          "name": "single_can_bus_2_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_1_LIN.csv"
+          "name": "single_lin_bus_1_LIN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_2_LIN.csv"
+          "name": "single_lin_bus_2_LIN.csv",
+          "relative_path": "../data_out"
         }
       ],
       "options":
       {
-        "-I": "."
+        "-i": "."
       },
       "options_uses_relative": 1
     },
     {
-      "_comment": "Convert multiple files by folder instead of by name, long form and relative path",
+      "name": "Convert multiple files by folder instead of by name, long form and relative path",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -141,26 +153,30 @@
       ],
       "output": [
         {
-          "name": "single_can_bus_1_CAN.csv"
+          "name": "single_can_bus_1_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_can_bus_2_CAN.csv"
+          "name": "single_can_bus_2_CAN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_1_LIN.csv"
+          "name": "single_lin_bus_1_LIN.csv",
+          "relative_path": "../data_out"
         },
         {
-          "name": "single_lin_bus_2_LIN.csv"
+          "name": "single_lin_bus_2_LIN.csv",
+          "relative_path": "../data_out"
         }
       ],
       "options":
       {
-        "--input-directory": "."
+        "--input-files": "."
       },
       "options_uses_relative": 1
     },
     {
-      "_comment": "Convert multiple files by folder instead of by name and output to folder, short form",
+      "name": "Convert multiple files by folder instead of by name and output to folder, short form",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -198,12 +214,12 @@
         }
       ],
       "options": {
-        "-I": ".",
+        "-i": ".",
         "-O": "abc"
       }
     },
     {
-      "_comment": "Convert multiple files by folder instead of by name and output to folder, long form",
+      "name": "Convert multiple files by folder instead of by name and output to folder, long form",
       "input": [
         {
           "name": "single_can_bus_1.MF4",
@@ -241,7 +257,7 @@
         }
       ],
       "options": {
-        "-I": ".",
+        "-i": ".",
         "--output-directory": "abc"
       }
     }
