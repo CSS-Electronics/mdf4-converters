@@ -23,20 +23,66 @@ static T* getDataPointer(Py::Object column);
 
 MdfFileWrapper::MdfFileWrapper(Py::PythonClassInstance *self, Py::Tuple &args, Py::Dict &kwds) :
     Py::PythonClass<MdfFileWrapper>::PythonClass(self, args, kwds) {
-    // Check the arguments. At least one and at most two.
-    if(args.size() == 0) {
-        throw Py::ValueError("Expected at least one argument, but got none");
-    } else if(args.size() > 2) {
-        std::stringstream ss;
-        ss << "Expected at most two arguments, but got " << args.size();
-        throw Py::ValueError(ss.str());
+
+    constexpr static int DEFAULT_CACHE_SIZE = 4096;
+
+    // Try to extract the arguments from keywords first, argument list second.
+    Py::Long cacheSize = Py::Long(DEFAULT_CACHE_SIZE);
+    Py::Dict passwords = Py::Dict();
+    Py::Object dataSource = Py::None();
+
+    auto argsIter = args.begin();
+
+    if(kwds.hasKey("data_source")) {
+        Py::Object dataSourceRaw = kwds.getItem("data_source");
+
+        if(dataSourceRaw.isNull() || dataSourceRaw.isNone()) {
+            throw Py::ValueError("Invalid argument for the data source");
+        } else {
+            dataSource = dataSourceRaw;
+        }
+    } else {
+        if (argsIter == args.end()) {
+            throw Py::ValueError("Missing argument for the data source");
+        } else {
+            dataSource = *argsIter++;
+        }
     }
 
-    // Extract first argument.
-    Py::Object firstArgument = args.front();
+    if(kwds.hasKey("passwords")) {
+        Py::Object passwordsRaw = kwds.getItem("passwords");
+
+        if(passwordsRaw.isNull() || passwordsRaw.isNone()) {
+            passwords = Py::Dict();
+        } else {
+            passwords = passwordsRaw;
+        }
+    } else {
+        if (argsIter == args.end()) {
+            passwords = Py::Dict();
+        } else {
+            passwords = *argsIter++;
+        }
+    }
+
+    if(kwds.hasKey("cache_size")) {
+        Py::Object cacheSizeRaw = kwds.getItem("cache_size");
+
+        if(cacheSizeRaw.isNull() || cacheSizeRaw.isNone() || !cacheSizeRaw.isNumeric()) {
+            throw Py::ValueError("Invalid argument for cache_size");
+        } else {
+            cacheSize = Py::Long(cacheSizeRaw);
+        }
+    } else {
+        if (argsIter == args.end()) {
+            cacheSize = Py::Long(DEFAULT_CACHE_SIZE);
+        } else {
+            cacheSize = *argsIter++;
+        }
+    }
 
     // Determine if the input is a file/path, a handle, or a wrapper.
-    MdfFileInputType inputType = getInputType(firstArgument);
+    MdfFileInputType inputType = getInputType(dataSource);
 
     Py::String inputPath;
     Py::Object handle;
@@ -44,7 +90,7 @@ MdfFileWrapper::MdfFileWrapper(Py::PythonClassInstance *self, Py::Tuple &args, P
 
     switch(inputType) {
         case MdfFileInputType::Interface:
-            wrapper = firstArgument;
+            wrapper = dataSource;
             break;
         case MdfFileInputType::Path:
             // No need to convert, since the IO module can handle both strings and Path objects.
@@ -53,7 +99,7 @@ MdfFileWrapper::MdfFileWrapper(Py::PythonClassInstance *self, Py::Tuple &args, P
         {
             auto module = Py::Module("io");
 
-            Py::Tuple openArgs = Py::TupleN(firstArgument);
+            Py::Tuple openArgs = Py::TupleN(dataSource);
 
             Py::Dict openKeywords;
             openKeywords["mode"] = Py::String("rb");
@@ -64,7 +110,7 @@ MdfFileWrapper::MdfFileWrapper(Py::PythonClassInstance *self, Py::Tuple &args, P
         case MdfFileInputType::FileLike:
         {
             if(handle.isNone() || handle.isNull()) {
-                handle = firstArgument;
+                handle = dataSource;
             }
 
             // Create an interface wrapper.
@@ -81,24 +127,29 @@ MdfFileWrapper::MdfFileWrapper(Py::PythonClassInstance *self, Py::Tuple &args, P
             break;
     }
 
-    std::shared_ptr<mdf::python::CallbackBuffer> stream;
+    std::unique_ptr<mdf::python::CallbackBuffer> stream;
 
-    // Check for a second argument.
     try {
-        if (args.size() > 1) {
-            Py::Long cacheSize(args[1]);
-
-            stream = std::make_shared<mdf::python::CallbackBuffer>(wrapper, static_cast<unsigned long>(cacheSize));
-        } else {
-            stream = std::make_shared<mdf::python::CallbackBuffer>(wrapper);
-        }
+        stream = std::make_unique<mdf::python::CallbackBuffer>(wrapper);
     } catch (std::exception &e) {
         throw Py::RuntimeError(e.what());
     }
 
+    std::map<std::string, std::string> passwordMap;
+    for(auto const& val: passwords) {
+        // Validate entry.
+        if(!val.first.isString() || !val.second.isString()) {
+            continue;
+        }
+
+        Py::String keyValue = Py::String(val.first);
+        Py::String valValue = Py::String(val.second);
+
+        passwordMap.insert(std::make_pair(keyValue, valValue));
+    }
 
     try {
-        backingFile = mdf::MdfFile::Create(stream);
+        backingFile = mdf::MdfFile::Create(std::move(stream), passwordMap);
     } catch(std::exception &e) {
         // Re-throw in Python.
         throw Py::RuntimeError(e.what());

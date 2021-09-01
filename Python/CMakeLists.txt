@@ -107,7 +107,7 @@ endif()
 # Build wheel after module.
 set(WHEEL_ADDITIONAL_ARGUMENTS "")
 if (UNIX)
-    list(APPEND WHEEL_ADDITIONAL_ARGUMENTS "--py-limited-api cp35")
+    list(APPEND WHEEL_ADDITIONAL_ARGUMENTS "--py-limited-api=cp35")
 endif (UNIX)
 
 add_custom_target(${LIBRARY_NAME}_wheel

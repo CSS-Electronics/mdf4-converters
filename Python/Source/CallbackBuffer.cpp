@@ -2,13 +2,15 @@
 
 #include "PythonLogger.h"
 
+#include "boost/iostreams/read.hpp"
+#include "boost/iostreams/seek.hpp"
+
+namespace bio = boost::iostreams;
+
 namespace mdf::python {
 
-    CallbackBuffer::CallbackBuffer(Py::Object obj, std::size_t cacheSize) :
-        parent(obj),
-        bufferOffset(0),
-        cacheSize(cacheSize) {
-        BOOST_LOG_SEV(pythonLogger::get(), severity_level::trace) << "Constructing CallbackBuffer from " << obj << " with a cache size of " << cacheSize;
+    CallbackBuffer::CallbackBuffer(Py::Object obj) : parent(obj) {
+        BOOST_LOG_SEV(pythonLogger::get(), severity_level::trace) << "Constructing CallbackBuffer from " << obj;
 
         // Check for compliance with the expected interface.
         do {
@@ -80,166 +82,108 @@ namespace mdf::python {
             BOOST_LOG_SEV(pythonLogger::get(), severity_level::trace) << "Verified signature";
         } while(false);
 
-        // Setup buffer.
-        bufferStorage = std::move(std::unique_ptr<char[]>(new char[cacheSize], std::default_delete<char[]>()));
-        buffer = bufferStorage.get();
+        endFound = false;
 
-        // Reset pointers.
-        setg(buffer, buffer, buffer);
+        buffer.clear();
+        setg(buffer.data(), buffer.data(), buffer.data());
     }
 
     CallbackBuffer::traits_type::int_type CallbackBuffer::underflow() {
-        // Create bytes buffer.
-        PyObject* pythonBuffer = PyMemoryView_FromMemory(reinterpret_cast<char *>(eback()), cacheSize, 0x200);
-        Py::Object wrappedBuffer = Py::asObject(pythonBuffer);
-        Py::Long bufferSizeObj(static_cast<unsigned long>(cacheSize));
+        int_type result;
 
-        // Call in python.
-        Py::Object result = parent.callMemberFunction("read", Py::TupleN(wrappedBuffer, bufferSizeObj));
-        Py::Long bytesRead(result);
-
-        // Update pointers.
-        setg(buffer, buffer, buffer + bytesRead);
-
-        if(bytesRead == 0) {
-            return traits_type::eof();
+        if(endFound) {
+            result = traits_type::eof();
         } else {
-            return traits_type::to_int_type( bufferStorage.get()[0]);
-        }
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::seekoff(off_type offset, std::ios_base::seekdir direction, std::ios_base::openmode mode) {
-        (void)mode;
-        CallbackBuffer::pos_type result;
-
-        // Switch on the seek direction.
-        switch (direction) {
-            case std::ios_base::beg:
-                result = seekBeginning(offset);
-                break;
-            case std::ios_base::cur:
-                result = seekCurrent(offset);
-                break;
-            case std::ios_base::end:
-                result = seekEnd(offset);
-                break;
-            default:
-                result = 0;
-                break;
-        }
-
-        return result;
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::seekpos(pos_type pos, std::ios_base::openmode mode) {
-        return seekoff(pos, std::ios_base::beg, mode);
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::seekBeginning(off_type offset) {
-        // Determine offset relative to current buffer.
-        auto currentAvailable = egptr() - gptr();
-
-        if((bufferOffset <= offset) && (offset < (bufferOffset + currentAvailable))) {
-            auto difference = offset - bufferOffset;
-            setg(eback(), buffer + difference, egptr());
-        } else {
-            // Reset.
-            Py::Object result = parent.callMemberFunction("seek", Py::TupleN(Py::Long(offset), Py::Long(0)));
-            Py::Long pos(result);
-
-            bufferOffset = offset;
-            setg(buffer, buffer, buffer);
-        }
-
-        return offset;
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::seekEnd(off_type offset) {
-        Py::Object result = parent.callMemberFunction("seek", Py::TupleN(Py::Long(offset), Py::Long(2)));
-        Py::Long pos(result);
-
-        setg(buffer, buffer, buffer);
-        return pos.as_unsigned_long_long();
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::seekCurrent(off_type offset) {
-        if(offset == 0) {
-            return currentPosition();
-        }
-
-        auto newAbsolute = currentPosition() + offset;
-
-        // Determine offset relative to current buffer.
-        auto currentAvailable = egptr() - gptr();
-
-        if((bufferOffset <= newAbsolute) && (newAbsolute < (bufferOffset + currentAvailable))) {
-            auto difference = newAbsolute - bufferOffset;
-            setg(eback(), buffer + difference, egptr());
-        } else {
-            // Reset.
-            Py::Object result = parent.callMemberFunction("seek", Py::TupleN(Py::Long(offset), Py::Long(1)));
-            Py::Long pos(result);
-
-            bufferOffset = newAbsolute;
-            setg(buffer, buffer, buffer);
-        }
-
-        return newAbsolute;
-    }
-
-    CallbackBuffer::pos_type CallbackBuffer::currentPosition() {
-        CallbackBuffer::pos_type result = bufferOffset;
-
-        auto dif = gptr() - eback();
-        if(dif < 0) {
-            throw std::runtime_error("Buffer error");
-        }
-
-        result += dif;
-
-        return result;
-    }
-
-    std::streamsize CallbackBuffer::xsgetn(char_type *s, std::streamsize n) {
-        // If more data than is available is requested, redirect to the base.
-        auto available = egptr() - gptr();
-        std::streamsize bytesRead = 0;
-
-        if(n > cacheSize) {
-            // Cannot contain in a single read call, do a direct call.
-            seekoff(currentPosition(), std::ios_base::beg, std::ios_base::in);
-            PyObject* pythonBuffer = PyMemoryView_FromMemory(s, n, 0x200);
+            // Create bytes buffer.
+            std::array<char_type, 1024> pollBuffer = { 0 };
+            PyObject *pythonBuffer = PyMemoryView_FromMemory(pollBuffer.data(), pollBuffer.size(), 0x200);
             Py::Object wrappedBuffer = Py::asObject(pythonBuffer);
-            Py::Long bufferSizeObj(static_cast<unsigned long>(cacheSize));
+            Py::Long bufferSizeObj(static_cast<unsigned long>(pollBuffer.size()));
 
             // Call in python.
-            Py::Object result = parent.callMemberFunction("read", Py::TupleN(wrappedBuffer, bufferSizeObj));
-            Py::Long bytesRead_(result);
-            bytesRead = bytesRead_.as_unsigned_long_long();
+            Py::Object pythonResult = parent.callMemberFunction("read", Py::TupleN(wrappedBuffer, bufferSizeObj));
+            Py::Long bytesRead(pythonResult);
 
-            setg(buffer, buffer, buffer);
-        } else if (n > available) {
-            // Reset cache.
-            auto pos = seekoff(currentPosition(), std::ios_base::beg, std::ios_base::in);
-            underflow();
-
-            std::copy_n(gptr(), n, s);
-            setg(eback(), gptr() + n, egptr());
-            if(egptr() - gptr() < 0) {
-                throw std::runtime_error("Buffer error");
+            if (bytesRead == 0) {
+                result = traits_type::eof();
+                endFound = true;
+            } else {
+                std::copy(pollBuffer.begin(), pollBuffer.begin() + bytesRead, std::back_inserter(buffer));
+                auto offset = gptr() - eback();
+                setg(buffer.data(), buffer.data() + offset, buffer.data() + buffer.size());
+                result = std::char_traits<char_type>::to_int_type(*gptr());
             }
-            bytesRead = n;
-        }
-        else {
-            std::copy_n(gptr(), n, s);
-            setg(eback(), gptr() + n, egptr());
-            if(egptr() - gptr() < 0) {
-                throw std::runtime_error("Buffer error");
-            }
-            bytesRead = n;
         }
 
-        return bytesRead;
+        return result;
+    }
+
+    CallbackBuffer::pos_type CallbackBuffer::seekoff(
+            off_type offset,
+            std::ios_base::seekdir direction,
+            std::ios_base::openmode mode
+    ) {
+        switch (direction) {
+            case std::ios::beg: {
+                if(offset < 0) {
+                    throw std::invalid_argument("Cannot seek negative from the beginning");
+                }
+
+                while(!endFound && (offset >= buffer.size())) {
+                    underflow();
+                }
+
+                if(offset < buffer.size()) {
+                    setg(buffer.data(), buffer.data() + offset, buffer.data() + buffer.size());
+                } else {
+                    setg(buffer.data(), buffer.data() + buffer.size(), buffer.data() + buffer.size());
+                }
+
+                break;
+            }
+            case std::ios::cur: {
+                if(offset != 0) {
+                    auto targetAbsolute = gptr() - eback() + offset;
+
+                    while(!endFound && (targetAbsolute < buffer.size())) {
+                        underflow();
+                    }
+
+                    if(targetAbsolute >= buffer.size()) {
+                        setg(buffer.data(), buffer.data() + targetAbsolute, buffer.data() + buffer.size());
+                    } else {
+                        setg(buffer.data(), buffer.data() + buffer.size(), buffer.data() + buffer.size());
+                    }
+                }
+
+                break;
+            }
+            case std::ios::end: {
+                if(offset > 0) {
+                    throw std::invalid_argument("Cannot seek positive from the end");
+                }
+
+                // Read the parent stream to the end.
+                int_type read;
+                do {
+                    read = underflow();
+                } while( read != std::char_traits<char_type>::eof());
+
+                // Seek relative to the end.
+                setg(buffer.data(), buffer.data() + buffer.size() + offset, buffer.data() + buffer.size());
+
+                break;
+            }
+            default: {
+                throw std::invalid_argument("Unexpected seek direction");
+            }
+        }
+
+        return gptr() - eback();
+    }
+
+    CallbackBuffer::pos_type CallbackBuffer::seekpos(pos_type offset, std::ios_base::openmode mode) {
+        return seekoff(offset, std::ios::beg, mode);
     }
 
 }

@@ -55,7 +55,14 @@ bool isInputPath(Py::Object inputObject) {
 }
 
 bool isInputFileInterface(Py::Object inputObject) {
-    auto pmodule = Py::Module(PyImport_ImportModule("mdf_iter"));
+    auto pmodule = Py::Module(PyImport_AddModule("mdf_iter"));
+
+    if(pmodule.isNull()) {
+        pmodule = Py::Module(PyImport_ImportModule("mdf_iter"));
+    }
+
+    Py::ifPyErrorThrowCxxException();
+
     auto dict = pmodule.getDict();
     auto interfaceObject = dict.getItem("IFileInterface");
 

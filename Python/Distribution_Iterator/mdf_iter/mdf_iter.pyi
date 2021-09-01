@@ -1,7 +1,7 @@
 import io
 
 from pathlib import Path
-from typing import Dict, Iterator, List, Type, TypedDict, Union
+from typing import Dict, Iterator, List, Optional, Type, TypedDict, Union
 
 from mdf_iter.IFileInterface import IFileInterface
 
@@ -181,10 +181,11 @@ class MdfFile(object):
     """MDF file loaded by the C++ library.
     
     """
-    def __init__(self, data_source: Union[str, Path, io.BytesIO, IFileInterface], cache_size: int = 4096):
+    def __init__(self, data_source: Union[str, Path, io.BytesIO, IFileInterface], passwords: Optional[Dict[str, str]] = None, cache_size: int = 4096):
         """Constructor. Requires a callback to read data through.
         
         :param data_source:     Object to support data access through read and seek calls.
+        :param passwords:       Dictionary with each device specific password, and/or a "DEFAULT" entry.
         :param cache_size:      Specify how large the internal buffer is. Larger values reduces the number of read
                                 calls.
         :raises ValueError:     Invalid input arguments, more detail in the error message.
