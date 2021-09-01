@@ -21,6 +21,8 @@ namespace mdf {
 
         bool finalize_setLengthOfLastDTBlock();
 
+        bool softFinalize_setLengthOfLastDTBlock();
+
         bool finalize_updateCycleCountersInCGCABlocks();
 
         bool finalize_updateByteCountersInVLSDCGBlocks();
@@ -35,7 +37,7 @@ namespace mdf {
 
         FileInfo getFileInfo() override;
 
-        bool load(std::shared_ptr<std::streambuf> stream);
+        bool load(std::unique_ptr<std::streambuf> stream);
 
         std::chrono::nanoseconds getFirstMeasurement() override;
 

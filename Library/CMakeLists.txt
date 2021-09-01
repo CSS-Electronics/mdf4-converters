@@ -9,6 +9,8 @@ find_package(Boost REQUIRED COMPONENTS filesystem log)
 
 # Improved formatting to string.
 find_package(fmt REQUIRED)
+find_package(Heatshrink REQUIRED)
+find_package(botan 2.12.1 REQUIRED)
 
 find_path(NEARGYE_SEMVER_INCLUDE_DIRS "neargye/semver.hpp" REQUIRED)
 
@@ -83,6 +85,9 @@ set(SOURCE_HEADERS
     Source/Iterators/GenericIterator.h
     Source/Iterators/MappingInformation.h
     Source/Iterators/RecordFunctor.h
+
+    Source/Streams/AESGCMStream.h
+    Source/Streams/HeatshrinkStream.h
     )
 
 # List of all core source files.
@@ -134,6 +139,9 @@ set(SOURCE_FILES
     Source/Records/LIN_SyncError.cpp
     Source/Records/LIN_TransmissionError.cpp
     Source/Records/RecordTypes.cpp
+
+    Source/Streams/AESGCMStream.cpp
+    Source/Streams/HeatshrinkStream.cpp
     )
 
 # Create an amalgamated list for sources and target libraries depending on the options.
@@ -148,6 +156,8 @@ set(LIBRARIES_FINAL
     Boost::filesystem
     Boost::log
     fmt::fmt
+    botan::botan
+    Heatshrink::Heatshrink
     )
 
 include(CMakePackageConfigHelpers)
@@ -155,7 +165,7 @@ include(CMakePackageConfigHelpers)
 # Create static library.
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FINAL})
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")

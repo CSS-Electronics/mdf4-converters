@@ -4,23 +4,38 @@
 #include <fstream>
 #include "CachingStreamBuffer.h"
 
+#include "Streams/AESGCMStream.h"
+#include "Streams/HeatshrinkStream.h"
+
 namespace mdf {
 
-    std::unique_ptr<MdfFile> MdfFile::Create(std::string fileName) {
+    std::unique_ptr<MdfFile> MdfFile::Create(
+            std::string const& fileName,
+            std::optional<std::map<std::string, std::string>> const& passwords) {
         std::unique_ptr<MdfFileImplementation> result = std::make_unique<MdfFileImplementation>();
 
         do {
             // Create a new streambuf (For files), and open the target in binary read mode.
-            std::shared_ptr<std::basic_filebuf<char>> streamParent = std::make_shared<std::basic_filebuf<char>>();
+            std::unique_ptr<std::basic_filebuf<char>> streamParent = std::make_unique<std::basic_filebuf<char>>();
             auto ptr = streamParent->open(fileName, std::ios::in | std::ios::binary);
 
-            std::shared_ptr<std::streambuf> stream = std::make_shared<CachingStreamBuffer>(streamParent, 1024*1024);
-
             if(ptr == nullptr) {
+                result.reset();
                 break;
             }
 
-            bool loadResult = result->load(stream);
+            auto passwordMap = passwords.value_or(std::map<std::string, std::string>());
+            std::unique_ptr<std::streambuf> stream = std::move(streamParent);
+
+            try {
+                stream = mdf::stream::applyAESGCMFilter(std::move(stream), passwordMap);
+                stream = mdf::stream::applyHeatshrinkFilter(std::move(stream));
+            } catch(std::exception &e) {
+                result.reset();
+                break;
+            }
+
+            bool loadResult = result->load(std::move(stream));
 
             if (!loadResult) {
                 result.reset();
@@ -30,20 +45,29 @@ namespace mdf {
         return result;
     }
 
-    std::unique_ptr<MdfFile> MdfFile::Create(std::shared_ptr<std::istream> stream) {
+    std::unique_ptr<MdfFile> MdfFile::Create(
+            std::unique_ptr<std::streambuf> stream,
+            std::optional<std::map<std::string, std::string>> const& passwords) {
         std::unique_ptr<MdfFileImplementation> result = std::make_unique<MdfFileImplementation>();
 
-        return result;
-    }
+        do {
 
-    std::unique_ptr<MdfFile> MdfFile::Create(std::shared_ptr<std::streambuf> stream) {
-        std::unique_ptr<MdfFileImplementation> result = std::make_unique<MdfFileImplementation>();
+            auto passwordMap = passwords.value_or(std::map<std::string, std::string>());
 
-        bool loadResult = result->load(stream);
+            try {
+                stream = mdf::stream::applyAESGCMFilter(std::move(stream), passwordMap);
+                stream = mdf::stream::applyHeatshrinkFilter(std::move(stream));
+            } catch (std::exception &e) {
+                result.reset();
+                break;
+            }
 
-        if (!loadResult) {
-            result.reset();
-        }
+            bool loadResult = result->load(std::move(stream));
+
+            if (!loadResult) {
+                result.reset();
+            }
+        } while(false);
 
         return result;
     }

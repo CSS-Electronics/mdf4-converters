@@ -69,7 +69,6 @@ namespace mdf {
 
             do {
                 if(location == -1) {
-                    std::cout << "Break due to location" << std::endl;
                     break;
                 }
 

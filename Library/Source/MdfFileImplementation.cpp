@@ -28,15 +28,14 @@
 #include "Records/RecordTypes.h"
 #include "FileInfo/FinalizedFileInfo.h"
 
+#include "Streams/AESGCMStream.h"
+#include "Streams/HeatshrinkStream.h"
+
 namespace mdf {
 
-    MdfFileImplementation::MdfFileImplementation() {
+    MdfFileImplementation::MdfFileImplementation() = default;
 
-    }
-
-    MdfFileImplementation::~MdfFileImplementation() {
-        //
-    }
+    MdfFileImplementation::~MdfFileImplementation() = default;
 
     bool MdfFileImplementation::finalize() {
         bool result = true;
@@ -98,6 +97,62 @@ namespace mdf {
 
                 // Find end of stream.
                 std::streampos const end = stream->pubseekoff(0, std::ios_base::end);
+
+                dtHeader.blockSize = static_cast<uint64_t>(end) - highestDataBlockLocation;
+                highestDataBlock->setHeader(dtHeader);
+            }
+        }
+
+        return true;
+    }
+
+    bool MdfFileImplementation::softFinalize_setLengthOfLastDTBlock() {
+        // Find the last DT block in the storage.
+        std::shared_ptr<MdfBlock> highestDataBlock;
+        uint64_t highestDataBlockLocation = 0;
+
+        for (auto &it: blockStorage->getBlockMap().left) {
+            if (it.second->getHeader().blockType == MdfBlockType_DT) {
+                if (it.first > highestDataBlockLocation) {
+                    highestDataBlockLocation = it.first;
+                    highestDataBlock = it.second;
+                }
+            }
+        }
+
+        if (highestDataBlock) {
+            // Find the smallest possible record which could have been stored here.
+            std::shared_ptr<DGBlock> dgBlock = getHDBlock()->getFirstDGBlock();
+            int64_t minimumSize = 0;
+
+            while( dgBlock ) {
+                if( dgBlock->getDataBlock() == highestDataBlock ) {
+                    std::shared_ptr<CGBlock> cgBlock = dgBlock->getFirstCGBlock();
+
+                    while( cgBlock ) {
+                        if( cgBlock->getRecordSize() > minimumSize ) {
+                            minimumSize = cgBlock->getRecordSize();
+                        }
+                        cgBlock = cgBlock->getNextCGBlock();
+                    }
+                }
+
+                dgBlock = dgBlock->getNextDGBlock();
+            }
+
+            // Find the next key.
+            auto iter = blockStorage->getBlockMap().left.find(highestDataBlockLocation);
+
+            iter++;
+
+            if (iter != std::end(blockStorage->getBlockMap().left)) {
+                // TODO: Bound by another block. Use the address of this block to calculate the size. Simply throw for now.
+                throw std::runtime_error(
+                        "Data block is not bounded by end of file but by another block. Not supported in library.");
+            } else {
+                MdfHeader dtHeader = highestDataBlock->getHeader();
+
+                std::streampos const end = stream->pubseekoff(highestDataBlockLocation + minimumSize, std::ios_base::beg);
 
                 dtHeader.blockSize = static_cast<uint64_t>(end) - highestDataBlockLocation;
                 highestDataBlock->setHeader(dtHeader);
@@ -222,8 +277,7 @@ namespace mdf {
         } else {
             // Unfinalized file.
             if (flags & FinalizationFlags_UpdateLengthInLastDT) {
-                finalize_setLengthOfLastDTBlock();
-                flags &= (~FinalizationFlags_UpdateLengthInLastDT);
+                softFinalize_setLengthOfLastDTBlock();
             }
 
             idBlock->setFinalizationFlags(flags);
@@ -296,9 +350,13 @@ namespace mdf {
         return result;
     }
 
-    bool MdfFileImplementation::load(std::shared_ptr<std::streambuf> stream_) {
+    bool MdfFileImplementation::load(std::unique_ptr<std::streambuf> stream_) {
         bool result = false;
-        stream = stream_;
+        stream = std::move(stream_);
+
+        if(!stream) {
+            return result;
+        }
 
         do {
             blockStorage = std::make_unique<BlockStorage>(stream);
@@ -313,7 +371,6 @@ namespace mdf {
 
             // Load the HD block and all linked blocks.
             blockStorage->getBlockAt(64);
-
             result = loadFileInfo();
             if (!result) {
                 break;
@@ -324,10 +381,6 @@ namespace mdf {
     }
 
     bool MdfFileImplementation::sort() {
-        // Sorting requires each DG block to have only a single CG block. Thus, loop over all DG blocks, and for each
-        // CG block after the first, move it to a new DG block.
-        // For VLSD CG blocks, instead of moving them to a new DG block, convert them into a SD block, and unlink them
-        // from the CG block chain (But ensure the link in the CN block referencing it stays intact).
         bool result = false;
 
         do {
@@ -346,55 +399,16 @@ namespace mdf {
             }
         } while (false);
 
-        /*
-        // Post sorting, each DT block can only contain a single record ID. If the file was sorted this run, they are
-        // replaced with in-memory mapped DT blocks. If it was sorted prior to this run, replace the DT blocks.
-        std::shared_ptr<DGBlock> dgBlock = getHDBlock()->getFirstDGBlock();
-
-        while(dgBlock) {
-          // Loop over all linked DT blocks and replace them if not already single ID blocks.
-
-          // Check if it is of the right type.
-          std::shared_ptr<DTBlock> dtBlock = std::dynamic_pointer_cast<DTBlock>(dgBlock->getDataBlock());
-
-          if(dtBlock) {
-            // Ensure it is a single ID block.
-            std::shared_ptr<DTBlockRaw> dtBlockRaw = std::dynamic_pointer_cast<DTBlockRaw>(dtBlock);
-
-            if(!dtBlockRaw) {
-              // Extract record size.
-              std::shared_ptr<CGBlock> cgBlock = dgBlock->getFirstCGBlock();
-              std::size_t recordSize = cgBlock->getRecordSize();
-
-              // Convert into a single block ID.
-              std::shared_ptr<DTBlockSingleContinuous> replacementDTBlock;
-
-              replacementDTBlock = std::make_shared<DTBlockSingleContinuous>(*dtBlockRaw, recordSize);
-
-              // Replace original block.
-              dgBlock->setDataBlock(replacementDTBlock);
-            }
-
-          }
-
-          // Select next data group.
-          dgBlock = dgBlock->getNextDGBlock();
-        }*/
-
         return result;
     }
 
     bool MdfFileImplementation::sort_VLSDCGtoSD() {
-        // For each DG block, find all CG blocks. For each CG block which is a VLSD block, move it to a SD block
-        // instead.
         std::shared_ptr<HDBlock> hdBlock = std::dynamic_pointer_cast<HDBlock>(blockStorage->getBlockAt(64));
         std::shared_ptr<DGBlock> dgBlock = hdBlock->getFirstDGBlock();
 
         // TODO: This construction is a bit convoluted, think of possible simplifications.
         while (dgBlock) {
-            // Create a double linked list of all CG blocks in this DG block.
             std::list<std::shared_ptr<CGBlock>> cgBlocks;
-
             std::shared_ptr<CGBlock> cgBlock = dgBlock->getFirstCGBlock();
 
             while (cgBlock) {
@@ -470,10 +484,7 @@ namespace mdf {
         std::shared_ptr<DGBlock> dgBlock = hdBlock->getFirstDGBlock();
 
         while (dgBlock) {
-            // Get the first CG block.
             std::shared_ptr<CGBlock> cgBlock = dgBlock->getFirstCGBlock();
-
-            // Any following CG blocks?
             std::shared_ptr<CGBlock> followingCGBlock = cgBlock->getNextCGBlock();
 
             if (followingCGBlock) {

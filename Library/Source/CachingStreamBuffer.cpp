@@ -21,7 +21,11 @@ namespace mdf {
 
         setg(buffer, buffer, buffer + bytesRead);
 
-        return buffer[0];
+        if(bytesRead == 0) {
+            return std::char_traits<CachingStreamBuffer::char_type>::eof();
+        } else {
+            return std::char_traits<CachingStreamBuffer::char_type>::to_int_type(buffer[0]);
+        }
     }
 
     CachingStreamBuffer::pos_type CachingStreamBuffer::seekoff(off_type offset, std::ios_base::seekdir direction, std::ios_base::openmode mode) {

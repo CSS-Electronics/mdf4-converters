@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <istream>
+#include <optional>
 #include <string>
 
 #include "FileInfo.h"
@@ -21,11 +22,15 @@
 namespace mdf {
 
     struct MdfFile {
-        static std::unique_ptr<MdfFile> Create(std::string fileName);
+        static std::unique_ptr<MdfFile> Create(
+                std::string const& fileName,
+                std::optional<std::map<std::string, std::string>> const& passwords = std::nullopt
+                );
 
-        static std::unique_ptr<MdfFile> Create(std::shared_ptr<std::istream> stream);
-
-        static std::unique_ptr<MdfFile> Create(std::shared_ptr<std::streambuf> stream);
+        static std::unique_ptr<MdfFile> Create(
+                std::unique_ptr<std::streambuf> stream,
+                std::optional<std::map<std::string, std::string>> const& passwords = std::nullopt
+                );
 
         virtual ~MdfFile();
 
