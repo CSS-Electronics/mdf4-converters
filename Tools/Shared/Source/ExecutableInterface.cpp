@@ -434,6 +434,10 @@ namespace mdf::tools::shared {
                 BOOST_LOG_TRIVIAL(error) << "Error during conversion of " << inputFilePath << ".";
                 mainStatus |= StatusCode::DecodingError;
                 continue;
+            } else if(deleteInputFiles) {
+                bfs::path originalFilePath(path.first);
+                BOOST_LOG_TRIVIAL(info) << "Deleting original input file " << originalFilePath << ".";
+                bfs::remove(originalFilePath);
             }
         }
 
@@ -447,6 +451,7 @@ namespace mdf::tools::shared {
             ("version,v", bpo::bool_switch()->default_value(false), "Print version information.")
             ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
             ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
+            ("delete-converted,d", bpo::bool_switch()->default_value(false), "Delete input files on success.")
             ("non-interactive", bpo::bool_switch()->default_value(false),
              "Run in non-interactive mode, with no progress output.")
             ("timezone,t", bpo::value<std::string>()->default_value("l"),
@@ -612,6 +617,8 @@ namespace mdf::tools::shared {
                 }
             }
         }
+
+        deleteInputFiles = result["delete-converted"].as<bool>();
 
         if (result.count("input-files")) {
             std::vector<std::string> files = result["input-files"].as<std::vector<std::string>>();

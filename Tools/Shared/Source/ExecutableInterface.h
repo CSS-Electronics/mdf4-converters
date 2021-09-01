@@ -72,6 +72,7 @@ namespace mdf::tools::shared {
 
     boost::program_options::variables_map optionResult;
     std::vector<boost::filesystem::path> inputFiles;
+    bool deleteInputFiles;
     std::shared_ptr<CommonOptions> commonOptions;
     std::shared_ptr<PasswordStorage> passwordStorage;
     std::vector<std::string> earlyLogMessages;
