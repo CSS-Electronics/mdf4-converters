@@ -1,5 +1,4 @@
 .idea
-vcpkg
 cmake-build-*
 venv*
 __pycache__

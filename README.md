@@ -69,28 +69,9 @@ All targets are build using static linking. Select the matching triplet for the 
 * `x86-windows-static`
 * `x64-linux`
 
-And install all dependencies with vcpkg. This utilizes an overlay. This can either be explicitly added to the command line, or the port can be added to vcpkg installation.
+#### Install vcpkg
 
-#### Add to vcpkg installation
-```
-cp /path/to/mdf4-converters/External/vcpkg-overlay/heatshrink /home/docker/vcpkg/ports/
-```
-
-#### Specify on commandline
-Add the following to the vcpkg commands:
-
-```
---overlay-ports=/path/to/mdf4-converters/External/vcpkg-overlay
-```
-
-### Install dependencies with vcpkg
-
-Run vcpkg with the triplet inserted (One of the two following commands, depending on the overlay strategy):
-
-```
-vcpkg install --triplet $SELECTED-TRIPLET boost-log boost-dll boost-filesystem boost-program-options boost-iostreams boost-bimap botan fmt neargye-semver heatshrink
-vcpkg install --triplet $SELECTED-TRIPLET boost-log boost-dll boost-filesystem boost-program-options boost-iostreams boost-bimap botan fmt neargye-semver heatshrink --overlay-ports=/path/to/mdf4-converters/External/vcpkg-overlay 
-```
+Checkout vcpkg commit xyz and bootstrap it, such that it exists as a sub-folder in the project root. 
 
 ### Run CMake
 
@@ -104,7 +85,7 @@ cd build
 Run CMake with the desired configuration and the correct vcpkg triplet.
 
 ```
-cmake -DVCPKG_TARGET_TRIPLET=$SELECTED-TRIPLET -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=$BUILD-TYPE ..
+cmake -DCMAKE_BUILD_TYPE=$BUILD-TYPE -DVCPKG_OVERLAY_PORTS=../External/vcpkg-overlay -DVCPKG_TARGET_TRIPLET=$SELECTED-TRIPLET -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake ..
 ```
 
 `$BUILD-TYPE` world normally be `Release`, but any other normal CMake build type can be inserted. Example:
@@ -141,7 +122,7 @@ make ToolsRelease
 ---
 
 ## Dependencies
-The project uses the following external libraries, apart from the standard library for C++17:
+The project uses the following external libraries, apart from the standard library for C++20:
 - [Boost](https://www.boost.org/) - Boost license
 - [Botan](https://botan.randombit.net/) - Simplified BSD license
 - [fmt](https://github.com/fmtlib/fmt) - Custom license, see repository for details

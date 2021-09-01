@@ -1,0 +1,19 @@
+{
+  "name": "mdf4",
+  "version-string": "0.0.1",
+  "port-version": 6,
+  "homepage": "",
+  "description": "",
+  "dependencies": [
+    "boost-log",
+    "boost-dll",
+    "boost-filesystem",
+    "boost-program-options",
+    "boost-iostreams",
+    "boost-bimap",
+    "botan",
+    "fmt",
+    "neargye-semver",
+    "heatshrink"
+  ]
+}
