@@ -5,7 +5,7 @@ find_package(Boost COMPONENTS filesystem program_options log REQUIRED)
 find_package(Heatshrink 0.4.1 REQUIRED)
 
 set(MDFSimpleConverters_Shared_VERSION_MAJOR 1)
-set(MDFSimpleConverters_Shared_VERSION_MINOR 1)
+set(MDFSimpleConverters_Shared_VERSION_MINOR 2)
 set(MDFSimpleConverters_Shared_VERSION_PATCH 0)
 
 find_path(NEARGYE_SEMVER_INCLUDE_DIRS "neargye/semver.hpp" REQUIRED)
@@ -64,7 +64,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${NEARGYE_SEMVER_INCLUDE_DIRS}
     )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)

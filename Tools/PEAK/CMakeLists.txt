@@ -5,7 +5,7 @@ set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to PEAK Trace format")
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 
 # Set required additional packages.
@@ -41,7 +41,7 @@ target_link_libraries(${PROGRAM_NAME}
     fmt::fmt
     )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)

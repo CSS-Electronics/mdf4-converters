@@ -71,6 +71,7 @@ endfunction()
 function(pack_executable_unix target)
     # Custom installer target to copy over the executable into the release directory.
     add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND $<$<CONFIG:Release>:${CMAKE_STRIP}> $<TARGET_FILE_NAME:${target}>
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/Release
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE_NAME:${target}> ${CMAKE_BINARY_DIR}/Release/$<TARGET_FILE_NAME:${target}>
         )

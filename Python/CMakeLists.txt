@@ -5,10 +5,13 @@ set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 1)
 
+cmake_policy(SET CMP0094 NEW)
+set(Python3_FIND_STRATEGY "LOCATION")
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMake")
 
 # Search for Python.
-find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
 find_package(Threads)
 
 # Setup PyCXX target.
@@ -17,7 +20,7 @@ set(ENV{PyCXX_ROOT} ${PyCXX_ROOT})
 include(PyCXX.cmake)
 
 # Find external dependencies.
-find_package(PyCXX)
+find_package(PyCXX 7.1.5)
 
 if(PyCXX_FOUND)
 # List of all source files.
@@ -81,21 +84,23 @@ add_library(${LIBRARY_NAME} SHARED ${SOURCE_FILES})
 target_link_libraries(${LIBRARY_NAME}
     Threads::Threads
     PyCXX::PyCXX
-    MDF_BusLogging_Library
     Python3::Module
+    MDF_BusLogging_Library
 )
 
 set_target_properties(${LIBRARY_NAME} PROPERTIES PREFIX "")
 
-# Remove unneeded symbols in release builds (Not on Windows).
+# Remove unneeded symbols in release builds (Not necessary on Windows).
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC" AND CMAKE_BUILD_TYPE STREQUAL Release)
     add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND ${CMAKE_STRIP} --strip-unneeded $<TARGET_FILE:${LIBRARY_NAME}>)
 endif()
 
+# Copy artifact into source tree for building the wheel later.
 add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${LIBRARY_NAME}> ${CMAKE_CURRENT_SOURCE_DIR}/Distribution_Iterator/mdf_iter
     )
 
+# NOTE: PyCXX is not ready for C++20 yet.
 set_property(TARGET ${LIBRARY_NAME} PROPERTY CXX_STANDARD 17)
 set_property(TARGET ${LIBRARY_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${LIBRARY_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)

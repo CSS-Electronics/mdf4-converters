@@ -49,8 +49,8 @@ if(NOT PyCXX_FOUND)
             PyCXX_fetch
 
             PREFIX            PyCXX
-            URL               https://downloads.sourceforge.net/project/cxx/CXX/PyCXX%20V7.1.3/pycxx-7.1.3.tar.gz
-            URL_HASH          MD5=0b2e64973c55a2e8dce5b4b8612bcb36
+            URL               https://downloads.sourceforge.net/project/cxx/CXX/PyCXX%20V7.1.5/pycxx-7.1.5.tar.gz
+            URL_HASH          MD5=6f4e43dae8f9242486a0c09080ad4fbb
 
             CONFIGURE_COMMAND ""
             BUILD_COMMAND     ""
