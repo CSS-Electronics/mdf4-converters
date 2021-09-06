@@ -30,17 +30,27 @@ namespace mdf {
             return false;
         }
 
+        std::vector<uint8_t> data(buffer, buffer + sizeof(buffer));
+
+        return isCompressedFile(data);
+    }
+
+    bool isCompressedFile(std::vector<uint8_t> const& data) {
+        if(data.size() < 20) {
+            return false;
+        }
+
         // Check against expected header.
-        if(!std::equal(magicHeader, magicHeader + sizeof(magicHeader), buffer)) {
+        if(!std::equal(magicHeader, magicHeader + sizeof(magicHeader), data.cbegin())) {
             return false;
         }
 
         // Ensure it is compressed, and that the compression is supported by this library.
-        if(buffer[14] != encryptedIdentifier) {
+        if(data[14] != encryptedIdentifier) {
             return false;
         }
 
-        if(buffer[15] != AESGCMIdentifier) {
+        if(data[15] != AESGCMIdentifier) {
             return false;
         }
 

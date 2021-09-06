@@ -71,11 +71,9 @@ if (PyCXX_FOUND)
       INTERFACE_INCLUDE_DIRECTORIES "${PyCXX_INCLUDE_DIRS}"
       )
 
-    if (UNIX)
-      set_target_properties(PyCXX::PyCXX PROPERTIES
-          INTERFACE_COMPILE_DEFINITIONS Py_LIMITED_API=0x03050000
-          )
-    endif ()
+    set_target_properties(PyCXX::PyCXX PROPERTIES
+        INTERFACE_COMPILE_DEFINITIONS Py_LIMITED_API=0x03050000
+        )
 
     target_sources(PyCXX::PyCXX
       INTERFACE ${PyCXX_SOURCES}

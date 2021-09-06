@@ -104,19 +104,15 @@ add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
 set_property(TARGET ${LIBRARY_NAME} PROPERTY CXX_STANDARD 17)
 set_property(TARGET ${LIBRARY_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${LIBRARY_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set_property(TARGET ${LIBRARY_NAME} PROPERTY SUFFIX ".pyd")
     set_property(TARGET ${LIBRARY_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
 endif()
 
 # Build wheel after module.
-set(WHEEL_ADDITIONAL_ARGUMENTS "")
-if (UNIX)
-    list(APPEND WHEEL_ADDITIONAL_ARGUMENTS "--py-limited-api=cp35")
-endif (UNIX)
-
 add_custom_target(${LIBRARY_NAME}_wheel
-        COMMAND Python3::Interpreter setup.py bdist_wheel ${WHEEL_ADDITIONAL_ARGUMENTS}
+        COMMAND Python3::Interpreter setup.py bdist_wheel --py-limited-api=cp35
         DEPENDS ${LIBRARY_NAME}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Distribution_Iterator
         )

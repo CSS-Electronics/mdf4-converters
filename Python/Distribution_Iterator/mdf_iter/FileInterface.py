@@ -13,13 +13,13 @@ class FileInterface(IFileInterface):
         super(IFileInterface, self).__init__()
         self._handle = fl
 
-    def read(self, buffer: bytes, number_of_bytes: int):
+    def read(self, buffer: bytearray, number_of_bytes: int) -> int:
         res = self._handle.read(number_of_bytes)
         buffer[:len(res)] = res
 
         return len(res)
 
-    def seek(self, offset: int, direction: int = 0):
+    def seek(self, offset: int, direction: int = 0) -> int:
         abs_pos = self._handle.seek(offset, direction)
 
         return abs_pos

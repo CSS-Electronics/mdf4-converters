@@ -9,7 +9,7 @@ class IFileInterface(object, metaclass=ABCMeta):
         self._handle = fl
     
     @abstractmethod
-    def read(self, buffer: bytes, number_of_bytes: int):
+    def read(self, buffer: bytearray, number_of_bytes: int) -> int:
         """Method called by the library when additional data is required from the current position.
         
         :param buffer:              Object supporting the buffer protocol to write the read data into.
@@ -18,7 +18,7 @@ class IFileInterface(object, metaclass=ABCMeta):
         """
         raise NotImplementedError("Interface method not implemented")
 
-    def seek(self, offset: int, direction: int = 0):
+    def seek(self, offset: int, direction: int = 0) -> int:
         """Method called by the library when the current position in the data source needs to be moved.
         
         :param offset:              Offset to seek.
@@ -26,5 +26,11 @@ class IFileInterface(object, metaclass=ABCMeta):
         :return:                    Absolute position from the beginning of the data source.
         """
         raise NotImplementedError("Interface method not implemented")
-    
+
+    def readable(self) -> bool:
+        return True
+
+    def seekable(self) -> bool:
+        return True
+
     pass

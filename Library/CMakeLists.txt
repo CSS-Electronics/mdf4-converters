@@ -9,7 +9,7 @@ find_package(Boost REQUIRED COMPONENTS filesystem log)
 
 # Improved formatting to string.
 find_package(fmt REQUIRED)
-find_package(Heatshrink REQUIRED)
+find_package(Heatshrink 0.4.1 REQUIRED)
 find_package(botan 2.12.1 REQUIRED)
 
 find_path(NEARGYE_SEMVER_INCLUDE_DIRS "neargye/semver.hpp" REQUIRED)

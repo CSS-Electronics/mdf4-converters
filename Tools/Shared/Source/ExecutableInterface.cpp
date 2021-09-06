@@ -32,6 +32,7 @@ namespace mdf::tools::shared {
 
     ExecutableInterface::ExecutableInterface(std::unique_ptr<ConverterInterface> interface) : interface(
         std::move(interface)) {
+        deleteInputFiles = false;
         commonOptions = std::make_shared<CommonOptions>();
     }
 

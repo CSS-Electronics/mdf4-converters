@@ -59,7 +59,7 @@ namespace mdf::stream {
             if(locator != passwords.cend()) {
                 foundPassword = std::string(locator->second);
             } else {
-                locator = passwords.find("DEFAULT");
+                locator = passwords.find("default");
                 if(locator != passwords.cend()) {
                     foundPassword = std::string(locator->second);
                 }

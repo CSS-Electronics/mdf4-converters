@@ -1,5 +1,6 @@
-#include "CallbackBuffer.h"
+#include <array>
 
+#include "CallbackBuffer.h"
 #include "PythonLogger.h"
 
 #include "boost/iostreams/read.hpp"

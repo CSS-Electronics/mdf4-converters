@@ -1,5 +1,6 @@
 #include "HeatshrinkStream.h"
 
+#include <array>
 #include <bit>
 
 #include "boost/endian/conversion.hpp"
