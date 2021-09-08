@@ -22,7 +22,6 @@ namespace mdf::tools::finalizer {
 
     private:
         bool overwrite;
-        bool sort;
         std::string appendName;
     };
 

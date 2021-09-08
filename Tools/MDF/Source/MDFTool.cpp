@@ -11,7 +11,6 @@ namespace mdf::tools::finalizer {
 
     MDFTool::MDFTool() : ConverterInterface(PROGRAM_NAME) {
         overwrite = false;
-        sort = false;
     }
 
     void MDFTool::configureParser(boost::program_options::options_description &opts) {
@@ -19,10 +18,6 @@ namespace mdf::tools::finalizer {
             // Add option for overwriting.
             ("overwrite", boost::program_options::bool_switch()->default_value(false),
              "replace the input data with the output")
-
-            // Add option for sorting.
-            ("sort", boost::program_options::bool_switch()->default_value(true),
-             "sort the file after finalization")
 
             // Add option for pattern to append.
             ("name,n", boost::program_options::value<std::string>()->default_value("_fin"),

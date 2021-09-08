@@ -6,6 +6,7 @@ A set of common options are included, which all sub-tools inherit.
 * `-i` or `--input-files`. Specify a list of files to convert. All unknown arguments will be interpreted as an input file, allowing for the use of the program without specifying any options. If the patn to a folder is passed, the folder will be traversed recursively, looking for supported file extensions (".MF4", ".MFE", ".MFC" and ".MFM")
 * `-O` or `--output-directory`. Specify a directory to place the output files. If not specified, the same directory as the corresponding input file will be used
 * `-d` or `--delete-converted`. Delete files after conversion, defaults to false
+* `-k` or `--keep-structure`. When specifying an output folder, do not collapse all files into the root, but mirror the input directory structure in the output
 * `-p` or `--password-file`. Path to password json file to use for decryption. If not specified, the same directory as the executable will be used, looking for `passwords.json`. See further down for the format of the password file
 * `-t` or `--timezone`. Determine which format to output the log messages in when converting. The possible values are:
 Local time (`p`), logger local time (`l`) or UTC (`u`). May not be applicable for all output formats, e.g. CSV, PCAP and the finalizer.

@@ -14,6 +14,26 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMake")
 find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
 find_package(Threads)
 
+if(WIN32)
+    # The target output is an ABI3 compatible library, targetting the limited Python ABI. The default seems to be to
+    # link against the generic libraries, so this block replaces the full version name with the generic version names.
+
+    # Alter the Python targets to go after the generic and not the specific edition.
+    get_property(PYTHON_LOCATION_DLL TARGET Python3::Module PROPERTY IMPORTED_LOCATION)
+    get_property(PYTHON_LOCATION_LIB TARGET Python3::Module PROPERTY IMPORTED_IMPLIB)
+
+    # Get full component.
+    get_filename_component(PYTHON_FILENAME_DLL ${PYTHON_LOCATION_DLL} NAME_WE)
+    get_filename_component(PYTHON_FILENAME_LIB ${PYTHON_LOCATION_DLL} NAME_WE)
+
+    string(REGEX REPLACE "python3[0-9]." "python3." PYTHON_LOCATION_DLL ${PYTHON_LOCATION_DLL})
+    string(REGEX REPLACE "python3[0-9]." "python3." PYTHON_LOCATION_LIB ${PYTHON_LOCATION_LIB})
+
+    set_property(TARGET Python3::Module PROPERTY IMPORTED_LOCATION ${PYTHON_LOCATION_DLL})
+    set_property(TARGET Python3::Module PROPERTY IMPORTED_IMPLIB ${PYTHON_LOCATION_LIB})
+endif()
+
+
 # Setup PyCXX target.
 set(PyCXX_ROOT ${CMAKE_CURRENT_BINARY_DIR}/External/PyCXX CACHE PATH "PyCXX root path")
 set(ENV{PyCXX_ROOT} ${PyCXX_ROOT})

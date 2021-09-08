@@ -212,6 +212,12 @@ namespace mdf::tools::shared {
                 continue;
             }
 
+            std::optional<bfs::path> baseOutputDirectoryParameter;
+
+            if(optionResult.count("output-directory")) {
+                baseOutputDirectoryParameter = boost::filesystem::path(optionResult["output-directory"].as<std::string>());
+            }
+
             // If it is a folder, iterate recursively.
             if (bfs::is_directory(inputPath)) {
                 BOOST_LOG_TRIVIAL(info) << "Received folder as input argument, performing recursive walk: "
@@ -219,7 +225,7 @@ namespace mdf::tools::shared {
 
                 /* Determine name of target output directory */
                 bfs::path const baseDirectory = inputPath;
-                bfs::path const baseOutputDirectory = inputPath.string() + "_out";
+                bfs::path const baseOutputDirectory = baseOutputDirectoryParameter.value_or(inputPath.string() + "_out");
 
                 for (auto &entry: bfs::recursive_directory_iterator(inputPath, bfs::symlink_option::no_recurse)) {
                     std::string extension = entry.path().extension().string();
@@ -228,22 +234,26 @@ namespace mdf::tools::shared {
                     if (std::find(std::cbegin(acceptableExtensions), std::cend(acceptableExtensions), extension) !=
                         std::end(acceptableExtensions)) {
                         BOOST_LOG_TRIVIAL(info) << "Found file with matching extensions; " << entry;
+                        std::optional<bfs::path> relativePath;
 
-                        auto rel = bfs::relative(entry.path().parent_path(), baseDirectory);
+                        if(keepStructure) {
+                            relativePath = bfs::relative(entry.path().parent_path(), baseDirectory);
+                        }
 
                         curatedInputFiles.insert(
                             {
                                 entry,
-                                baseOutputDirectory / rel
+                                baseOutputDirectory / relativePath.value_or(bfs::path())
                             }
                         );
+
                     }
                 }
             } else {
                 curatedInputFiles.insert(
                     {
                         inputPath,
-                        inputPath.parent_path()
+                        baseOutputDirectoryParameter.value_or(inputPath.parent_path())
                     }
                 );
             }
@@ -258,14 +268,7 @@ namespace mdf::tools::shared {
             bool inputFileIsTemporary = false;
 
             // Determine where to place the result.
-            boost::filesystem::path outputFolder;
-            if (optionResult.count("output-directory")) {
-                // An output directory is specified, place everything here.
-                outputFolder = boost::filesystem::path(optionResult["output-directory"].as<std::string>());
-            } else {
-                // The output path is already calculated.
-                outputFolder = path.second;
-            }
+            boost::filesystem::path outputFolder = path.second;
 
             if (!outputFolder.is_absolute()) {
                 boost::filesystem::weakly_canonical(outputFolder);
@@ -452,6 +455,7 @@ namespace mdf::tools::shared {
             ("version,v", bpo::bool_switch()->default_value(false), "Print version information.")
             ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
             ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
+            ("keep-structure,k", bpo::bool_switch()->default_value(false), "Keep structure of input paths in output folder.")
             ("delete-converted,d", bpo::bool_switch()->default_value(false), "Delete input files on success.")
             ("non-interactive", bpo::bool_switch()->default_value(false),
              "Run in non-interactive mode, with no progress output.")
@@ -620,6 +624,7 @@ namespace mdf::tools::shared {
         }
 
         deleteInputFiles = result["delete-converted"].as<bool>();
+        keepStructure = result["keep-structure"].as<bool>();
 
         if (result.count("input-files")) {
             std::vector<std::string> files = result["input-files"].as<std::vector<std::string>>();
