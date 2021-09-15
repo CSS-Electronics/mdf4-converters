@@ -146,7 +146,7 @@ namespace mdf::python {
                 if(offset != 0) {
                     auto targetAbsolute = gptr() - eback() + offset;
 
-                    while(!endFound && (targetAbsolute < buffer.size())) {
+                    while(!endFound && (targetAbsolute >= buffer.size())) {
                         underflow();
                     }
 

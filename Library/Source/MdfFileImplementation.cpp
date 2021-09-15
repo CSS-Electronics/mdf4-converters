@@ -152,7 +152,7 @@ namespace mdf {
             } else {
                 MdfHeader dtHeader = highestDataBlock->getHeader();
 
-                std::streampos const end = stream->pubseekoff(highestDataBlockLocation + minimumSize, std::ios_base::beg);
+                std::streampos const end = stream->pubseekoff(highestDataBlockLocation + 24 + minimumSize, std::ios_base::beg);
 
                 dtHeader.blockSize = static_cast<uint64_t>(end) - highestDataBlockLocation;
                 highestDataBlock->setHeader(dtHeader);
