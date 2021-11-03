@@ -37,28 +37,6 @@ namespace mdf::tools::clx {
                        FMT_STRING("{:s}"),
                        delimiter
             );
-
-            /*
-            // Convert to right zone.
-            std::chrono::nanoseconds logTime(record.TimeStamp);
-            std::chrono::seconds timeForConversion = std::chrono::duration_cast<std::chrono::seconds>(logTime);
-            std::chrono::nanoseconds floatingPart = logTime - timeForConversion;
-
-            std::time_t correctedTime = tools::shared::convertTimeStamp(displayLocalTime,
-                                                                        static_cast<time_t>(timeForConversion.count()),
-                                                                        fileInfo);
-
-            // Shift from seconds to nanoseconds again.
-            correctedTime *= 1000000000;
-
-            // Add the nanoseconds, which were removed earlier.
-            correctedTime += floatingPart.count();
-
-            fmt::print(output,
-                       FMT_STRING("{:s}{:s}"),
-                       convertTimestampToFormat(correctedTime),
-                       delimiter
-            );*/
         }
         if (configuration.DataFields_type) {
             fmt::print(output,
