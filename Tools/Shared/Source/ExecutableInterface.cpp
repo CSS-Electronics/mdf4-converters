@@ -455,7 +455,7 @@ namespace mdf::tools::shared {
             ("version,v", bpo::bool_switch()->default_value(false), "Print version information.")
             ("verbose", bpo::value<int>()->default_value(1), "Set verbosity of output (0-5).")
             ("output-directory,O", bpo::value<std::string>(), "Output directory to place converted files into.")
-            ("keep-structure,k", bpo::bool_switch()->default_value(false), "Keep structure of input paths in output folder.")
+            ("keep-structure,k", bpo::bool_switch()->default_value(true), "Keep structure of input paths in output folder.")
             ("delete-converted,d", bpo::bool_switch()->default_value(false), "Delete input files on success.")
             ("non-interactive", bpo::bool_switch()->default_value(false),
              "Run in non-interactive mode, with no progress output.")
