@@ -2,6 +2,7 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
+#include <vector>
 
 #include "CLX000_BaseExporter.h"
 
@@ -225,8 +226,11 @@ namespace mdf::tools::clx {
 
     template<typename T>
     void CLX000_BaseExporter<T>::convertTimestampToFormat(std::chrono::nanoseconds const& timeStamp, std::ostream& output) {
-        auto const secondsComponent = std::chrono::duration_cast<std::chrono::seconds>(timeStamp);
-        auto const millisComponent = std::chrono::round<std::chrono::milliseconds>(timeStamp - secondsComponent);
+        // Convert to right zone.
+        std::chrono::nanoseconds correctedTime = tools::shared::convertTimeStamp(displayLocalTime, timeStamp, fileInfo);
+
+        auto const secondsComponent = std::chrono::duration_cast<std::chrono::seconds>(correctedTime);
+        auto const millisComponent = std::chrono::round<std::chrono::milliseconds>(correctedTime - secondsComponent);
         std::time_t const secondsComponentTime = secondsComponent.count();
 
         std::tm const genericTimeStamp = *std::gmtime(&secondsComponentTime);
