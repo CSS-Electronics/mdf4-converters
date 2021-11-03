@@ -91,6 +91,9 @@ namespace mdf::tools::asc {
                     indicator.update(++i);
                 }
                 indicator.end();
+
+                // Correct the header.
+                exporter.correctHeader();
             }
 
             if (info.LINMessages > 0) {
@@ -117,6 +120,9 @@ namespace mdf::tools::asc {
                     indicator.update(++i);
                 }
                 indicator.end();
+
+                // Correct the header.
+                exporter.correctHeader();
             }
 
             status = true;

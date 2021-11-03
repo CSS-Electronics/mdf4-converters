@@ -17,6 +17,8 @@ namespace mdf::tools::asc {
         explicit ASC_LIN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
                                   tools::shared::DisplayTimeFormat displayLocalTime);
 
+        void correctHeader();
+
         void writeHeader() override;
 
         void writeRecord(LIN_Frame const &record) override;
@@ -26,13 +28,15 @@ namespace mdf::tools::asc {
         std::chrono::nanoseconds firstTimeStamp;
         bool firstTimeStampSet = false;
         tools::shared::DisplayTimeFormat displayLocalTime;
+        std::fpos<mbstate_t> startTimePosition;
 
         std::stringstream timeStampString;
         mdf::tools::shared::ParsedFileInfo const &fileInfo;
 
         std::string convertTimestamp(double const &timeStamp);
-
         std::string convertTimestamp(std::time_t const &timeStamp);
+        std::string convertTimestamp(std::chrono::seconds const &timeStamp);
+        std::string convertTimestamp(std::chrono::nanoseconds const &timeStamp);
     };
 
 }

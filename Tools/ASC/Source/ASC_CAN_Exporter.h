@@ -17,6 +17,8 @@ namespace mdf::tools::asc {
         explicit ASC_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
                                   tools::shared::DisplayTimeFormat displayLocalTime);
 
+        void correctHeader();
+
         void writeHeader() override;
 
         void writeRecord(ASC_Record const &record) override;
@@ -26,6 +28,7 @@ namespace mdf::tools::asc {
         std::chrono::nanoseconds firstTimeStamp;
         bool firstTimeStampSet = false;
         tools::shared::DisplayTimeFormat displayLocalTime;
+        std::fpos<mbstate_t> startTimePosition;
 
         std::stringstream timeStampString;
         mdf::tools::shared::ParsedFileInfo const &fileInfo;
@@ -33,7 +36,6 @@ namespace mdf::tools::asc {
         std::string convertTimestamp(std::time_t const &timeStamp);
 
         std::string convertTimestamp(std::chrono::seconds const &timeStamp);
-
         std::string convertTimestamp(std::chrono::nanoseconds const &timeStamp);
 
         void write_CAN_DataFrame(mdf::CAN_DataFrame const &record);

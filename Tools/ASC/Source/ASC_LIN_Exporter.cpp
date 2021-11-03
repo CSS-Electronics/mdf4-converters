@@ -16,15 +16,24 @@ namespace mdf::tools::asc {
     }
 
     void ASC_LIN_Exporter::writeHeader() {
-        firstTimeStamp = std::chrono::duration_cast<std::chrono::seconds>(fileInfo.Time);
-        firstTimeStampSet = true;
-
-        output << "date " << convertTimestamp(fileInfo.Time.count() / 1000000000) << "\n";
+        output << "date ";
+        startTimePosition = output.tellp();
+        output << "                           \n";
         output << "base hex  timestamps absolute\n";
         output.flush();
     }
 
+    void ASC_LIN_Exporter::correctHeader() {
+        output.seekp(startTimePosition);
+        output << convertTimestamp(firstTimeStamp);
+    }
+
     void ASC_LIN_Exporter::writeRecord(LIN_Frame const &record) {
+        if(!firstTimeStampSet) {
+            firstTimeStamp = record.TimeStamp;
+            firstTimeStampSet = true;
+        }
+
         std::chrono::duration<double> deltaTime = record.TimeStamp - firstTimeStamp;
 
         fmt::print(output,
@@ -56,6 +65,19 @@ namespace mdf::tools::asc {
         // Convert epoch to datetime.
         auto t = static_cast<std::time_t>(timeStamp);
         return convertTimestamp(t);
+    }
+
+    std::string ASC_LIN_Exporter::convertTimestamp(std::chrono::seconds const &timeStamp) {
+        // Extract time and convert to right zone.
+        std::time_t extractTime = timeStamp.count();
+        return convertTimestamp(extractTime);
+    }
+
+    std::string ASC_LIN_Exporter::convertTimestamp(std::chrono::nanoseconds const &timeStamp) {
+        // Extract time and convert to right zone.
+        auto baseTime = std::chrono::duration_cast<std::chrono::seconds>(timeStamp);
+        std::time_t extractTime = baseTime.count();
+        return convertTimestamp(extractTime);
     }
 
 }

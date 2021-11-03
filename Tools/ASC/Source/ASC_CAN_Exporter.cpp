@@ -9,21 +9,27 @@
 
 namespace mdf::tools::asc {
 
-    ASC_CAN_Exporter::ASC_CAN_Exporter(std::ostream &output, mdf::tools::shared::ParsedFileInfo const &fileInfo,
-                                       tools::shared::DisplayTimeFormat displayLocalTime) : GenericRecordExporter(
-        output), fileInfo(fileInfo),
-                                                                                            displayLocalTime(
-                                                                                                displayLocalTime) {
+    ASC_CAN_Exporter::ASC_CAN_Exporter(
+        std::ostream &output,
+        mdf::tools::shared::ParsedFileInfo const &fileInfo,
+        tools::shared::DisplayTimeFormat displayLocalTime
+        ) : GenericRecordExporter(output),
+        fileInfo(fileInfo),
+        displayLocalTime(displayLocalTime) {
 
     }
 
     void ASC_CAN_Exporter::writeHeader() {
-        firstTimeStamp = std::chrono::duration_cast<std::chrono::seconds>(fileInfo.Time);
-        firstTimeStampSet = true;
-
-        output << "date " << convertTimestamp(firstTimeStamp) << "\n";
+        output << "date ";
+        startTimePosition = output.tellp();
+        output << "                           \n";
         output << "base hex  timestamps absolute\n";
         output.flush();
+    }
+
+    void ASC_CAN_Exporter::correctHeader() {
+        output.seekp(startTimePosition);
+        output << convertTimestamp(firstTimeStamp);
     }
 
     void ASC_CAN_Exporter::writeRecord(ASC_Record const &record) {
@@ -76,6 +82,11 @@ namespace mdf::tools::asc {
     }
 
     void ASC_CAN_Exporter::write_CAN_DataFrame(mdf::CAN_DataFrame const &record) {
+        if(!firstTimeStampSet) {
+            firstTimeStamp = record.TimeStamp;
+            firstTimeStampSet = true;
+        }
+
         std::chrono::duration<double> deltaTime = record.TimeStamp - firstTimeStamp;
 
         fmt::print(
@@ -92,6 +103,11 @@ namespace mdf::tools::asc {
     }
 
     void ASC_CAN_Exporter::write_CAN_RemoteFrame(mdf::CAN_RemoteFrame const &record) {
+        if(!firstTimeStampSet) {
+            firstTimeStamp = record.TimeStamp;
+            firstTimeStampSet = true;
+        }
+
         std::chrono::duration<double> deltaTime = record.TimeStamp - firstTimeStamp;
 
         fmt::print(
