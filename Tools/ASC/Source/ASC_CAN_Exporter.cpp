@@ -90,26 +90,26 @@ namespace mdf::tools::asc {
         std::chrono::duration<double> deltaTime = record.TimeStamp - firstTimeStamp;
         uint32_t merged = 0;
 
-        if(record.EDL) {
+        if(record.EDL != 0) {
             merged |= 0x00001000;
         }
-        if(record.BRS) {
+        if(record.BRS != 0) {
             merged |= 0x00002000;
         }
-        if(record.ESI) {
+        if(record.ESI != 0) {
             merged |= 0x00004000;
         }
 
         fmt::print(
             output,
-            FMT_STRING("{: >12.6f} CANFD {:3d} {:s} {:8X}{:c} {:d} {:d} {:2d} {:2d} {:02X}        0    0 {:8X}        0        0        0        0        0\n"),
+            FMT_STRING("{: >11.6f} CANFD {:3d} {:s}   {:8X}{:c}                                  {:d} {:d} {:X} {:2d} {:02X}        0    0 {:8X}        0        0        0        0        0\n"),
             deltaTime.count(),
             record.BusChannel,
             (record.Dir == 0) ? "Rx" : "Tx",
             record.ID,
-            record.IDE ? 'x' : ' ',
-            record.BRS ? 1 : 0,
-            record.ESI ? 1 : 0,
+            (record.IDE != 0) ? 'x' : ' ',
+            (record.BRS != 0) ? 1 : 0,
+            (record.ESI != 0) ? 1 : 0,
             record.DLC,
             record.DataLength,
             fmt::join(record.DataBytes, " "),
@@ -127,7 +127,7 @@ namespace mdf::tools::asc {
 
         fmt::print(
             output,
-            FMT_STRING("{: >12.6f} CANFD {:3d} {:s} {:8X}{:c} 0 0 {:2d} {:2d}         0    0       10        0        0        0        0        0\n"),
+            FMT_STRING("{: >11.6f} CANFD {:3d} {:s}   {:8X}{:c}                                  0 0 {:X} {:2d}         0    0       10        0        0        0        0        0\n"),
             deltaTime.count(),
             record.BusChannel,
             (record.Dir == 0) ? "Rx" : "Tx",

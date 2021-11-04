@@ -24,6 +24,7 @@ BOOST_FUSION_ADAPT_STRUCT(
     Dir,
     EDL,
     BRS,
+    ESI,
     DataBytes
 );
 
@@ -53,6 +54,7 @@ BOOST_FUSION_ADAPT_STRUCT(
     Dir,
     ReceivedDataByteCount,
     DataLength,
+    Checksum,
     DataBytes
 );
 
