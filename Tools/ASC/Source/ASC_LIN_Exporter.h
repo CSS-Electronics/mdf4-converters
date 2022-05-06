@@ -20,6 +20,7 @@ namespace mdf::tools::asc {
         void correctHeader();
 
         void writeHeader() override;
+        void writeFooter() override;
 
         void writeRecord(LIN_Frame const &record) override;
 

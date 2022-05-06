@@ -92,6 +92,8 @@ namespace mdf::tools::asc {
                 }
                 indicator.end();
 
+                exporter.writeFooter();
+
                 // Correct the header.
                 exporter.correctHeader();
             }
@@ -120,6 +122,8 @@ namespace mdf::tools::asc {
                     indicator.update(++i);
                 }
                 indicator.end();
+
+                exporter.writeFooter();
 
                 // Correct the header.
                 exporter.correctHeader();

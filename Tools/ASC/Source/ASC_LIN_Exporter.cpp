@@ -20,6 +20,12 @@ namespace mdf::tools::asc {
         startTimePosition = output.tellp();
         output << "                           \n";
         output << "base hex  timestamps absolute\n";
+        output << "Begin Triggerblock\n";
+        output.flush();
+    }
+
+    void ASC_LIN_Exporter::writeFooter() {
+        output << "End Triggerblock\n";
         output.flush();
     }
 

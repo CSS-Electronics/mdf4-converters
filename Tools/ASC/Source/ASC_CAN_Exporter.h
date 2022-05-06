@@ -21,6 +21,8 @@ namespace mdf::tools::asc {
 
         void writeHeader() override;
 
+        void writeFooter() override;
+
         void writeRecord(ASC_Record const &record) override;
 
     private:
