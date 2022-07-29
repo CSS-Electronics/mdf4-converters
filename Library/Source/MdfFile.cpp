@@ -24,8 +24,10 @@ namespace mdf {
                 break;
             }
 
+            std::unique_ptr<std::streambuf> cachingStreamParent = std::make_unique<CachingStreamBuffer>(std::move(streamParent), 1024*1024);
+
             auto passwordMap = passwords.value_or(std::map<std::string, std::string>());
-            std::unique_ptr<std::streambuf> stream = std::move(streamParent);
+            std::unique_ptr<std::streambuf> stream = std::move(cachingStreamParent);
 
             try {
                 stream = mdf::stream::applyAESGCMFilter(std::move(stream), passwordMap);
