@@ -1,3 +1,8 @@
+#include <algorithm>
+#include <fstream>
+#include <variant>
+#include <vector>
+
 #include "PEAK_Exporter.h"
 
 #include "MdfFile.h"
@@ -6,10 +11,6 @@
 #include "PEAK_CAN_Exporter_2_1.h"
 #include "ProgressIndicator.h"
 #include "Version.h"
-
-#include <algorithm>
-#include <variant>
-#include <vector>
 
 using namespace mdf;
 

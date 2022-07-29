@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "PCAP_Exporter.h"
 
 #include "MdfFile.h"

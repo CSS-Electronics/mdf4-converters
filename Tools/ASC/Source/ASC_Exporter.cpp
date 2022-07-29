@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "ASC_Exporter.h"
 
 #include "ASC_CAN_Exporter.h"

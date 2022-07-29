@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "CSV_Exporter.h"
 #include "CSV_CAN_Exporter.h"
 #include "CSV_LIN_Exporter.h"

@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "MdfFile.h"
 #include "SocketCAN_Exporter.h"
 
