@@ -5,8 +5,8 @@ set(PROGRAM_NAME ${PROJECT_NAME})
 set(DESCRIPTION "MDF4 bus logging to PEAK ASCII format")
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 3)
-set(VERSION_PATCH 1)
+set(VERSION_MINOR 4)
+set(VERSION_PATCH 0)
 
 # Set required additional packages.
 find_package(fmt REQUIRED)

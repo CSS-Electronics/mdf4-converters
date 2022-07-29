@@ -5,7 +5,7 @@ find_package(Boost COMPONENTS filesystem program_options log REQUIRED)
 find_package(Heatshrink 0.4.1 REQUIRED)
 
 set(MDFSimpleConverters_Shared_VERSION_MAJOR 1)
-set(MDFSimpleConverters_Shared_VERSION_MINOR 2)
+set(MDFSimpleConverters_Shared_VERSION_MINOR 4)
 set(MDFSimpleConverters_Shared_VERSION_PATCH 0)
 
 find_path(NEARGYE_SEMVER_INCLUDE_DIRS "neargye/semver.hpp" REQUIRED)
