@@ -1,6 +1,8 @@
-# MDF4 Converters
+# MDF4 Converters [LEGACY]
 This project includes library and converter tools for converting raw MDF4 log files.
 These converters are designed for use with the [CANedge](https://www.csselectronics.com/screen/page/can-logger-products) CAN bus data loggers from [CSS Electronics](https://www.csselectronics.com/).
+
+**IMPORTANT**: Going forward, you can find the latest converter releases in the [MF4 converter docs](https://canlogger.csselectronics.com/converters-docs/converters/index.html). The source code in this repository matches release `v1.4.0`, but does not reflect the latest updates.
 
 ---
 
