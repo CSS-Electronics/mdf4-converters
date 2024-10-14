@@ -28,7 +28,7 @@ namespace mdf::tools::finalizer {
         bool status = false;
 
         // Generate the new filename.
-        auto fileNameWithoutExtension = outputFolder / inputFilePath.stem();
+        auto fileNameWithoutExtension = boost::filesystem::path::make_preferred(outputFolder / inputFilePath.stem());
         fileNameWithoutExtension += appendName;
         auto fileNameWithExtension = fileNameWithoutExtension.replace_extension(inputFilePath.extension());
 
